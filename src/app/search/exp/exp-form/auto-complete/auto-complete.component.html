@@ -1,0 +1,10 @@
+<div *ngIf="!!ac" (click)="clicked($event)">
+	<h2 class="total">{{ valueMatchesTotalValuesInTotalSubstancesAutoField }}</h2>
+	<ul *ngIf="showResults">
+		<li *ngFor="let ds of ac.results">{{ds.data}}<span *ngIf="ds.substances > 1"> ({{ds.substances | number}} substances)</span><span *ngIf="ds.values">* ({{formulaGTE}}{{ds.values | number}} values)</span></li>
+	</ul>
+	<div *ngIf="!!ac.alternatives" class="spellCheckMsg">Did you mean...</div>
+	<ul *ngIf="!!ac.alternatives">
+		<li *ngFor="let rnidname of ac.alternatives">{{rnidname.name}}</li>
+	</ul>
+</div>

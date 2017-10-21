@@ -1,0 +1,35 @@
+<p>
+	To begin consuming our API, we recommend using our source code to start with a functioning application.
+</p>
+
+<p>
+	This ChemIDsearch application works by consuming the same API you want to use.
+	It has all the files needed to both create well-formed API requests and parse the JSON results.
+	The resulting objects are strongly typed and the objects' properties have readable labels.
+</p>
+
+<p>
+	The source code and installation instructions are available at <a href="https://github.com/ChemIDplus/ChemIDsearch" target="_blank">https://github.com/ChemIDplus/ChemIDsearch</a>.
+	The project is built on the Angular 2+ framework and coded in Typescript.
+	For assistance with understanding how the components and classes work, please see the <a href="https://angular.io/docs" target="_blank">Angular documentation</a>.
+</p>
+
+<p>
+	Some highlights of our code:
+</p>
+<ul>
+	<li>The expression.ts and search.ts files compose the API request URLs.</li>
+	<li>The server-json.ts file converts the JSON responses into our strongly typed classes.</li>
+	<li>The resource.ts file defines how to create complete resource/locator URLs by combining Source pre-URLs with Resource post-URLs.
+		It also shows that {{ '{' }}RN} and {{ '{' }}MH} values in the pre-URL must be replaced with RN and MeSH values from the Summary.</li>
+</ul>
+
+<p>
+	Once you explore our code and have a basic understanding, you can start to customize it or extract what you need for your own purposes.
+</p>
+
+<p>
+	We'd welcome your feedback!
+	If you find an issue, please add it to <a href="https://github.com/ChemIDplus/ChemIDsearch/issues" target="_blank">GitHub</a>.
+	And if you happen to have a fix, we'd gratefully accept and incorporate your pull requests.
+</p>

@@ -1,0 +1,50 @@
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th style="width: 45%">Name</th>
+			<th style="width: 15%">RN / ID Link</th>
+			<th style="width: 20%">Formula</th>
+			<th style="width: 15%">MeSH</th>
+			<th style="width: 5%">Citations</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>{{ name }}</td>
+			<td><a [routerLink]="routerLink">{{ rn_id }}</a></td>
+			<td>{{ formula }}</td>
+			<td>{{ mesh }}</td>
+			<td class="text-right">{{ citations }}</td>
+		</tr>
+	</tbody>
+</table>
+<div class="checkbox">
+	<label>
+		<input type="checkbox" [(ngModel)]="oneAtATime">
+		Display one section at a time
+	</label>
+</div>
+<ngb-accordion [closeOthers]="oneAtATime">
+	<ngb-panel *ngIf="weight" title="Structure">
+		<ng-template ngbPanelContent>
+			<app-structure *ngIf="structure" [structure]="structure"></app-structure>
+		</ng-template>
+	</ngb-panel>
+	<ngb-panel *ngFor="let typeElementsArray of typeElementsArrays" [title]="sharedTypeLabel(typeElementsArray)">
+		<ng-template ngbPanelContent>
+			<app-type-elements *ngFor="let typeElements of typeElementsArray" [summary]="substance.summary" [typeElements]="typeElements"></app-type-elements>
+		</ng-template>
+	</ngb-panel>
+	<ngb-panel *ngIf="toxicityList" title="Toxicity">
+		<ng-template ngbPanelContent>
+			<app-toxicity-list [toxicityList]="toxicityList"></app-toxicity-list>
+		</ng-template>
+	</ngb-panel>
+	<ngb-panel *ngIf="physicalProps" title="Physical Properties">
+		<ng-template ngbPanelContent>
+			<app-physical-props [physicalProps]="physicalProps"></app-physical-props>
+		</ng-template>
+	</ngb-panel>
+</ngb-accordion>
+
+<div *ngIf="substance.lastMod" class="last-mod">Updated: {{ substance.lastMod | date}}</div>

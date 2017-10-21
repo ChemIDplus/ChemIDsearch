@@ -1,0 +1,142 @@
+<div>
+The API returns JSON. The Typescript interfaces below match the server's JSON.
+Most requests return a SubstancesResult with an array of Substance objects.
+The returned Substance objects' data elements depend on the request's data parameter.
+</div>
+<pre>
+<code>
+<b>interface SubstancesResult {{ '{' }}
+	total :number;
+	start ? :number;
+	end ? :number;
+	results ? :Substance[];
+}
+interface Substance {{ '{' }}
+	id :string;
+	lastMod ? :Date;
+	summary ? :Summary;
+	notes ? :TypeElements&lt;Detail&gt;[];
+	categories ? :TypeElements&lt;Detail&gt;[];
+	numbers ? :TypeElements&lt;Detail&gt;[];
+	names ? :TypeElements&lt;Detail&gt;[];
+	formulas ? :TypeElements&lt;Detail&gt;[];
+	resources ? :TypeElements&lt;Resource&gt;[];
+	toxicityList ? :Toxicity[];
+	physicalProps ? :PhysicalProp[];
+	structureDetails ? :StructureDetails;
+	image ? :string;
+	similarity ? :number;
+}</b>
+
+interface Summary {{ '{' }}
+	/** canonical URL */
+	u :string;
+	/** name */
+	na :string;
+	/** inchikey */
+	ik ? :string;
+	/** formula */
+	f ? :string;
+	/** weight */
+	w ? :number;
+	/** has3D */
+	'3d' ? :boolean;
+	/** mesh */
+	mh ? :string;
+	/** citations */
+	ci ? :number;
+	/** rn */
+	rn ? :string;
+}
+
+interface TypeElements&lt;T extends Element&gt; {{ '{' }}
+	t :number;
+	e :T[];
+}
+interface Element {{ '{' }}
+	/** data */
+	d :string;
+}
+interface Detail extends Element {{ '{' }}
+	/** sources */
+	s ? :string[];
+}
+interface Resource extends Element {{ '{' }}
+	/** postUrl */
+	u ? :string;
+}
+
+interface Toxicity {{ '{' }}
+	/** organism */
+	o :string;
+	/** testType */
+	t :string;
+	/** route */
+	r :string;
+	/** dose */
+	d :ToxDose;
+	/** effectList */
+	e ? :ToxEffect[];
+	/** journal */
+	j :ToxJournal;
+}
+interface ToxDose {{ '{' }}
+	/** modifier */
+	m ? :string;
+	/** reported */
+	r :string;
+	/** reportedUnits */
+	u :string;
+	/** normalized */
+	n ? :string;
+	/** normalizedUnits */
+	nu ? :string;
+}
+interface ToxEffect {{ '{' }}
+	/** systemDesc */
+	s ? :string;
+	/** toxicDesc */
+	t ? :string;
+}
+interface ToxJournal {{ '{' }}
+	/** title */
+	t :string;
+	/** vol */
+	v ? :string;
+	/** page */
+	p ? :string;
+	/** year */
+	y ? :string;
+	/** pubmedId */
+	i ? :string;
+}
+
+interface PhysicalProp {{ '{' }}
+	/** property */
+	p :string;
+	/** value */
+	v :string;
+	/** units */
+	u :string;
+	/** temperature */
+	t ? :string;
+	/** source */
+	s :string;
+}
+
+interface StructureDetails {{ '{' }}
+	/** weight */
+	w ? :number;
+	/** inchikey */
+	ik ? :string;
+	/** inchi */
+	i ? :string;
+	/** smiles */
+	s ? :string;
+	/** mol */
+	m ? :string;
+	/** mol3d */
+	m3 ? :string;
+}
+</code>
+</pre>

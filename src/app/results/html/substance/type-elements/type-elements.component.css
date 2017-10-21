@@ -1,0 +1,20 @@
+/* details */
+.mat-column-data{
+	flex: 80;
+}
+.mat-column-sources{
+	flex: 20;
+	min-width: 120px;
+}
+
+/* resources */
+.mat-column-url{
+	flex: 20;
+	min-width: 120px;
+}
+.mat-column-sourceName{
+	flex: 80;
+}
+.fa-info-circle{
+	cursor:pointer
+}

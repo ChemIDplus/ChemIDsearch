@@ -1,0 +1,17 @@
+.mat-column-millis{
+	flex: 10;
+	min-width: 80px;
+}
+.mat-column-searchDisplay{
+	flex: 65;
+}
+.mat-column-substances{
+	flex: 5;
+	min-width: 80px;
+	text-align: right;
+}
+.mat-column-actions{
+	flex: 20;
+	min-width: 125px;
+	text-align: center;
+}

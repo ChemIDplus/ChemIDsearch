@@ -1,0 +1,17 @@
+app-data-mode{
+	display: block;
+}
+pre,
+.pre{
+	margin: 0;
+	padding: 0.5em;
+	max-height: 40em;
+}
+app-data-mode{
+	display: inline-block;
+	vertical-align: middle;
+}
+ngb-pagination{
+	display: inline-block;
+	vertical-align: middle;
+}

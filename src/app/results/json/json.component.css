@@ -1,0 +1,12 @@
+pre{
+	margin: 0;
+	padding: 0.5em;
+	max-height: 40em;
+}
+a.active{
+	font-style: italic;
+}
+.card.top-level{
+	display: block;
+	margin-top: 2em;
+}

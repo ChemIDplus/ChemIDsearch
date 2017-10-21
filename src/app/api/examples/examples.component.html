@@ -1,0 +1,26 @@
+<p>
+Single expression searches include the expression in the URL path.<br>
+Thus the search "Category equals Analgesics" is <a href="https://chem.nlm.nih.gov/api/data/category/equals/analgesics?data=totals" target="_blank">https://chem.nlm.nih.gov/api/data/category/equals/analgesics?data=totals</a><br>
+The abbreviated form is <a href="https://chem.nlm.nih.gov/api/data/ca/eq/analgesics?data=totals" target="_blank">https://chem.nlm.nih.gov/api/data/ca/eq/analgesics?data=totals</a><br>
+Except for searches on structure/smiles, the expression value is not case-sensitive.
+</p>
+
+<p>
+Multi-expression searches have two or more expressions that must all be true to match substances.
+The expressions are listed in the query string.
+Each expression uses the key "exp" and the value is the same path as the single expression version except path slashes are replaced with %2F<br>
+The search "Category equals Analgesics AND Locator equals DrugPortal" is <a href="https://chem.nlm.nih.gov/api/data/search?data=totals&exp=category%2Fequals%2Fanalgesics&exp=locator%2Fequals%2Fdrugportal" target="_blank">https://chem.nlm.nih.gov/api/data/search?data=totals&amp;exp=category%2Fequals%2Fanalgesics&amp;exp=locator%2Fequals%2Fdrugportal</a><br>
+The abbreviated form is <a href="https://chem.nlm.nih.gov/api/data/search?data=totals&exp=ca%2Feq%2Fanalgesics&exp=lo%2Feq%2Fdrugportal" target="_blank">https://chem.nlm.nih.gov/api/data/search?data=totals&amp;exp=ca%2Feq%2Fanalgesics&amp;exp=lo%2Feq%2Fdrugportal</a><br>
+</p>
+
+<p>
+When using a multi-expression search, expressions may also be negated, such that the search is of the form A AND NOT B.
+At least one expression must not be negated.
+To negate an expression, add "not" to the beginning of the operator.<br>
+Thus "Category equals Analgesics AND NOT Locator equals DrugPortal" is <a href="https://chem.nlm.nih.gov/api/data/search?data=totals&exp=ca%2Feq%2Fanalgesics&exp=lo%2Fnoteq%2Fdrugportal" target="_blank">https://chem.nlm.nih.gov/api/data/search?data=totals&amp;exp=ca%2Feq%2Fanalgesics&amp;exp=lo%2Fnoteq%2Fdrugportal</a><br>
+</p>
+
+<p>
+The examples above all include data=totals.
+Any valid data parameter could be used with the same searches to return different levels of detail for all matching substances.
+</p>

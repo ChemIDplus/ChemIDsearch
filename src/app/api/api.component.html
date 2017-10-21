@@ -1,0 +1,59 @@
+<h1>API Details and Examples</h1>
+<div class="checkbox">
+	<label>
+		<input type="checkbox" [(ngModel)]="oneAtATime">
+		Display one section at a time
+	</label>
+</div>
+<ngb-accordion [closeOthers]="oneAtATime">
+	<ngb-panel title="Generating Search URLs">
+		<ng-template ngbPanelContent>
+			<app-generating-urls></app-generating-urls>
+		</ng-template>
+	</ngb-panel>
+	<ngb-panel title="Examples">
+		<ng-template ngbPanelContent>
+			<app-examples></app-examples>
+		</ng-template>
+	</ngb-panel>
+	<ngb-panel title="Data Parameters">
+		<ng-template ngbPanelContent>
+			<app-data-parameters></app-data-parameters>
+		</ng-template>
+	</ngb-panel>
+	<ngb-panel title="JSON Results: Interfaces and Key to Abbreviations">
+		<ng-template ngbPanelContent>
+			<app-json-results></app-json-results>
+		</ng-template>
+	</ngb-panel>
+	<ngb-panel title="Search Fields and Operators">
+		<ng-template ngbPanelContent>
+			<app-fields-operators></app-fields-operators>
+		</ng-template>
+	</ngb-panel>
+	<ngb-panel title="Sorting">
+		<ng-template ngbPanelContent>
+			<app-sorting></app-sorting>
+		</ng-template>
+	</ngb-panel>
+	<ngb-panel title="Paging and Batch Results">
+		<ng-template ngbPanelContent>
+			<app-batch-results></app-batch-results>
+		</ng-template>
+	</ngb-panel>
+	<ngb-panel title="Reference Data">
+		<ng-template ngbPanelContent>
+			<app-reference-data></app-reference-data>
+		</ng-template>
+	</ngb-panel>
+	<ngb-panel title="Value Counts and Spell Check">
+		<ng-template ngbPanelContent>
+			<app-value-counts></app-value-counts>
+		</ng-template>
+	</ngb-panel>
+	<ngb-panel title="Use our Source Code">
+		<ng-template ngbPanelContent>
+			<app-source-code></app-source-code>
+		</ng-template>
+	</ngb-panel>
+</ngb-accordion>

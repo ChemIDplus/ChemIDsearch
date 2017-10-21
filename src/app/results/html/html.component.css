@@ -1,0 +1,7 @@
+label {
+	padding-right: 0.5em;
+}
+label,
+input {
+	cursor: pointer;
+}

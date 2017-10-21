@@ -1,0 +1,76 @@
+<p>
+Each expression will usually have a Search Field, an Operator, and a Value.
+The following fields and operators are available, though not all operators are available for each field.
+In general, the "auto" field and operator should not be used; it takes more processing and you also may not get back the matches you wanted.
+The "auto" field and operator exist primarily for the autocomplete functionality.
+Multi-expression searches may not include "auto" fields or operators.
+</p>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Field</th>
+			<th>Abbreviation</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr><td>auto</td><td></td></tr>
+		<tr><td>name</td><td>na</td></tr>
+		<tr><td>number</td><td>nu</td></tr>
+		<tr><td>rn</td><td></td></tr>
+		<tr><td>id</td><td></td></tr>
+		<tr><td>unii</td><td>un</td></tr>
+		<tr><td>formula</td><td>fo</td></tr>
+		<tr><td>category</td><td>ca</td></tr>
+		<tr><td>inchikey</td><td>ik</td></tr>
+		<tr><td>locator</td><td>lo</td></tr>
+		<tr><td>weight</td><td>mw</td></tr>
+		<tr><td>structure</td><td>st</td></tr>
+		<tr><td>has2d</td><td>2d</td></tr>
+		<tr><td>has3d</td><td>3d</td></tr>
+	</tbody>
+</table>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Operator</th>
+			<th>Abbreviation</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr><td>auto</td><td></td></tr>
+		<tr><td>equals</td><td>eq</td></tr>
+		<tr><td>inlist</td><td>in</td></tr>
+		<tr><td>startswith</td><td>sw</td></tr>
+		<tr><td>endswith</td><td>ew</td></tr>
+		<tr><td>contains</td><td>cs</td></tr>
+		<tr><td>between</td><td>bw</td></tr>
+		<tr><td>lte</td><td></td></tr>
+		<tr><td>gte</td><td></td></tr>
+	</tbody>
+</table>
+
+<p>
+The following operators are only available when used with the structure field.
+Similarity searches may also include a similarity percent at the end of the operator.
+80 is the default similarity percent and need not be included.
+</p>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Structure Operator</th>
+			<th>Abbreviation</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr><td>substructure</td><td>sb</td></tr>
+		<tr><td>similarity</td><td>si</td></tr>
+		<tr><td>exact</td><td>ex</td></tr>
+		<tr><td>flex</td><td>fx</td></tr>
+		<tr><td>flexplus</td><td>fp</td></tr>
+	</tbody>
+</table>
+
+
+
+

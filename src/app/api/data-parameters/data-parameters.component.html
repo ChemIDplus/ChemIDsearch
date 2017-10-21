@@ -1,0 +1,44 @@
+<p>
+When you don't need all data fields, you'll more quickly get back the data you are interested in by picking a more focussed data parameter.
+When you only request the data fields you want, you can get back more results more quickly, and have less to parse.
+The maximum batch size per data parameter is set to return similar average kilobytes per batch.
+Using the most specific data parameter for your needs results in higher maximum results per batch.
+</p>
+
+<p>
+In the table below, the indented parameter names indicate a tree structure, where all indented data is included in the less-indented parent(s).
+Thus, "summary(2,000)" and "names(1,000)" are both also included in the results of "details(300)," which is itself included in the results for "complete(25)".
+</p>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Data Parameter</th>
+			<th>Maximum Results per Batch</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr><td>totals</td><td>N/A</td></tr>
+		<tr><td>id</td><td>30,000</td></tr>
+		<tr><td>complete</td><td>25</td></tr>
+		<tr><td>&emsp;&emsp;details</td><td>300</td></tr>
+		<tr><td>&emsp;&emsp;&emsp;&emsp;summary</td><td>2,000</td></tr>
+		<tr><td>&emsp;&emsp;&emsp;&emsp;notes</td><td>10,000</td></tr>
+		<tr><td>&emsp;&emsp;&emsp;&emsp;categories</td><td>5,000</td></tr>
+		<tr><td>&emsp;&emsp;&emsp;&emsp;numbers</td><td>3,000</td></tr>
+		<tr><td>&emsp;&emsp;&emsp;&emsp;names</td><td>1,000</td></tr>
+		<tr><td>&emsp;&emsp;&emsp;&emsp;formulas</td><td>5,000</td></tr>
+		<tr><td>&emsp;&emsp;&emsp;&emsp;resources</td><td>2,000</td></tr>
+		<tr><td>&emsp;&emsp;&emsp;&emsp;toxicityList</td><td>2,000</td></tr>
+		<tr><td>&emsp;&emsp;&emsp;&emsp;physicalProps</td><td>5,000</td></tr>
+		<tr><td>&emsp;&emsp;structure</td><td>50</td></tr>
+		<tr><td>&emsp;&emsp;&emsp;&emsp;structureDetails</td><td>90</td></tr>
+		<tr><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;weight</td><td>10,000</td></tr>
+		<tr><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;inchikey</td><td>7,000</td></tr>
+		<tr><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;inchi</td><td>3,000</td></tr>
+		<tr><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;smiles</td><td>5,000</td></tr>
+		<tr><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;mol</td><td>400</td></tr>
+		<tr><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;mol3d</td><td>125</td></tr>
+		<tr><td>&emsp;&emsp;&emsp;&emsp;image</td><td>80</td></tr>
+	</tbody>
+</table>

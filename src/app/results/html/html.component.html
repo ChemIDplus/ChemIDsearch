@@ -1,0 +1,6 @@
+<div *ngIf="substances">
+	<label for="structuresView">Structures:</label><input id="structuresView" type="checkbox" name="structuresView" [(ngModel)]="structuresView" >
+	<app-summaries *ngIf="structuresView || ltLg" [search]="search" [orderBy]="orderBy" [paging]="paging" [total]="total" [substances]="substances" [idSimilarities]="idSimilarities" [structuresView]="structuresView"></app-summaries>
+	<app-summaries-no-structures *ngIf="!structuresView && !ltLg" [search]="search" [orderBy]="orderBy" [paging]="paging" [total]="total" [substances]="substances"></app-summaries-no-structures>
+</div>
+<app-substance *ngIf="substance" [substance]="substance"></app-substance>

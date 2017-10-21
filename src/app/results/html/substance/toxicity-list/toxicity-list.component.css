@@ -1,0 +1,20 @@
+ul {
+	margin-bottom: 0;
+	padding:0;
+}
+li {
+	list-style-type: none;
+	padding-top: 5px;
+	line-height: 90%;
+}
+li:first-of-type {
+	padding-top: 0;
+}
+.lt-lg .wrapped {
+	margin-top: 10px;
+}
+.normalized {
+	white-space: nowrap;
+}
+/* Styling would be added by matTable */
+.mat-table{display:block}.mat-header-row,.mat-row{display:flex;border-bottom-width:1px;border-bottom-style:solid;align-items:center;min-height:48px;padding:0 24px}.mat-cell,.mat-header-cell{flex:1}

@@ -1,0 +1,29 @@
+<div class="mat-elevation-z8">
+	<div ngClass.lt-lg="lt-lg" class="mat-table" role="grid" matSort matSortDisableClear>
+		<div fxLayout="row wrap" class="mat-header-row" role="row">
+			<div fxFlex="10" fxFlex.lt-lg="23" mat-sort-header="organism" class="mat-header-cell" role="columnheader">Organism</div>
+			<div fxFlex="6" fxFlex.lt-lg="14" mat-sort-header="testType" class="mat-header-cell" role="columnheader">Test<br>Type</div>
+			<div fxFlex="10" fxFlex.lt-lg="28" mat-sort-header="route" class="mat-header-cell" role="columnheader">Route</div>
+			<div fxFlex="12" fxFlex.lt-lg="35" mat-sort-header="dose" class="mat-header-cell" role="columnheader">Reported Dose (Normalized)</div>
+			<div fxFlex="42" fxFlex.lt-lg="100" mat-sort-header="effectList" class="mat-header-cell" role="columnheader">Effects</div>
+			<div fxFlex="20" fxFlex.lt-lg="100" mat-sort-header="source" class="mat-header-cell" role="columnheader">Source</div>
+		</div>
+		<div *ngFor="let toxicity of toxicityList" fxLayout="row wrap" class="mat-row" role="row">
+			<div fxFlex="10" fxFlex.lt-lg="23" class="mat-cell" role="gridcell">{{ toxicity.organism }}</div>
+			<div fxFlex="6" fxFlex.lt-lg="14" class="mat-cell" role="gridcell">{{ toxicity.testType }}</div>
+			<div fxFlex="10" fxFlex.lt-lg="28" class="mat-cell" role="gridcell">{{ toxicity.route }}</div>
+			<div fxFlex="12" fxFlex.lt-lg="35" class="mat-cell" role="gridcell">{{ toxicity.doseReported }}<span *ngIf="toxicity.doseNormalized" class="normalized"> {{ toxicity.doseNormalized }}</span></div>
+			<div fxFlex="42" fxFlex.lt-lg="100" [class.wrapped]="toxicity.effectList" class="mat-cell" role="gridcell">
+				<ul>
+					<li *ngFor="let effect of toxicity.effectList">{{effect.systemDesc}} : {{effect.toxicDesc}}</li>
+				</ul>
+			</div>
+			<div fxFlex="20" fxFlex.lt-lg="100" [class.wrapped]="toxicity.journal.title" class="mat-cell" role="gridcell">
+				<div *ngIf="toxicity.journal.title">
+					<a *ngIf="toxicity.journal.pubmedId" [href]="toxicity.journal.href" target="_blank">{{ toxicity.journal.display }}</a>
+					<span *ngIf="!toxicity.journal.pubmedId">{{ toxicity.journal.display }}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

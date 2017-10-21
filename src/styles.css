@@ -1,0 +1,25 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+.btn.disabled, .btn[disabled]{
+	opacity:0.4;
+}
+
+.provided-info{
+	align-content: center;
+	font-size: 80%;
+}
+
+.result-sub-table thead th {
+	vertical-align: middle;
+	text-align: center;
+}
+.result-sub-table th,
+.result-sub-table td {
+	padding:2px;
+}
+@media (min-width: 1200px){
+	.container{
+		max-width:90%;
+	}
+}

@@ -1,0 +1,39 @@
+<div class="mat-elevation-z8">
+	<mat-table #table [dataSource]="dataSource" matSort>
+
+		<!--- Note that these columns can be defined in any order.
+				The actual rendered columns are set as a property on the row definition" -->
+
+		<ng-container matColumnDef="property">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Physical Property</mat-header-cell>
+			<mat-cell *matCellDef="let physicalProp">{{ physicalProp.property }}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="value">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Value</mat-header-cell>
+			<mat-cell *matCellDef="let physicalProp">{{ physicalProp.value }}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="units">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Units</mat-header-cell>
+			<mat-cell *matCellDef="let physicalProp">{{ physicalProp.units }}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="temperature">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Temp (deg C)</mat-header-cell>
+			<mat-cell *matCellDef="let physicalProp">{{ physicalProp.temperature }}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="source">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Source</mat-header-cell>
+			<mat-cell *matCellDef="let physicalProp">{{ physicalProp.source }}</mat-cell>
+		</ng-container>
+
+
+		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+		<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+	</mat-table>
+	<div class="provided-info">Physical property data is provided to ChemIDplus by 
+		<a href="http://www.srcinc.com/what-we-do/environmental/scientific-databases.html" target="_blank">SRC, Inc.</a>
+	</div>
+</div>

@@ -1,0 +1,32 @@
+<p>
+The JSON results for substances include references to Types and Sources.
+The following URLs return the data for these:
+</p>
+<ul>
+<li><a href="https://chem.nlm.nih.gov/api/data/meta/types" target="_blank">https://chem.nlm.nih.gov/api/data/meta/types</a></li>
+<li><a href="https://chem.nlm.nih.gov/api/data/meta/sources" target="_blank">https://chem.nlm.nih.gov/api/data/meta/sources</a></li>
+</ul>
+
+<p>
+The JSON results match the following interfaces:
+</p>
+<pre>
+<code>
+interface Source {{ '{' }}
+	id :string;
+	/** name */
+	n :string;
+	/** description */
+	d :string;
+	/** elementTypeId */
+	t :number;
+	/** preUrl */
+	u :string;
+}
+interface Type {{ '{' }}
+	id :number;
+	name :string;
+	table :string;
+}
+</code>
+</pre>

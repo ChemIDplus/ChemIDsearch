@@ -1,0 +1,26 @@
+<div class="mat-elevation-z8">
+	<mat-table #table [dataSource]="dataSource">
+		<ng-container matColumnDef="summary">
+			<mat-header-cell *matHeaderCellDef>
+				<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between">
+					<app-summaries-sort fxFlex [orderBy]="orderBy" [hasOneSimilarity]="hasOneSimilarity" (onSortChange)="onSortChange($event)"></app-summaries-sort>
+					<div *ngIf="structuresView" fxFlex="none">
+						{{ hasOneSimilarity ? 'Next ' : '' }}Similarity Search Percent: <input type="number" min="40" max="100" step="5" [(ngModel)]="linkSimPercent">
+					</div>
+				</div>
+			</mat-header-cell>
+			<mat-cell *matCellDef="let substance">
+				<app-summary [substance]="substance" [linkSimPercent]="linkSimPercent" [similarity]="getSimilarity(substance)" [structuresView]="structuresView"></app-summary>
+			</mat-cell>
+		</ng-container>
+
+		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+		<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+	</mat-table>
+	<mat-paginator #paginator
+		[length]="total"
+		[pageIndex]="activePage-1"
+		[pageSize]="pageSize"
+		[pageSizeOptions]="[5, 10, 25]">
+	</mat-paginator>
+</div>

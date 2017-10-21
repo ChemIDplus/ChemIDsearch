@@ -1,0 +1,38 @@
+<div class="mat-elevation-z8">
+	<h1 *ngIf="!hasHistory" class="no-history">No search history is available</h1>
+	<mat-table #table [dataSource]="dataSource" matSort matSortDisableClear>
+	
+		<!--- Note that these columns can be defined in any order.
+				The actual rendered columns are set as a property on the row definition" -->
+
+		<ng-container matColumnDef="millis">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Last Run</mat-header-cell>
+			<mat-cell *matCellDef="let searchEvent">
+				<div *ngIf="searchEvent.inLastDay">{{ searchEvent.millis | date:'shortTime' }}</div>
+				<div *ngIf="!searchEvent.inLastDay">{{ searchEvent.millis | date:'shortDate' }}</div>
+			</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="searchDisplay">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Search</mat-header-cell>
+			<mat-cell *matCellDef="let searchEvent">{{ searchEvent.searchDisplay }}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="substances">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Substances</mat-header-cell>
+			<mat-cell *matCellDef="let searchEvent">{{ searchEvent.substances | number }}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="actions">
+			<mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+			<mat-cell *matCellDef="let searchEvent">
+				<button class="btn btn-success" title="Run" (click)="run(searchEvent)"><i class="fa fa-bolt fa-lg" aria-hidden="true"></i><span class="sr-only">Run</span></button>
+				<button class="btn btn-info" title="Edit" (click)="edit(searchEvent)"><i class="fa fa-pencil" aria-hidden="true"></i><span class="sr-only">Edit</span></button>
+				<button class="btn btn-default" title="Delete" (click)="delete(searchEvent)"><i class="fa fa-trash" aria-hidden="true"></i><span class="sr-only">Delete</span></button>				
+			</mat-cell>
+		</ng-container>
+
+		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+		<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+	</mat-table>
+</div>

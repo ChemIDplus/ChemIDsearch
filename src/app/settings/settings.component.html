@@ -1,0 +1,31 @@
+<h1>Settings</h1>
+<form [formGroup]="form">
+	<div class="form-group">
+		<label for="settings_result_mode">Default Results View</label>
+		<select id="settings_result_mode" class="form-control" formControlName="ctrlResultMode">
+			<option *ngFor="let rm of rms" [value]="rm">{{ getResultModeDisplay(rm) }}</option>
+		</select>
+	</div>
+
+	<div class="form-group">
+		<label for="settings_result_page">Default Number of Results per Page</label>
+		<select id="settings_result_page" class="form-control" formControlName="ctrlResultPage">
+			<option value="5">5</option>
+			<option value="10">10</option>
+			<option value="25">25</option>
+		</select>
+	</div>
+	
+	<div class="form-group">
+		<label for="settings_result_page">Number of AutoComplete Result Rows</label>
+		<input id="settings_result_page" type="number" class="form-control" min="10" max="50" step="5" formControlName="ctrlAutoCompleteResult">
+	</div>
+
+	<div class="form-group">
+		<label for="settings_abbr">Field/Operator Values in URLs</label>
+		<select  id="settings_abbr" class="form-control" formControlName="ctrlFldOpAbbr">
+			<option value="full">Full Term</option>
+			<option value="abbr">Abbreviated</option>
+		</select>
+	</div>
+</form>

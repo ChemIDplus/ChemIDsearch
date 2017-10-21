@@ -1,0 +1,32 @@
+<div class="mat-elevation-z8">
+	<mat-table #table [dataSource]="dataSource" matSort>
+
+		<!--- Note that these columns can be defined in any order.
+				The actual rendered columns are set as a property on the row definition" -->
+
+		<ng-container matColumnDef="data">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>{{ typeElements.type.name }}</mat-header-cell>
+			<mat-cell *matCellDef="let detail">{{ detail.data }}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="sources">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Sources</mat-header-cell>
+			<mat-cell *matCellDef="let detail">{{ detail.sources }}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="url">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>{{ typeElements.type.name }}</mat-header-cell>
+			<mat-cell *matCellDef="let resourceWithURL"><a [href]="resourceWithURL.url" target="_blank">{{ resourceWithURL.data }}</a></mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="sourceName">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
+			<mat-cell *matCellDef="let resourceWithURL">{{ resourceWithURL.sourceName }}
+				<i class="fa fa-info-circle btn" (click)="sourceDescription(resourceWithURL)"></i></mat-cell>
+		</ng-container>
+
+
+		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+		<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+	</mat-table>
+</div>

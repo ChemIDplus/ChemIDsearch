@@ -1,0 +1,33 @@
+.mat-cell,
+.mat-header-cell{
+	flex:none;
+}
+.mat-column-name{
+	width: 30%;
+}
+.mat-column-id{
+	min-width: 60px;
+	width: 8%;
+}
+.mat-column-formula{
+	width: 16%;
+}
+.mat-column-weight{
+	width: 6%;
+	text-align: right;
+}
+.mat-column-has3d{
+	min-width: 35px;
+	width: 3%;
+	text-align: center;
+}
+.mat-column-mesh{
+	width: 10%;
+}
+.mat-column-inchikey{
+	width: 22%;
+}
+.mat-column-citations{
+	width: 5%;
+	text-align: right;
+}

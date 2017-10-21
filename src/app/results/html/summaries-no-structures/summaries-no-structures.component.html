@@ -1,0 +1,58 @@
+<div class="mat-elevation-z8">
+	<mat-table #table [dataSource]="dataSource" matSort matSortDisableClear>
+
+		<!--- Note that these columns can be defined in any order.
+				The actual rendered columns are set as a property on the row definition" -->
+
+		<ng-container matColumnDef="name">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+			<mat-cell *matCellDef="let summary"><a [routerLink]="summary.routerLink" (click)="onRequestSubstance()">{{summary.name}}</a></mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="id">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>RN / ID</mat-header-cell>
+			<mat-cell *matCellDef="let summary">{{summary.rn_id}}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="formula">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Formula</mat-header-cell>
+			<mat-cell *matCellDef="let summary">{{summary.formula}}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="weight">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Weight</mat-header-cell>
+			<mat-cell *matCellDef="let summary">{{summary.weight || ''}}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="has3d">
+			<mat-header-cell *matHeaderCellDef mat-sort-header start="desc">Has 3D</mat-header-cell>
+			<mat-cell *matCellDef="let summary">{{summary.has3D ? 'Y' : ''}}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="mesh">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>MeSH</mat-header-cell>
+			<mat-cell *matCellDef="let summary">{{summary.mesh}}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="inchikey">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>InChIKey</mat-header-cell>
+			<mat-cell *matCellDef="let summary">{{summary.inchikey}}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="citations">
+			<mat-header-cell *matHeaderCellDef mat-sort-header start="desc">Citations</mat-header-cell>
+			<mat-cell *matCellDef="let summary">{{summary.citations | number}}</mat-cell>
+		</ng-container>
+
+
+		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+		<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+	</mat-table>
+	<mat-paginator #paginator
+		[length]="total"
+		[pageIndex]="activePage-1"
+		[pageSize]="pageSize"
+		[pageSizeOptions]="[5, 10, 25]">
+	</mat-paginator>
+</div>
+	

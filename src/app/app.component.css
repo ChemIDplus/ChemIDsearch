@@ -1,0 +1,55 @@
+/* Header copied from TOXNET Mobile */
+.mob-tox-header {
+	background-color: #409c47;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#409c47), to(#2c6c31));
+	border-color: #666;
+	border-style: solid;
+	border-width: 0 0 1px 0;
+	margin-bottom:0;
+}
+.mob-tox-header div {
+	color: #eee;
+	font-size: 20px;
+	font-weight: bold;
+	margin: 0 auto;
+	padding: 5px 25px;
+	text-align: center;
+	text-shadow: 0px 1px 1px #111;
+	max-width: 160px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	background: url(assets/images/nlm.png) no-repeat 0px 5px, -webkit-gradient(linear, left top, left bottom, from(#409c47), to(#2c6c31));
+}
+/* From ChemIDplus TOXNET: */
+.tox-header {
+	background:url(assets/images/bg-header.png) repeat-x 0 0;
+	border-bottom:1px solid #297490;
+}
+.site-titles a { height:82px; display:block; margin:0; text-indent:-9999px; outline:none; font-size:1px; float:left;}
+.site-title a { width:205px; margin-left:10px; background:url(assets/images/nihlogo.png) no-repeat 0 0;}
+.site-title2 a { width:233px; background:url(assets/images/toxnetlogo.png) no-repeat 0 0;}
+nav a {
+	color:#a9e8ff;
+	text-align: center;
+}
+.sm {
+	height:92px;
+}
+.sm nav a {
+	line-height: 0;
+	font-size:12px;
+}
+
+.mob-tox-footer,
+.tox-footer	{
+	margin-top:20px;
+}
+.mob-tox-footer div {
+	margin-top: 10px;
+}
+
+.tox-footer	{ background:#0f516b; padding:12px 20px; font-size:11px;}
+.siteinfo	{ color:#fff;}
+.siteinfo a	{color:#A9E8FF; }
+.siteinfo div {margin-top:10px;}

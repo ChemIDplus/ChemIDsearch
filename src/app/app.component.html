@@ -1,0 +1,40 @@
+<header class="mob-tox-header" fxHide fxShow.xs>
+	<div>TOXNET</div>
+</header>
+<header class="tox-header" fxHide fxShow.gt-xs fxLayout="row" fxLayout.sm="column" ngClass.sm="sm">
+	<div fxFlex class="site-titles">
+		<div class="site-title"><a href="https://www.nlm.nih.gov/" title="U.S. National Library of Medicine" rel="NLM home">U.S. National Library of Medicine</a></div>
+		<div class="site-title2"><a href="https://toxnet.nlm.nih.gov/" title="TOXNET - TOXICOLOGY DATA NETWORK" rel="home">TOXNET - TOXICOLOGY DATA NETWORK</a></div>
+	</div>
+	<nav fxFlex fxLayout="row" fxLayoutAlign="space-around center" fxLayoutAlign.sm="space-around start" role="article">
+		<a fxFlex="20" href="https://toxnet.nlm.nih.gov/newtoxnet/faq.html">FAQs</a>
+		<a fxFlex="35" href="https://www.nlm.nih.gov/pubs/factsheets/toxnetfs.html">TOXNET Fact Sheet</a>
+		<a fxFlex="45" href="https://sis.nlm.nih.gov/enviro/manuals.html">Training Manual &amp; Schedule</a>
+	</nav>
+</header>
+<div class="container mat-app-background">
+	<app-init></app-init>
+	<app-modal-outer></app-modal-outer>
+	<app-top-menu></app-top-menu>
+	<router-outlet></router-outlet>
+</div>
+<footer class="mob-tox-footer" fxHide fxShow.xs fxLayout="column" fxLayoutAlign="end center">
+	<div><a href="https://chem.nlm.nih.gov/chemidplus/">ChemIDplus Main Site</a></div>
+	<div><a href="https://www.nlm.nih.gov/copyright.html">Copyright</a> &nbsp;|&nbsp; <a href="https://www.nlm.nih.gov/privacy.html">Privacy</a> &nbsp;|&nbsp; <a href="mailto:tehip@teh.nlm.nih.gov">Contact Us</a></div>
+</footer>
+<footer class="tox-footer" fxHide fxShow.gt-xs>
+	<nav fxLayout="row" fxLayoutAlign="space-around center" role="article">
+		<a fxFlex="10" href="https://www.nlm.nih.gov/pubs/factsheets/toxnetfs.html">About</a>
+		<a fxFlex="15" href="https://sis.nlm.nih.gov/siscontact.html"              >Contact Us</a>
+		<a fxFlex="12" href="https://sis.nlm.nih.gov/"                             >SIS Home</a>
+		<a fxFlex="13" href="https://www.nlm.nih.gov/copyright.html"               >Copyright</a>
+		<a fxFlex="10" href="https://www.nlm.nih.gov/privacy.html"                 >Privacy</a>
+		<a fxFlex="18" href="https://www.nlm.nih.gov/accessibility.html"           >Accessibility</a>
+		<a fxFlex="22" href="https://www.nlm.nih.gov/plugins.html"                 >Viewers and Players</a>
+	</nav>
+	<div class="siteinfo">
+		<div><a href="https://chem.nlm.nih.gov/chemidplus/">ChemIDplus Main Site</a></div>
+		<div><a href="https://www.nlm.nih.gov/">U.S. National Library of Medicine</a> 8600 Rockville Pike, Bethesda, MD 20894</div>
+		<div><a href="https://www.nih.gov/">National Institutes of Health</a>, <a href="https://www.hhs.gov/">Health &amp; Human Services</a></div>
+	</div>
+</footer>

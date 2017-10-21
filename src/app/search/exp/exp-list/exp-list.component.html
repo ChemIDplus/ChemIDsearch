@@ -1,0 +1,17 @@
+<app-criteria [totals]="totals" [expressionCount]="search.exps.length"></app-criteria>
+<ul class="list-group">
+	<li *ngFor="let e of search.exps" class="list-group-item">
+		<button class="btn btn-info" title="Edit" tabindex="3" (click)="createOrEdit(e)"><i class="fa fa-pencil" aria-hidden="true"></i><span class="sr-only">Edit</span></button>
+		<label>(Not <input type="checkbox" [checked]="e.not" (change)="toggleNot(e)">)</label> {{ e.display }}
+		<button class="btn btn-default" title="Delete" tabindex="4" (click)="deleteExp(e)"><i class="fa fa-trash" aria-hidden="true"></i><span class="sr-only">Delete</span></button>
+	</li>
+	<li class="list-group-item"><button class="btn btn-info" title="Add another" tabindex="2" (click)="createOrEdit()"><i class="fa fa-plus" aria-hidden="true"></i><span class="sr-only">Add another</span></button></li>
+</ul>
+<div *ngIf="!valid" class="alert alert-warning">
+	<span *ngIf="!search.hasNonNot">Searches must have at least one expression without the NOT operator.</span>
+	<span *ngIf="search.hasNonNot">Please adjust the search criteria to match at least one substance.</span>
+</div>
+<div>
+	<button class="btn btn-success" tabindex="1" #getResults [disabled]="!valid" (click)="app.navToResults()">Get Results</button>
+	<button class="btn btn-default" (click)="clear()">Clear</button>
+</div>

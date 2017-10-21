@@ -1,0 +1,9 @@
+<td *ngIf="inLastDay">{{ millis | date:'shortTime' }}</td>
+<td *ngIf="!inLastDay">{{ millis | date:'shortDate' }}</td>
+<td>{{ searchDisplay }}</td>
+<td>{{ substances | number }}</td>
+<td>
+	<button class="btn btn-success" title="Run" (click)="run()"><i class="fa fa-bolt fa-lg" aria-hidden="true"></i><span class="sr-only">Run</span></button>
+	<button class="btn btn-info" title="Edit" (click)="edit()"><i class="fa fa-pencil" aria-hidden="true"></i><span class="sr-only">Edit</span></button>
+	<button class="btn btn-default" title="Delete" (click)="delete()"><i class="fa fa-trash" aria-hidden="true"></i><span class="sr-only">Delete</span></button>
+</td>

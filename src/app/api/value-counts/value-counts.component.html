@@ -1,0 +1,54 @@
+<p>
+The data=valueCounts parameter is used in the autocomplete.
+It may only be used with single expression searches.
+</p>
+
+<p>
+When the data=valueCounts parameter is used with name/startswith searches, if no matching results are found then the spell checker is used to return alternatives.
+For example, a search on "TNTT" will not find a match and will instead return alternatives.<br>
+<a href="https://chem.nlm.nih.gov/api/data/name/startswith/tntt?data=valueCounts" target="_blank">https://chem.nlm.nih.gov/api/data/name/startswith/tntt?data=valueCounts</a><br>
+Whereas the same search on "TNT" will find results and return them.<br>
+<a href="https://chem.nlm.nih.gov/api/data/name/startswith/tnt?data=valueCounts" target="_blank">https://chem.nlm.nih.gov/api/data/name/startswith/tnt?data=valueCounts</a><br>
+</p>
+
+<p>
+The JSON results match the following interfaces:
+</p>
+<pre>
+<code>
+interface ValueCountsResult {{ '{' }}
+	totals :Totals;
+	expression ? :Expression;
+	results ? :DataCount[];
+	alternatives ? :RNIDName[];
+}
+interface Totals {{ '{' }}
+	substances ? :number;
+	values ? :number;
+}
+interface Expression {{ '{' }}
+	field :string;
+	operator :string;
+	value :string;
+	not ? :boolean;
+	similarity ? :number;
+	measurement ? :string;
+	toxtest ? :string;
+	toxspecies ? :string;
+	toxroute ? :string;
+	toxeffect ? :string;
+}
+interface DataCount {{ '{' }}
+	/** substances */
+	s :number;
+	/** data */
+	d :string;
+}
+interface RNIDName {{ '{' }}
+	rn ? :string;
+	id ? :string;
+	/** name */
+	n :string;
+}
+</code>
+</pre>

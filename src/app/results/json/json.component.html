@@ -1,0 +1,14 @@
+<div class="card card-body bg-light top-level">
+	<h2>Totals</h2>
+	Direct Link: <a target="_blank" [href]="totalsURL">{{ totalsURL }}</a>
+	<div class="card card-body"><pre>{{ tsj | json }}</pre></div>
+</div>
+<div *ngIf="totals.substances || totals.values" class="card card-body bg-light top-level">
+	<div ngbDropdown class="d-inline-block">
+		<button id="dm_dropdown" class="btn btn-outline-primary" ngbDropdownToggle>Data Parameter Choice</button>
+		<div ngbDropdownMenu aria-labelledby="dm_dropdown">
+			<button *ngFor="let dataMode of dataModes" class="dropdown-item" [class.active]="dataMode.dm === dm" (click)="dm=dataMode.dm"><app-data-mode [dataMode]="dataMode"></app-data-mode></button>
+		</div>
+	</div>
+	<app-json-data [search]="search" [totals]="totals" [dm]="dm" ></app-json-data>
+</div>

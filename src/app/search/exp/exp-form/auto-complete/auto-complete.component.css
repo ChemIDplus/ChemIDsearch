@@ -1,0 +1,15 @@
+h2{
+	font-size:1.17em;
+}
+.spellCheckMsg{
+	color:red;
+	text-align:center;
+	background:#eee;
+	border: 1px solid #afafaf;
+	-moz-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.58);
+	-webkit-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.58);
+	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.58);
+}
+li{
+	cursor:pointer;
+}

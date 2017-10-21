@@ -1,0 +1,36 @@
+.rel{
+	position: relative;
+}
+ul{
+	display: inline-block;
+	margin: 0 0 0 0.25em;
+	padding: 0 0 0 0.1em;
+	min-width: 5em;
+	white-space: nowrap;
+}
+li{
+	padding: 0.1em 0.5em;
+	display: none;
+	cursor: pointer;
+}
+.show-all{
+	position: absolute;
+	left: 3.4em;
+	background-color: #fff;
+	border-radius: 5px; 
+	-moz-border-radius: 5px; 
+	-webkit-border-radius: 5px; 
+	border: 1px solid #ccc;
+}
+li.active,
+.show-all li{
+	display: block;
+}
+.show-all{
+	padding: 0.4em 0;
+}
+.sort-by{
+	min-height: 2em;
+	margin-top: 3px;
+	display: inline-block;
+}

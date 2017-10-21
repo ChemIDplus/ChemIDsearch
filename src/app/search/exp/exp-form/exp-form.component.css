@@ -1,0 +1,49 @@
+.form-control,
+.values-container {
+	display :inline-block;
+	width :auto;
+}
+.values-container[hidden]{
+	display:none;
+}
+label{
+	width:140px;
+}
+#exp_values_label{
+	vertical-align:12px;
+}
+label.small{
+	width:20px;
+	padding:0 5px;
+}
+.form-control[type=checkbox]{
+	height:15px;
+	margin:0;
+	vertical-align:middle;
+}
+.options{
+	margin-top:30px;
+}
+#exp_values{
+	text-transform:uppercase;
+	resize:both;
+	overflow:hidden;
+}
+#exp_values.keepcase{
+	text-transform:none;
+}
+auto-complete{
+	display:block;
+	margin-top:20px;
+}
+
+form .ng-valid[required] {
+	border-left: 5px solid #42A948; /* green */
+}
+
+form .ng-invalid {
+	border-left: 5px solid #a94442; /* red */
+}
+.alert-warning {
+	max-width:425px;
+}
