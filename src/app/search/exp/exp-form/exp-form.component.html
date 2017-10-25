@@ -44,6 +44,7 @@
 			<div *ngIf="ctrlValue.hasError('id_not_correct')"       ><b>{{'System ID'}}</b> terms are 10 characters, either all digits or with one or more letters followed by digits.</div>
 			<div *ngIf="ctrlValue.hasError('unii_not_correct')"     ><b>{{'FDA UNII'}}</b> terms are 10 digits and/or letters.</div>
 			<div *ngIf="ctrlValue.hasError('inchikey_not_correct')" ><b>{{'InChIKey'}}</b> terms are 25 letters, with hyphens after the 14th and 24th.</div>
+			<div *ngIf="ctrlValue.hasError('date_not_correct')"><b>{{'Last Modified'}}</b> search terms must be YYYY or YYYY-MM or YYYY-MM-DD or YYYYMMDD or 13 digits of milliseconds.</div>
 			<div *ngIf="ctrlValue.hasError('single_value_empty')">A search term is required.</div>
 			<div *ngIf="ctrlValue.hasError('auto_too_short')"><b>{{'(automatic)'}}</b> search terms must be at least 3 characters.</div>
 			<div *ngIf="ctrlValue.hasError('autocomplete_pending')">Please wait, search results are pending...</div>

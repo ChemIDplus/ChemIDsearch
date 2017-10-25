@@ -232,6 +232,10 @@ export class ExpressionValidators {
 						throw new Error('inchikey logic error');
 				}
 				break;
+			case Fld.lastmod:
+				regex = /^(20[0-9]{2}(-(0[1-9]|1[0-2])(-(0[1-9]|[12][0-9]|3[01]))?)?|20[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])|[0-9]{13})$/;
+				messageKey = 'date_not_correct';
+				break;
 			case Fld.weight:
 				if(op === Op.inlist){
 					regex = /^([0-9]+(\.[0-9]{1,4})?\|)+[0-9]+(\.[0-9]{1,4})?\|?$/;

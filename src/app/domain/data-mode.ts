@@ -4,6 +4,7 @@ export enum DM {
 	totals,
 	valueCounts,
 	id,
+	lastMod,
 	complete,
 		details,
 			summary,
@@ -41,6 +42,7 @@ export class DataMode{
 		a[DM.valueCounts] = new DataMode(DM.valueCounts, 1000, ' = List of matching values with substance counts');
 		/* tslint:disable:align */
 		a[DM.id] = new DataMode(DM.id, 25000, ' = IDs only');
+		a[DM.lastMod] = new DataMode(DM.lastMod, 10000, ' = IDs and Last Modified');
 		a[DM.complete] = new DataMode(DM.complete, 25, ' = Everything');
 			a[DM.details] = new DataMode(DM.details, 300, ' includes all non-structure data: Summary, Notes, Categories, Numbers, Names, Formulas, and Resources');
 				a[DM.summary] = new DataMode(DM.summary, 2000, ' includes: URL, Name, RN, InChIKey, Formula, Weight, 3D flag, MeSH, and Citations');

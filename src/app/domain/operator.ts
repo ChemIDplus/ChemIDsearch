@@ -27,6 +27,7 @@ export class Operator{
 
 	private static autoOps :Op[] = [Op.auto, Op.equals, Op.inlist, Op.startswith, Op.endswith, Op.contains];
 	private static idOps :Op[] = [Op.auto, Op.equals, Op.inlist, Op.startswith, Op.endswith, Op.contains, Op.regex];
+	private static dateOps :Op[] = [Op.gte, Op.lte]; // gte first as the default for last_mod
 	private static rangeOps :Op[] = [Op.between, Op.lte, Op.gte, Op.equals, Op.inlist];
 	private static stOps :Op[] = [Op.substructure, Op.similarity, Op.exact, Op.flex, Op.flexplus];
 	private static eqOp :Op[] = [Op.equals];
@@ -69,6 +70,8 @@ export class Operator{
 			case Fld.inchikey:
 			case Fld.locator:
 				return Operator.idOps;
+			case Fld.lastmod:
+				return Operator.dateOps;
 			case Fld.weight:
 			case Fld.meltingpoint:
 			case Fld.boilingpoint:
