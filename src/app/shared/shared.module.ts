@@ -4,7 +4,7 @@ import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatTableModule, MatPaginatorModule, MatSortModule } from '@angular/material';
+import { MatTableModule, MatPaginatorModule, MatSortModule, MatExpansionModule } from '@angular/material';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
@@ -26,6 +26,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 		MatTableModule,
 		MatPaginatorModule,
 		MatSortModule,
+		MatExpansionModule,
 
 		NgbModule
 	]

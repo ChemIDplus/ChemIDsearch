@@ -24,27 +24,31 @@
 		Display one section at a time
 	</label>
 </div>
-<ngb-accordion [closeOthers]="oneAtATime">
-	<ngb-panel *ngIf="weight" title="Structure">
-		<ng-template ngbPanelContent>
+<mat-accordion [multi]="!oneAtATime">
+	<mat-expansion-panel *ngIf="weight">
+		<mat-expansion-panel-header>Structure</mat-expansion-panel-header>
+		<div class="mat-elevation-z3">
 			<app-structure *ngIf="structure" [structure]="structure"></app-structure>
-		</ng-template>
-	</ngb-panel>
-	<ngb-panel *ngFor="let typeElementsArray of typeElementsArrays" [title]="sharedTypeLabel(typeElementsArray)">
-		<ng-template ngbPanelContent>
-			<app-type-elements *ngFor="let typeElements of typeElementsArray" [summary]="substance.summary" [typeElements]="typeElements"></app-type-elements>
-		</ng-template>
-	</ngb-panel>
-	<ngb-panel *ngIf="toxicityList" title="Toxicity">
-		<ng-template ngbPanelContent>
+		</div>
+	</mat-expansion-panel>
+	<mat-expansion-panel *ngFor="let typeElementsArray of typeElementsArrays">
+		<mat-expansion-panel-header>{{ sharedTypeLabel(typeElementsArray) }}</mat-expansion-panel-header>
+		<div *ngFor="let typeElements of typeElementsArray" class="mat-elevation-z3">
+			<app-type-elements [summary]="substance.summary" [typeElements]="typeElements"></app-type-elements>
+		</div>
+	</mat-expansion-panel>
+	<mat-expansion-panel *ngIf="toxicityList">
+		<mat-expansion-panel-header>Toxicity</mat-expansion-panel-header>
+		<div class="mat-elevation-z3">
 			<app-toxicity-list [toxicityList]="toxicityList"></app-toxicity-list>
-		</ng-template>
-	</ngb-panel>
-	<ngb-panel *ngIf="physicalProps" title="Physical Properties">
-		<ng-template ngbPanelContent>
+		</div>
+	</mat-expansion-panel>
+	<mat-expansion-panel *ngIf="physicalProps">
+		<mat-expansion-panel-header>Physical Properties</mat-expansion-panel-header>
+		<div class="mat-elevation-z3">
 			<app-physical-props [physicalProps]="physicalProps"></app-physical-props>
-		</ng-template>
-	</ngb-panel>
-</ngb-accordion>
+		</div>
+	</mat-expansion-panel>
+</mat-accordion>
 
 <div *ngIf="substance.lastMod" class="last-mod">Updated: {{ substance.lastMod | date}}</div>

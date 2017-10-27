@@ -23,3 +23,6 @@
 		max-width:90%;
 	}
 }
+.mat-expanded .mat-expansion-panel-header{
+	font-weight: bold;
+}

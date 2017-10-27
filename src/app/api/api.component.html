@@ -5,55 +5,45 @@
 		Display one section at a time
 	</label>
 </div>
-<ngb-accordion [closeOthers]="oneAtATime">
-	<ngb-panel title="Generating Search URLs">
-		<ng-template ngbPanelContent>
-			<app-generating-urls></app-generating-urls>
-		</ng-template>
-	</ngb-panel>
-	<ngb-panel title="Examples">
-		<ng-template ngbPanelContent>
-			<app-examples></app-examples>
-		</ng-template>
-	</ngb-panel>
-	<ngb-panel title="Data Parameters">
-		<ng-template ngbPanelContent>
-			<app-data-parameters></app-data-parameters>
-		</ng-template>
-	</ngb-panel>
-	<ngb-panel title="JSON Results: Interfaces and Key to Abbreviations">
-		<ng-template ngbPanelContent>
-			<app-json-results></app-json-results>
-		</ng-template>
-	</ngb-panel>
-	<ngb-panel title="Search Fields and Operators">
-		<ng-template ngbPanelContent>
-			<app-fields-operators></app-fields-operators>
-		</ng-template>
-	</ngb-panel>
-	<ngb-panel title="Sorting">
-		<ng-template ngbPanelContent>
-			<app-sorting></app-sorting>
-		</ng-template>
-	</ngb-panel>
-	<ngb-panel title="Paging and Batch Results">
-		<ng-template ngbPanelContent>
-			<app-batch-results></app-batch-results>
-		</ng-template>
-	</ngb-panel>
-	<ngb-panel title="Reference Data">
-		<ng-template ngbPanelContent>
-			<app-reference-data></app-reference-data>
-		</ng-template>
-	</ngb-panel>
-	<ngb-panel title="Value Counts and Spell Check">
-		<ng-template ngbPanelContent>
-			<app-value-counts></app-value-counts>
-		</ng-template>
-	</ngb-panel>
-	<ngb-panel title="Use our Source Code">
-		<ng-template ngbPanelContent>
-			<app-source-code></app-source-code>
-		</ng-template>
-	</ngb-panel>
-</ngb-accordion>
+<mat-accordion [multi]="!oneAtATime">
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>Generating Search URLs</mat-expansion-panel-header>
+		<app-generating-urls></app-generating-urls>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>Examples</mat-expansion-panel-header>
+		<app-examples></app-examples>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>Data Parameters</mat-expansion-panel-header>
+		<app-data-parameters></app-data-parameters>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>JSON Results: Interfaces and Key to Abbreviations</mat-expansion-panel-header>
+		<app-json-results></app-json-results>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>Search Fields and Operators</mat-expansion-panel-header>
+		<app-fields-operators></app-fields-operators>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>Sorting</mat-expansion-panel-header>
+		<app-sorting></app-sorting>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>Paging and Batch Results</mat-expansion-panel-header>
+		<app-batch-results></app-batch-results>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>Reference Data</mat-expansion-panel-header>
+		<app-reference-data></app-reference-data>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>Value Counts and Spell Check</mat-expansion-panel-header>
+		<app-value-counts></app-value-counts>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>Use our Source Code</mat-expansion-panel-header>
+		<app-source-code></app-source-code>
+	</mat-expansion-panel>
+</mat-accordion>
