@@ -35,6 +35,8 @@ export class Field{
 
 	private static fields :Field[];
 
+	// Make sure the help matches: \ChemIDsearch\src\app\api\fields-operators\fields-operators.component.html
+
 	// Static Constructor IIFE: see https://github.com/Microsoft/TypeScript/issues/265
 	/* tslint:disable-next-line */
 	private static _constructor = (() :void => {

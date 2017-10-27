@@ -33,6 +33,9 @@ export class DataMode{
 	static readonly dms :DM[] = EnumEx.getValues(DM);
 
 	private static DATA_MODES :DataMode[];
+
+	// Make sure the help matches: \ChemIDsearch\src\app\api\data-parameters\data-parameters.component.html
+
 	// Static Constructor IIFE: see https://github.com/Microsoft/TypeScript/issues/265
 	/* tslint:disable-next-line */
 	private static _constructor = ( () => {

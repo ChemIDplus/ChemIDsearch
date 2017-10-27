@@ -4,6 +4,7 @@ The following fields and operators are available, though not all operators are a
 In general, the "auto" field and operator should not be used; it takes more processing and you also may not get back the matches you wanted.
 The "auto" field and operator exist primarily for the autocomplete functionality.
 Multi-expression searches may not include "auto" fields or operators.
+Likewise, the "regex" operator may not be used with the "auto" field.
 </p>
 <table class="table table-striped">
 	<thead>
@@ -23,10 +24,20 @@ Multi-expression searches may not include "auto" fields or operators.
 		<tr><td>category</td><td>ca</td></tr>
 		<tr><td>inchikey</td><td>ik</td></tr>
 		<tr><td>locator</td><td>lo</td></tr>
+		<tr><td>lastmod</td><td>lm</td></tr>
 		<tr><td>weight</td><td>mw</td></tr>
 		<tr><td>structure</td><td>st</td></tr>
 		<tr><td>has2d</td><td>2d</td></tr>
 		<tr><td>has3d</td><td>3d</td></tr>
+		<tr><td>toxicity</td><td>tox</td></tr>
+		<tr><td>meltingpoint</td><td>mp</td></tr>
+		<tr><td>boilingpoint</td><td>bp</td></tr>
+		<tr><td>watersolubility</td><td>sol</td></tr>
+		<tr><td>logp</td><td>logp</td></tr>
+		<tr><td>henryslawconstant</td><td>hlc</td></tr>
+		<tr><td>atmosphericohrateconstant</td><td>aoh</td></tr>
+		<tr><td>pkadissociationconstant</td><td>pka</td></tr>
+		<tr><td>vaporpressure</td><td>vp</td></tr>
 	</tbody>
 </table>
 
@@ -44,6 +55,7 @@ Multi-expression searches may not include "auto" fields or operators.
 		<tr><td>startswith</td><td>sw</td></tr>
 		<tr><td>endswith</td><td>ew</td></tr>
 		<tr><td>contains</td><td>cs</td></tr>
+		<tr><td>regex</td><td>re</td></tr>
 		<tr><td>between</td><td>bw</td></tr>
 		<tr><td>lte</td><td></td></tr>
 		<tr><td>gte</td><td></td></tr>
