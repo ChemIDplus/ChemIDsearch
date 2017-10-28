@@ -1,0 +1,9 @@
+.mat-column-description{
+	flex: 50;
+}
+.mat-column-regex{
+	flex: 20;
+}
+.mat-column-url{
+	flex: 30;
+}

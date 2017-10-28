@@ -26,3 +26,49 @@
 .mat-expanded .mat-expansion-panel-header{
 	font-weight: bold;
 }
+.top-menu-button,
+.go-button,
+.modify-search-button,
+.delete-expression-button{
+	padding: 5px;
+	border-radius: 0.25rem;
+}
+.top-menu-button,
+.go-button{
+	color: #fff;
+}
+.modify-search-button,
+.delete-expression-button{
+	color: #000;
+}
+.top-menu-button{
+	background-color: #007bff;
+}
+.go-button{
+	background-color: #28a745;
+}
+.modify-search-button{
+	background-color: #17a2b8;
+}
+.delete-expression-button{
+	background-color: #ddd;
+}
+.page-name{
+	font-weight: bold;
+}
+.field,
+.operator{
+	font-style: italic;
+}
+.field{
+	color: purple;
+}
+.operator{
+	color: teal;
+}
+.help li{
+	line-height: 2;
+}
+.help .dense li{
+	line-height: inherit;
+}

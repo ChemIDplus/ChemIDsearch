@@ -1,0 +1,26 @@
+<p>
+The <span class="operator">in list</span> operator combines its terms with OR logic.
+The search returns all substances that exactly match any of the terms.
+Multiple search terms are each separated by the &quot;|&quot; (pipe) character.
+</p>
+
+<p>
+Inserting a pipe character into the "Search Term(s)" input box will update the expression to use the <span class="operator">in list</span> operator.
+</p>
+
+<p>
+When the <span class="operator">in list</span> operator is selected, clicking on an AutoComplete result will append the selected term to the "Search Term(s)" list and append another pipe character.
+Only the characters in the final term are used to generate the AutoComplete results, and only these characters are replaced when selecting an AutoComplete result.
+All prior terms are ignored and left unchanged when generating and using the AutoComplete results.
+</p>
+
+<p>
+At least two terms are required for a valid <span class="operator">in list</span> expression.
+When accessing the API via a link or address in a browser window (a GET request), the maximum number of terms is only limited by the maximum number of characters in the complete URL.
+Typically this is around 4,000 characters total.
+</p>
+
+<p>
+Asterisks serving as wildcards may not be used with the <span class="operator">in list</span> operator.
+Only exact matches will return results.
+</p>

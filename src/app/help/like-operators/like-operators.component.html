@@ -1,0 +1,20 @@
+<p>
+The 3 operators <span class="operator">starts with</span>, <span class="operator">ends with</span>, and <span class="operator">contains</span> run similar kinds of searches.
+The <span class="operator">regex</span> operator could function like any of the three, but is both more powerful and slower.
+The <span class="operator">(automatic)</span> operator also behaves like <span class="operator">starts with</span> unless it finds an exact match.
+</p>
+
+<p>
+When typing into the "Search Term(s)" box, if you enter an asterisk, you can trigger operator changes.
+If the current operator is <span class="operator">(automatic)</span> or <span class="operator">equals</span>, trying to enter an asterisk at the beginning of the term will instead switch it to the <span class="operator">ends with</span> operator.
+Likewise, trying to enter an asterisk at the end of the term will instead switch it to the <span class="operator">starts with</span> operator.
+If the operator is already <span class="operator">starts with</span> or <span class="operator">ends with</span>, then trying to enter the asterisks above will instead switch to the <span class="operator">contains</span> operator.
+</p>
+
+<p>
+<span class="operator">Starts with</span> searches are fast. <span class="operator">Ends with</span> and <span class="operator">contains</span> searches will be slower. A <span class="operator">regex</span> search will be even slower.
+</p>
+
+<p>
+<span class="operator">Starts with</span> searches will generate AutoComplete results, but <span class="operator">ends with</span>, <span class="operator">contains</span>, and <span class="operator">regex</span> searches will not.
+</p>

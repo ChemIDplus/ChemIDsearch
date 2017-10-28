@@ -14,6 +14,7 @@ import { ExamplesComponent } from './examples/examples.component';
 import { ReferenceDataComponent } from './reference-data/reference-data.component';
 import { ValueCountsComponent } from './value-counts/value-counts.component';
 import { SourceCodeComponent } from './source-code/source-code.component';
+import { LastModifiedComponent } from './last-modified/last-modified.component';
 
 @NgModule({
 	imports: [
@@ -31,7 +32,8 @@ import { SourceCodeComponent } from './source-code/source-code.component';
 		FieldsOperatorsComponent,
 		ReferenceDataComponent,
 		ValueCountsComponent,
-		SourceCodeComponent
+		SourceCodeComponent,
+		LastModifiedComponent
 	]
 })
 export class ApiModule { }

@@ -1,0 +1,29 @@
+<p>
+On the <span class="page-name">Create an Expression</span> page, the <span class="field">(automatic)</span> field is selected by default.
+When you use it, the application returns the first match found in the following fields:
+</p>
+<ol class="dense">
+	<li><span class="field">RN</span></li>
+	<li><span class="field">Name</span></li>
+	<li><span class="field">ID</span></li>
+	<li><span class="field">UNII</span></li>
+	<li><span class="field">InChIKey</span></li>
+	<li><span class="field">Formula</span></li>
+	<li><span class="field">Category</span></li>
+	<li><span class="field">Locator</span></li>
+	<li><span class="field">Number</span></li>
+</ol>
+
+<p>
+Therefore, the <span class="field">(automatic)</span> field works best for <span class="field">RN</span>, <span class="field">Name</span>, <span class="field">ID</span>, and <span class="field">UNII</span> searches.
+If you are looking for an <span class="field">InChIKey</span>, the first match might be a <span class="field">Name</span> or <span class="field">UNII</span>, and the application would return that instead.
+</p>
+
+<p>
+To guarantee the results will be the field type you want, first select your desired field instead of using the <span class="field">(automatic)</span> field.
+</p>
+
+<p>
+Additionally, multi-expression searches may not contain any expression with the <span class="field">(automatic)</span> field.
+Nor is the <span class="operator">regex</span> operator available when using the <span class="field">(automatic)</span> field.
+</p>
