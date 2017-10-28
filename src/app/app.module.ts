@@ -11,6 +11,7 @@ import { SearchModule } from './search/search.module';
 import { ResultsModule } from './results/results.module';
 import { HistoryModule } from './history/history.module';
 import { SettingsModule } from './settings/settings.module';
+import { HelpModule } from './help/help.module';
 import { ApiModule } from './api/api.module';
 
 import { AppComponent } from './app.component';
@@ -30,6 +31,7 @@ import { AppComponent } from './app.component';
 		ResultsModule,
 		HistoryModule,
 		SettingsModule,
+		HelpModule,
 		ApiModule
 	],
 	bootstrap: [AppComponent]

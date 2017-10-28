@@ -11,7 +11,6 @@ export enum Fld{
 	category,
 	inchikey,
 	locator,
-	lastmod,
 	weight,
 	structure,
 	has2d,
@@ -24,7 +23,8 @@ export enum Fld{
 	henryslawconstant,
 	atmosphericohrateconstant,
 	pkadissociationconstant,
-	vaporpressure
+	vaporpressure,
+	lastmod
 }
 
 /** Immutable */
@@ -52,7 +52,6 @@ export class Field{
 		a[Fld.category] = new Field('ca', 'Category', 'Cat.', true);
 		a[Fld.inchikey] = new Field('ik', 'InChIKey', 'IKey', true);
 		a[Fld.locator] = new Field('lo', 'Locator', 'Loc.', true);
-		a[Fld.lastmod] = new Field('lm', 'Last Modified', 'LastMod');
 		a[Fld.weight] = new Field('mw', 'Molecular Weight', 'Weight');
 		a[Fld.structure] = new Field('st', 'Structure', 'Struc.', false, false, false, true);
 		a[Fld.has2d] = new Field('2d', 'Has 2D', '2D', false, true, true);
@@ -66,6 +65,7 @@ export class Field{
 		a[Fld.atmosphericohrateconstant] = new Field('aoh', 'Atmospheric OH Rate Constant', 'AOH', false, false, false, false, true);
 		a[Fld.pkadissociationconstant] = new Field('pka', 'pKa Dissociation Constant', 'pKa', false, false, false, false, true);
 		a[Fld.vaporpressure] = new Field('vp', 'Vapor Pressure', 'VP', false, false, false, false, true);
+		a[Fld.lastmod] = new Field('lm', 'Last Modified', 'LastMod');
 	})();
 
 	static get Flds() :Fld[] {

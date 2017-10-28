@@ -1,0 +1,35 @@
+<p>
+If you use the API and store results, the <span class="field">Last Modified</span> field allows you to only fetch incremental changes.
+You can use it with the following operators:
+</p>
+<ul class="dense">
+	<li><span class="operator">&gt;= (gte)</span></li>
+	<li><span class="operator">&lt;= (lte)</span></li>
+</ul>
+
+<p>
+The search value must be one of the following formats:
+</p>
+<ul class="dense">
+	<li>YYYYMMDD</li>
+	<li>YYYY-MM-DD</li>
+	<li>YYYY-MM (evaluated as YYYY-MM-01)</li>
+	<li>YYYY (evaluated as YYYY-01-01)</li>
+	<li>13 digit milliseconds (the last 3 digits need to exist but their values are ignored)</li>
+</ul>
+
+<p>
+To only fetch data for records that have been modified since your last retrieval:
+</p>
+<ol>
+	<li>After running an API search, store the highest lastMod property value from the results.</li>
+	<li>Later, rerun the search with an additional expression: <span class="field">Last Modified</span> <span class="operator">&gt;=</span> [the highest lastMod value + 1000].</li>
+</ol>
+
+<p>
+Note that this method will find new matches or updated records that still match.
+It does not return records that no longer match.
+If you wish to keep your data in sync with ours and remove records that no longer match, more complicated logic would be required.
+One option would be to check the current lastMod date for all records that previously matched.
+Any with a current lastMod value higher than your new search value but which were not returned by the new search must no longer match.
+</p>

@@ -1,0 +1,42 @@
+<p>
+Sometimes, only complex logic evaluating a particular value will provide the desired results: combining optional elements or filtering out undesired matches.
+In these cases, the slow but powerful <span class="operator">regex</span> operator can generate the perfect results.
+</p>
+
+<p>
+However, regular expressions are difficult to get correct and should only be used by advanced users.
+Incorrectly formed expressions could drain our resources and prevent our servers from being able to respond as quickly to other users.
+We don't want to have to block any users due to undue strain, so please only use this operator if you are confident you can create good regular expressions.
+</p>
+
+<p>
+On the server, the Search Term is wrapped with a ^ and $ (if not already present) so that all values need to match a complete term.
+Searches are case insensitive.
+Symbols used in chemical names that have meanings within regular expressions need to be escaped.
+Note that when put into a URL, most special characters need to be escaped (again), so the URL terms often become incomprehensible!
+</p>
+
+<p>
+Note that the <span class="operator">regex</span> operator may not be used with the <span class="field">(automatic)</span> field.
+</p>
+
+<p>
+Some example searches:
+</p>
+<mat-table #table [dataSource]="dataSource">
+	<ng-container matColumnDef="description">
+		<mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+		<mat-cell *matCellDef="let element">{{ element[0] }}</mat-cell>
+	</ng-container>
+	<ng-container matColumnDef="regex">
+		<mat-header-cell *matHeaderCellDef>Regular Expression</mat-header-cell>
+		<mat-cell *matCellDef="let element">{{ element[1] }}</mat-cell>
+	</ng-container>
+	<ng-container matColumnDef="url">
+		<mat-header-cell *matHeaderCellDef>API Totals URL (showing escaped URL term)</mat-header-cell>
+		<mat-cell *matCellDef="let element"><a target="_blank" [href]="element[2]">{{ element[3] }}</a></mat-cell>
+	</ng-container>
+
+	<mat-header-row fxLayout="row" fxLayoutAlign.gt-sm="start center" fxLayout.lt-md="column" fxLayoutAlign.lt-md="start" *matHeaderRowDef="displayedColumns"></mat-header-row>
+	<mat-row fxLayout="row" fxLayoutAlign.gt-sm="start center" fxLayout.lt-md="column" fxLayoutAlign.lt-md="start" *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>

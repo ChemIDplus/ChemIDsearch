@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
 	selector: 'app-source-code',
 	templateUrl: './source-code.component.html',
-	styleUrls: ['./source-code.component.css']
+	styleUrls: ['./source-code.component.css'],
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SourceCodeComponent {
 }

@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
 	selector :'app-sorting',
 	templateUrl :'./sorting.component.html',
-	styleUrls :['./sorting.component.css']
+	styleUrls :['./sorting.component.css'],
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SortingComponent {
 }

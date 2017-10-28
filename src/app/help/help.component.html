@@ -1,0 +1,61 @@
+<h1>Help</h1>
+<div class="checkbox">
+	<label>
+		<input type="checkbox" [(ngModel)]="oneAtATime">
+		Display one section at a time
+	</label>
+</div>
+<mat-accordion [multi]="!oneAtATime" class="help">
+	<mat-expansion-panel expanded="true">
+		<mat-expansion-panel-header>To Search:</mat-expansion-panel-header>
+		<app-to-search></app-to-search>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header><span class="field">(automatic)</span>&nbsp;Field</mat-expansion-panel-header>
+		<app-automatic-field></app-automatic-field>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header><span class="operator">(automatic)</span>&nbsp;Operator</mat-expansion-panel-header>
+		<app-automatic-operator></app-automatic-operator>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>AutoComplete Results</mat-expansion-panel-header>
+		<app-autocomplete></app-autocomplete>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>Edit Your Search</mat-expansion-panel-header>
+		<app-edit-search></app-edit-search>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>Create Complex Searches with Additional Expressions</mat-expansion-panel-header>
+		<app-multiple-expressions></app-multiple-expressions>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header><span class="operator">In List</span>&nbsp;Operator for OR Searches</mat-expansion-panel-header>
+		<app-inlist-operator></app-inlist-operator>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header><span class="operator">Starts With</span>,&nbsp;<span class="operator">Ends With</span>,&nbsp;&amp;&nbsp;<span class="operator">Contains</span>&nbsp;Operators</mat-expansion-panel-header>
+		<app-like-operators></app-like-operators>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header><span class="field">Formula</span>&nbsp;Field</mat-expansion-panel-header>
+		<app-formula-field></app-formula-field>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header><span class="field">Category</span>&nbsp;Field</mat-expansion-panel-header>
+		<app-category-field></app-category-field>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header><span class="field">Structure</span>&nbsp;Field</mat-expansion-panel-header>
+		<app-structure-field></app-structure-field>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header><span class="field">Toxicity</span>&nbsp;Field</mat-expansion-panel-header>
+		<app-toxicity-field></app-toxicity-field>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header><span class="operator">Regex</span>&nbsp;Operator for Complex Logic per Value</mat-expansion-panel-header>
+		<app-regex-operator></app-regex-operator>
+	</mat-expansion-panel>
+</mat-accordion>
