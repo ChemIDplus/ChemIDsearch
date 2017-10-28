@@ -17,3 +17,26 @@ Any number of additional expressions can be added to the search and all will be 
 Whenever there is more than one expression, you also have the option to mark the &quot;Not&quot; checkbox for some of your expressions.
 For a valid search, at least one expression must not have &quot;Not&quot; checked.
 </p>
+
+<p>
+For example, to search for all analgesics, you would use one expression:
+</p>
+<ul>
+	<li><span class="field">Category</span> <span class="operator">equals</span> Analgesics</li>
+</ul>
+
+<p>
+Whereas, to search for all analgesics within the Drug Information Portal, you would use two expressions:
+</p>
+<ul>
+	<li><span class="field">Category</span> <span class="operator">equals</span> Analgesics</li>
+	<li><span class="field">Locator</span> <span class="operator">equals</span> DrugPortal</li>
+</ul>
+
+<p>
+If you instead wanted to find all analgesics not within the Drug Information Portal, you would check the &quot;Not&quot; box on that expression:
+</p>
+<ul>
+	<li><span class="field">Category</span> <span class="operator">equals</span> Analgesics</li>
+	<li>NOT <span class="field">Locator</span> <span class="operator">equals</span> DrugPortal</li>
+</ul>

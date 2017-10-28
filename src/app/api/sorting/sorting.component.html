@@ -1,13 +1,13 @@
 <p>
 All API calls return sorted results.
-The default sort is usually by ascending RN/ID.
-The exception is Similarity searches, which by default are sorted first by descending Similarity, and second by ascending RN/ID.
+The default sort is usually by ascending <span class="field">RN</span> or <span class="field">ID</span>.
+The exception is <span class="operator">similarity</span> searches, which by default are sorted first by descending similarity values, and second by ascending <span class="field">RN</span> | <span class="field">ID</span>.
 </p>
 
 <p>
-You can specify a primary sort by appending "sortBy1=" followed by a sort field paramter value.
-If you want to reverse the default sort direction, also include "sortBy1Reverse=true".
-You may also request a secondary sort by including "sortBy2=" and, if you wish "sortBy2Reverse=true".
+You can specify a primary sort by appending &quot;sortBy1=&quot; followed by a sort field paramter value.
+If you want to reverse the default sort direction, also include &quot;sortBy1Reverse=true&quot;.
+You may also request a secondary sort by including &quot;sortBy2=&quot; and, if you wish &quot;sortBy2Reverse=true&quot;.
 </p>
 
 <p>
