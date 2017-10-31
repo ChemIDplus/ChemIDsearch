@@ -1,7 +1,8 @@
 import { AutoCompleteResult } from './auto-complete-result';
 import { Fld, Field } from './field';
 import { Op, Operator } from './operator';
-import { Mt, MeasurementType } from './measurement-type';
+import { PPF, PPField } from './pp-field';
+import { PPMT, PPMeasurementType } from './pp-measurement-type';
 import { ToxT, ToxicityTest } from './toxicity-test';
 import { ToxS, ToxicitySpecies } from './toxicity-species';
 import { ToxR, ToxicityRoute} from './toxicity-route';
@@ -15,6 +16,7 @@ export interface ExpressionMinJSON{
 	v :string;
 	n ? :boolean;
 	s ? :number;
+	p ? :number;
 	m ? :number;
 	tt ? :number;
 	ts ? :number;
@@ -55,8 +57,11 @@ export class Expression {
 		if(a.simPercent !== b.simPercent){
 			return (a.simPercent !== undefined && b.simPercent !== undefined) ? a.simPercent - b.simPercent : ( a.simPercent === undefined ? -1 : 1 );
 		}
-		if(a.mt !== b.mt){
-			return (a.mt !== undefined && b.mt !== undefined) ? a.mt - b.mt : ( a.mt === undefined ? -1 : 1 );
+		if(a.ppf !== b.ppf){
+			return (a.ppf !== undefined && b.ppf !== undefined) ? a.ppf - b.ppf : ( a.ppf === undefined ? -1 : 1 );
+		}
+		if(a.ppmt !== b.ppmt){
+			return (a.ppmt !== undefined && b.ppmt !== undefined) ? a.ppmt - b.ppmt : ( a.ppmt === undefined ? -1 : 1 );
 		}
 		if(a.toxT !== b.toxT){
 			return (a.toxT !== undefined && b.toxT !== undefined) ? a.toxT - b.toxT : ( a.toxT === undefined ? -1 : 1 );
@@ -92,17 +97,19 @@ export class Expression {
 		readonly value :string,
 		readonly not ? :boolean,
 		readonly simPercent ? :number,
-		readonly mt ? :Mt,
+		readonly ppf ? :PPF,
+		readonly ppmt ? :PPMT,
 		readonly toxT ? :ToxT,
 		readonly toxS ? :ToxS,
 		readonly toxR ? :ToxR,
 		readonly toxE ? :ToxE
 	){
 		this.url = this.generateURL(true);
-		this.display = (this.not ? 'NOT ' : '') + Field.getDisplayAbbr(this.fld)
+		this.display = (this.not ? 'NOT ' : '')
+			+ (this.fld === Fld.physicalproperty ? PPField.getDisplayAbbr(this.ppf) : Field.getDisplayAbbr(this.fld))
 			+ (this.simPercent ? ' ' + this.simPercent + '%' : '')
 			+ (this.value ? ' ' + Operator.getDisplayAbbr(this.op) + ' ' + (Field.caseSensitive(this.fld) ? this.value : this.value.toUpperCase()) : '')
-			+ (this.mt ? ' ' + MeasurementType.getDisplayAbbr(this.mt) : '')
+			+ (this.ppmt ? ' ' + PPMeasurementType.getDisplayAbbr(this.ppmt) : '')
 			+ (this.toxT ? ' ' + ToxicityTest.getDisplayAbbr(this.toxT) : '')
 			+ (this.toxS ? ' ' + ToxicitySpecies.getDisplayAbbr(this.toxS) : '')
 			+ (this.toxR ? ' ' + ToxicityRoute.getDisplayAbbr(this.toxR) : '')
@@ -112,11 +119,11 @@ export class Expression {
 
 	mutable() :ExpressionMut {
 		Logger.trace('Expression.mutable');
-		return new ExpressionMut(this.fld, this.not, this.op, this.simPercent, this.value, this.mt, this.toxT, this.toxS, this.toxR, this.toxE);
+		return new ExpressionMut(this.fld, this.not, this.op, this.simPercent, this.value, this.ppf, this.ppmt, this.toxT, this.toxS, this.toxR, this.toxE);
 	}
 	toggleNot() :Expression {
 		Logger.trace('Expression.toggleNot');
-		return new Expression(this.fld, this.op, this.value, !this.not, this.simPercent, this.mt, this.toxT, this.toxS, this.toxR, this.toxE);
+		return new Expression(this.fld, this.op, this.value, !this.not, this.simPercent, this.ppf, this.ppmt, this.toxT, this.toxS, this.toxR, this.toxE);
 	}
 
 	get routerLinkParams() :ReadonlyArray<string> {
@@ -164,7 +171,8 @@ export class Expression {
 		// Double escape all / in the value
 		const v :string = (this.value ? Expression.trimAndCase(this.fld, this.value).replace(/\\/g, '%5C').replace(/\//g, '%2F') : undefined);
 		return (useAbbr ? Field.getAbbr(this.fld) : Fld[this.fld])
-			+ (this.mt ? '/' + (useAbbr ? MeasurementType.getAbbr(this.mt) : Mt[this.mt]) : '')
+			+ (this.fld === Fld.physicalproperty ? '/' + (useAbbr ? PPField.getAbbr(this.ppf) : PPF[this.ppf]) : '')
+			+ (this.ppmt ? '/' + (useAbbr ? PPMeasurementType.getAbbr(this.ppmt) : PPMT[this.ppmt]) : '')
 			+ (this.toxT ? '/' + (useAbbr ? ToxicityTest.getAbbr(this.toxT) : ToxT[this.toxT]) : '')
 			+ (this.toxS ? '/' + (useAbbr ? ToxicitySpecies.getAbbr(this.toxS) : ToxS[this.toxS]) : '')
 			+ (this.toxR ? '/' + (useAbbr ? ToxicityRoute.getAbbr(this.toxR) : ToxR[this.toxR]) : '')
@@ -188,8 +196,11 @@ export class Expression {
 		if(this.simPercent !== undefined){
 			e.s = this.simPercent;
 		}
-		if(this.mt !== undefined){
-			e.m = this.mt;
+		if(this.ppf !== undefined){
+			e.p = this.ppf;
+		}
+		if(this.ppmt !== undefined){
+			e.m = this.ppmt;
 		}
 		if(this.toxT !== undefined){
 			e.tt = this.toxT;
@@ -207,12 +218,13 @@ export class Expression {
 	}
 	static deserialize(e :ExpressionMinJSON) :Expression {
 		if(e){
-			return new Expression(e.f, e.o, e.v, e.n, e.s, e.m, e.tt, e.ts, e.tr, e.te);
+			return new Expression(e.f, e.o, e.v, e.n, e.s, e.p, e.m, e.tt, e.ts, e.tr, e.te);
 		}
 	}
 	static deserializeURL(url :string, skipDecodeValue :boolean = false) :Expression {
 		let expTermsIndex :number = 0,
-			mt :Mt,
+			ppf :PPF,
+			ppmt :PPMT,
 			toxT :ToxT,
 			toxS :ToxS,
 			toxR :ToxR,
@@ -227,9 +239,11 @@ export class Expression {
 
 		++expTermsIndex;
 
-		if(Field.pp(fld)){
-			mt = MeasurementType.getMt(expTerms[expTermsIndex]);
-			if(mt !== undefined){
+		if(fld === Fld.physicalproperty){
+			ppf = PPField.getPPF(expTerms[expTermsIndex]);
+			++expTermsIndex;
+			ppmt = PPMeasurementType.getPPMT(expTerms[expTermsIndex]);
+			if(ppmt !== undefined){
 				++expTermsIndex;
 			}
 		}else if(fld === Fld.toxicity){
@@ -263,7 +277,7 @@ export class Expression {
 			value = (!skipDecodeValue ? decodeURIComponent(val) : val).replace(/%5C/g, '\\').replace(/%2F/g, '/');
 		}
 
-		return new Expression(fld, op, value, not, simPercent, mt, toxT, toxS, toxR, toxE);
+		return new Expression(fld, op, value, not, simPercent, ppf, ppmt, toxT, toxS, toxR, toxE);
 	}
 
 }
@@ -282,7 +296,8 @@ export class ExpressionMut{
 		private _op :Op,
 		private _simPercent :number,
 		private _value :string,
-		private _mt :Mt,
+		private _ppf :PPF,
+		private _ppmt :PPMT,
 		private _toxT :ToxT,
 		private _toxS :ToxS,
 		private _toxR :ToxR,
@@ -295,7 +310,7 @@ export class ExpressionMut{
 	}
 
 	immutable() :Expression {
-		return new Expression(this._fld, this._op, this._value, this._not, this._simPercent, this._mt, this._toxT, this._toxS, this._toxR, this._toxE);
+		return new Expression(this._fld, this._op, this._value, this._not, this._simPercent, this._ppf, this._ppmt, this._toxT, this._toxS, this._toxR, this._toxE);
 	}
 
 	set fld(fld :Fld) {
@@ -336,12 +351,19 @@ export class ExpressionMut{
 			this.onChange();
 		}
 	}
-	set mt(mt :Mt) {
-		if(mt === Mt.either){
-			mt = undefined;
+	set ppf(ppf :PPF) {
+		const changed :boolean = (this._ppf !== ppf);
+		this._ppf = ppf;
+		if(changed){
+			this.onChange();
 		}
-		const changed :boolean = (this._mt !== mt);
-		this._mt = mt;
+	}
+	set ppmt(ppmt :PPMT) {
+		if(ppmt === PPMT.either){
+			ppmt = undefined;
+		}
+		const changed :boolean = (this._ppmt !== ppmt);
+		this._ppmt = ppmt;
 		if(changed){
 			this.onChange();
 		}
@@ -392,7 +414,8 @@ export class ExpressionMut{
 	get op() :Op { return this._op; }
 	get simPercent() :number { return this._simPercent; }
 	get value() :string { return this._value; }
-	get mt() :Mt { return this._mt; }
+	get ppf() :PPF { return this._ppf; }
+	get ppmt() :PPMT { return this._ppmt; }
 	get toxT() :ToxT { return this._toxT; }
 	get toxS() :ToxS { return this._toxS; }
 	get toxR() :ToxR { return this._toxR; }
@@ -402,8 +425,11 @@ export class ExpressionMut{
 	get acValue() :string { return this._acValue; }
 
 	get display() :string {
-		return Field.getDisplay(this._fld) + ' ' + (this._not ? 'NOT ' : '') + Operator.getDisplay(this._op) + ' ' + (this._value ? (Field.caseSensitive(this._fld) ? this._value : this._value.toUpperCase()) : '""')
-			+ (this._mt ? ' ' + MeasurementType.getDisplay(this._mt) : '')
+		return (this._not ? 'NOT ' : '')
+			+ (this._fld === Fld.physicalproperty ? PPField.getDisplay(this._ppf) : Field.getDisplay(this._fld))
+			+ (this._simPercent ? ' ' + this.simPercent + '%' : '')
+			+ ' ' + Operator.getDisplay(this._op) + ' ' + (this._value ? (Field.caseSensitive(this._fld) ? this._value : this._value.toUpperCase()) : '""')
+			+ (this._ppmt ? ' ' + PPMeasurementType.getDisplay(this._ppmt) : '')
 			+ (this._toxT ? ' ' + ToxicityTest.getDisplay(this._toxT) : '')
 			+ (this._toxS ? ' ' + ToxicitySpecies.getDisplay(this._toxS) : '')
 			+ (this._toxR ? ' ' + ToxicityRoute.getDisplay(this._toxR) : '')
@@ -411,10 +437,10 @@ export class ExpressionMut{
 	}
 
 	get clone() :ExpressionMut {
-		return new ExpressionMut(this._fld, this._not, this._op, this._simPercent, this._value, this._mt, this._toxT, this._toxS, this._toxR, this._toxE, this.ac, this.testFirst);
+		return new ExpressionMut(this._fld, this._not, this._op, this._simPercent, this._value, this._ppf, this._ppmt, this._toxT, this._toxS, this._toxR, this._toxE, this.ac, this.testFirst);
 	}
 	get autocomplete() :ExpressionMut {
-		return new ExpressionMut(this._fld, this._not, Op.startswith, undefined, this._acValue, undefined, undefined, undefined, undefined, undefined, undefined, this.testFirst);
+		return new ExpressionMut(this._fld, this._not, Op.startswith, undefined, this._acValue, undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.testFirst);
 	}
 	get canonical() :boolean {
 		return (this._fld === Fld.rn || this._fld === Fld.id) && this._op === Op.equals;
@@ -425,7 +451,8 @@ export class ExpressionMut{
 			// Double escape all / in the value
 			const v :string = Expression.trimAndCase(this._fld, this._value).replace(/\//g, '%2F');
 			this._url = Field.getAbbr(this._fld)
-				+ (this._mt ? '/' + MeasurementType.getAbbr(this._mt) : '')
+				+ (this._fld === Fld.physicalproperty ? '/' + PPField.getAbbr(this._ppf) : '')
+				+ (this._ppmt ? '/' + PPMeasurementType.getAbbr(this._ppmt) : '')
 				+ (this._toxT ? '/' + ToxicityTest.getAbbr(this._toxT) : '')
 				+ (this._toxS ? '/' + ToxicitySpecies.getAbbr(this._toxS) : '')
 				+ (this._toxR ? '/' + ToxicityRoute.getAbbr(this._toxR) : '')
@@ -441,7 +468,7 @@ export class ExpressionMut{
 
 	equals(exp :ExpressionMut) :boolean {
 		return this._fld === exp._fld && this._not === exp._not && this._op === exp._op && this._simPercent === exp._simPercent && this._value === exp._value
-			&& this._mt === exp._mt && this._toxT === exp._toxT && this._toxS === exp._toxS && this._toxR === exp._toxR && this._toxE === exp._toxE;
+			&& this._ppf === exp._ppf && this._ppmt === exp._ppmt && this._toxT === exp._toxT && this._toxS === exp._toxS && this._toxR === exp._toxR && this._toxE === exp._toxE;
 	}
 
 	serialize() :ExpressionMinJSON {
@@ -452,8 +479,11 @@ export class ExpressionMut{
 		if(this._simPercent){
 			e.s = this._simPercent;
 		}
-		if(this._mt){
-			e.m = this._mt;
+		if(this._ppf){
+			e.p = this._ppf;
+		}
+		if(this._ppmt){
+			e.m = this._ppmt;
 		}
 		if(this._toxT){
 			e.tt = this._toxT;
@@ -472,7 +502,7 @@ export class ExpressionMut{
 	/*tslint:disable-next-line:member-ordering */
 	static deserialize(e :ExpressionMinJSON) :ExpressionMut {
 		if(e){
-			return new ExpressionMut(e.f, e.n, e.o, e.s, e.v, e.m, e.tt, e.ts, e.tr, e.te);
+			return new ExpressionMut(e.f, e.n, e.o, e.s, e.v, e.p, e.m, e.tt, e.ts, e.tr, e.te);
 		}
 	}
 
@@ -483,7 +513,8 @@ export class ExpressionMut{
 		this._value = exp._value;
 		this._not = exp._not;
 		this._simPercent = exp._simPercent;
-		this._mt = exp._mt;
+		this._ppf = exp._ppf;
+		this._ppmt = exp._ppmt;
 		this._toxT = exp._toxT;
 		this._toxS = exp._toxS;
 		this._toxR = exp._toxR;

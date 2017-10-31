@@ -32,7 +32,8 @@ export class ToxicityEffect{
 
 
 // Static
-	private static toxEs :ToxE[] = EnumEx.getValues(ToxE);
+	/* tslint:disable-next-line:variable-name */
+	static readonly ToxEs :ReadonlyArray<ToxE> = EnumEx.getValues(ToxE);
 
 	private static toxicityEffects :ToxicityEffect[];
 
@@ -67,9 +68,6 @@ export class ToxicityEffect{
 		a[ToxE.vascular] = new ToxicityEffect('Vascular', 'Vascular');
 	})();
 
-	static getToxEs() :ToxE[] {
-		return ToxicityEffect.toxEs;
-	}
 	static getAbbr(toxE :ToxE) :string {
 		return ToxE[toxE]; // currently no abbreviation, but leaving it in the public api in case we add them
 	}

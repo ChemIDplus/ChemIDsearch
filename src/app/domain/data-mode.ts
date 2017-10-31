@@ -30,7 +30,8 @@ export enum DM {
 /** Immutable */
 export class DataMode{
 // Static:
-	static readonly dms :DM[] = EnumEx.getValues(DM);
+	/* tslint:disable-next-line:variable-name */
+	static readonly DMs :ReadonlyArray<DM> = EnumEx.getValues(DM);
 
 	private static DATA_MODES :DataMode[];
 
@@ -68,10 +69,6 @@ export class DataMode{
 				a[DM.image] = new DataMode(DM.image, 80, ' = png bytes');
 		/* tslint:enable:align */
 	})();
-
-	static get DMs() :DM[] {
-		return DataMode.dms;
-	}
 
 	static getDataMode(dm :DM) :DataMode {
 		return DataMode.DATA_MODES[dm];

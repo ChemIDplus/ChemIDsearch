@@ -15,15 +15,8 @@ export enum Fld{
 	structure,
 	has2d,
 	has3d,
+	physicalproperty,
 	toxicity,
-	meltingpoint,
-	boilingpoint,
-	watersolubility,
-	logp,
-	henryslawconstant,
-	atmosphericohrateconstant,
-	pkadissociationconstant,
-	vaporpressure,
 	lastmod
 }
 
@@ -31,7 +24,8 @@ export enum Fld{
 export class Field{
 
 // Static
-	private static flds :Fld[] = EnumEx.getValues(Fld);
+	/* tslint:disable-next-line:variable-name */
+	static readonly Flds :ReadonlyArray<Fld> = EnumEx.getValues(Fld);
 
 	private static fields :Field[];
 
@@ -56,27 +50,17 @@ export class Field{
 		a[Fld.structure] = new Field('st', 'Structure', 'Struc.', false, false, false, true);
 		a[Fld.has2d] = new Field('2d', 'Has 2D', '2D', false, true, true);
 		a[Fld.has3d] = new Field('3d', 'Has 3D', '3D', false, true, true);
+		a[Fld.physicalproperty] = new Field('pp', 'Physical Property', 'PP'); // Display values are not currently used; PPField displayed instead
 		a[Fld.toxicity] = new Field('tox', 'Toxicity', 'Tox.');
-		a[Fld.meltingpoint] = new Field('mp', 'Melting Point', 'MP', false, false, false, false, true);
-		a[Fld.boilingpoint] = new Field('bp', 'Boiling Point', 'BP', false, false, false, false, true);
-		a[Fld.watersolubility] = new Field('sol', 'Water Solubility', 'Sol.', false, false, false, false, true);
-		a[Fld.logp] = new Field('logp', 'Log P', 'Log P', false, false, false, false, true);
-		a[Fld.henryslawconstant] = new Field('hlc', 'Henry\'s Law Constant', 'HLC', false, false, false, false, true);
-		a[Fld.atmosphericohrateconstant] = new Field('aoh', 'Atmospheric OH Rate Constant', 'AOH', false, false, false, false, true);
-		a[Fld.pkadissociationconstant] = new Field('pka', 'pKa Dissociation Constant', 'pKa', false, false, false, false, true);
-		a[Fld.vaporpressure] = new Field('vp', 'Vapor Pressure', 'VP', false, false, false, false, true);
 		a[Fld.lastmod] = new Field('lm', 'Last Modified', 'LastMod');
 	})();
 
-	static get Flds() :Fld[] {
-		return Field.flds;
-	}
 	static getAbbr(fld :Fld) :string {
 		return Field.getField(fld).abbr;
 	}
 	/* tslint:disable-next-line:variable-name */
 	static getFld(name_or_abbr :string) :Fld {
-		return Fld[name_or_abbr] || Field.flds.find( (fld :Fld) => Field.fields[fld].abbr === name_or_abbr);
+		return Fld[name_or_abbr] || Field.Flds.find( (fld :Fld) => Field.fields[fld].abbr === name_or_abbr);
 	}
 	static getDisplay(fld :Fld) :string {
 		return Field.getField(fld).display;
@@ -96,9 +80,6 @@ export class Field{
 	static caseSensitive(fld :Fld) :boolean {
 		return Field.getField(fld).caseSensitive;
 	}
-	static pp(fld :Fld) :boolean {
-		return Field.getField(fld).pp;
-	}
 
 
 	private static getField(fld :Fld) :Field {
@@ -114,8 +95,7 @@ export class Field{
 		readonly allowsAutocomplete ? :boolean,
 		readonly multiOnly ? :boolean,
 		readonly boolean ? :boolean,
-		readonly caseSensitive ? :boolean,
-		readonly pp ? :boolean
+		readonly caseSensitive ? :boolean
 	){}
 
 }

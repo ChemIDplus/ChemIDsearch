@@ -26,7 +26,8 @@ export class ToxicitySpecies{
 
 
 // Static
-	private static toxSs :ToxS[] = EnumEx.getValues(ToxS);
+	/* tslint:disable-next-line:variable-name */
+	static readonly ToxSs :ReadonlyArray<ToxS> = EnumEx.getValues(ToxS);
 
 	private static toxicitySpeciess :ToxicitySpecies[];
 
@@ -55,9 +56,6 @@ export class ToxicitySpecies{
 		a[ToxS.squirrel] = new ToxicitySpecies('Squirrel', 'Squirrel');
 	})();
 
-	static getToxSs() :ToxS[] {
-		return ToxicitySpecies.toxSs;
-	}
 	static getAbbr(toxS :ToxS) :string {
 		return ToxS[toxS]; // currently no abbreviation, but leaving it in the public api in case we add them
 	}

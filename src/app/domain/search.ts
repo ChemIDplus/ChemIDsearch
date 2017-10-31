@@ -34,35 +34,36 @@ export class Search {
 	/*tslint:disable:no-string-literal */
 	static parseParams(params :Params) :Search {
 		Logger.log('Search.parseParams', params);
-		const sFld :string = params['fld'],
-			sOp :string = params['op'],
-			sMt :string = params['mt'],
-			sTox1 :string = params['tox1'];
-		let sExp :string = params['exp1'],
-			exps :Expression[] = [];
-		if(sTox1){
-			const sTox2 :string = params['tox2'],
-				sTox3 :string = params['tox3'],
-				sTox4 :string = params['tox4'],
-				sTox5 :string = params['tox5'],
-				sTox6 :string = params['tox6'];
-			return Search.deserializeURL('tox/' + sTox1 + (sTox2 ? '/' + sTox2 + (sTox3 ? '/' + sTox3 + (sTox4 ? '/' + sTox4 + (sTox5 ? '/' + sTox5 + (sTox6 ? '/' + sTox6 : '' ) : '' ) : '' ) : '' ) : '' ));
-		}
-		if(sFld && sOp){
-			return Search.deserializeURL(sFld + '/' + (sMt ? sMt + '/' : '' ) + sOp + '/' + params['value'].replace(/%28/, '(').replace(/%29/, ')'));
-		}else if(sExp){
+		const fld :string = params['fld'],
+			op :string = params['op'],
+			ppf :string = params['ppf'],
+			tox1 :string = params['tox1'],
+			exp1 :string = params['exp1'];
+		if(ppf){
+			const ppmt :string = params['ppmt'];
+			return Search.deserializeURL('pp/' + ppf + (ppmt ? '/' + ppmt : '' ) + '/' + op + '/' + params['value']);
+		}else if(tox1){
+			const tox2 :string = params['tox2'],
+				tox3 :string = params['tox3'],
+				tox4 :string = params['tox4'],
+				tox5 :string = params['tox5'],
+				tox6 :string = params['tox6'];
+			return Search.deserializeURL('tox/' + tox1 + (tox2 ? '/' + tox2 + (tox3 ? '/' + tox3 + (tox4 ? '/' + tox4 + (tox5 ? '/' + tox5 + (tox6 ? '/' + tox6 : '' ) : '' ) : '' ) : '' ) : '' ));
+		}else if(fld && op){
+			return Search.deserializeURL(fld + '/' + op + '/' + params['value'].replace(/%28/, '(').replace(/%29/, ')'));
+		}else if(exp1){
 			const expUrls :string[] = [];
-			let i :number = 1;
-			while(sExp){
-				expUrls.push(sExp);
+			let i :number = 1,
+				expI :string = exp1;
+			while(expI){
+				expUrls.push(expI);
 				++i;
-				sExp = params['exp' + i];
+				expI = params['exp' + i];
 			}
-			exps = expUrls.map( (expURL :string) => Expression.deserializeURL(decodeURIComponent(expURL).replace(/%28/, '(').replace(/%29/, ')'), true));
+			return new Search(expUrls.map( (expURL :string) => Expression.deserializeURL(decodeURIComponent(expURL).replace(/%28/, '(').replace(/%29/, ')'), true)));
 		}else{
-			exps = undefined;
+			return Search.EMPTY_SEARCH;
 		}
-		return new Search(exps);
 	}
 	/*tslint:enable:no-string-literal */
 

@@ -72,17 +72,8 @@ export class Operator{
 			case Fld.inchikey:
 			case Fld.locator:
 				return Operator.idOps;
-			case Fld.lastmod:
-				return Operator.dateOps;
 			case Fld.weight:
-			case Fld.meltingpoint:
-			case Fld.boilingpoint:
-			case Fld.watersolubility:
-			case Fld.logp:
-			case Fld.henryslawconstant:
-			case Fld.atmosphericohrateconstant:
-			case Fld.pkadissociationconstant:
-			case Fld.vaporpressure:
+			case Fld.physicalproperty:
 			case Fld.toxicity:
 				return Operator.rangeOps;
 			case Fld.structure:
@@ -90,6 +81,8 @@ export class Operator{
 			case Fld.has2d:
 			case Fld.has3d:
 				return Operator.eqOp;
+			case Fld.lastmod:
+				return Operator.dateOps;
 			default:
 				throw new Error('getOps expected a valid fld and received ' + fld);
 		}
