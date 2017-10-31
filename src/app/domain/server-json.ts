@@ -4,7 +4,8 @@ import { Element } from './element';
 import { Expression, ExpressionMut } from './expression';
 import { Fld } from './field';
 import { IDSimilarity } from './id-similarity';
-import { Mt } from './measurement-type';
+import { PPF } from './pp-field';
+import { PPMT } from './pp-measurement-type';
 import { Op } from './operator';
 import { PhysicalProp } from './physical-prop';
 import { RNIDName } from './rn-id-name';
@@ -205,11 +206,12 @@ interface ExpressionServerJSON {
 	value :string;
 	not ? :boolean;
 	similarity ? :number;
-	measurement ? :string;
-	toxtest ? :string;
-	toxspecies ? :string;
-	toxroute ? :string;
-	toxeffect ? :string;
+	ppField ? :string;
+	ppMeasurement ? :string;
+	toxTest ? :string;
+	toxSpecies ? :string;
+	toxRoute ? :string;
+	toxEffect ? :string;
 }
 interface DataCountServerJSON {
 	/** substances */
@@ -243,12 +245,13 @@ export class ServerJSON {
 			value :string = sj.value,
 			not :boolean = sj.not,
 			simPercent :number = sj.similarity,
-			mt :Mt = sj.measurement && Mt[sj.measurement.toLowerCase()],
-			toxT :ToxT = sj.toxtest && ToxT[sj.toxtest.toLowerCase()],
-			toxS :ToxS = sj.toxspecies && ToxS[sj.toxspecies.toLowerCase()],
-			toxR :ToxR = sj.toxroute && ToxR[sj.toxroute.toLowerCase()],
-			toxE :ToxE = sj.toxeffect && ToxE[sj.toxeffect.toLowerCase()];
-		return new Expression(fld, op, value, not, simPercent, mt, toxT, toxS, toxR, toxE);
+			ppf :PPF = sj.ppField && PPF[sj.ppField.toLowerCase()],
+			ppmt :PPMT = sj.ppMeasurement && PPMT[sj.ppMeasurement.toLowerCase()],
+			toxT :ToxT = sj.toxTest && ToxT[sj.toxTest.toLowerCase()],
+			toxS :ToxS = sj.toxSpecies && ToxS[sj.toxSpecies.toLowerCase()],
+			toxR :ToxR = sj.toxRoute && ToxR[sj.toxRoute.toLowerCase()],
+			toxE :ToxE = sj.toxEffect && ToxE[sj.toxEffect.toLowerCase()];
+		return new Expression(fld, op, value, not, simPercent, ppf, ppmt, toxT, toxS, toxR, toxE);
 	}
 	static expressionMut(sj :ExpressionServerJSON) :ExpressionMut {
 		const fld :Fld = Fld[sj.field.toLowerCase()],
@@ -256,12 +259,13 @@ export class ServerJSON {
 			value :string = sj.value,
 			not :boolean = sj.not,
 			simPercent :number = sj.similarity,
-			mt :Mt = sj.measurement && Mt[sj.measurement.toLowerCase()],
-			toxT :ToxT = sj.toxtest && ToxT[sj.toxtest.toLowerCase()],
-			toxS :ToxS = sj.toxspecies && ToxS[sj.toxspecies.toLowerCase()],
-			toxR :ToxR = sj.toxroute && ToxR[sj.toxroute.toLowerCase()],
-			toxE :ToxE = sj.toxeffect && ToxE[sj.toxeffect.toLowerCase()];
-		return new ExpressionMut(fld, not, op, simPercent, value, mt, toxT, toxS, toxR, toxE);
+			ppf :PPF = sj.ppField && PPF[sj.ppField.toLowerCase()],
+			ppmt :PPMT = sj.ppMeasurement && PPMT[sj.ppMeasurement.toLowerCase()],
+			toxT :ToxT = sj.toxTest && ToxT[sj.toxTest.toLowerCase()],
+			toxS :ToxS = sj.toxSpecies && ToxS[sj.toxSpecies.toLowerCase()],
+			toxR :ToxR = sj.toxRoute && ToxR[sj.toxRoute.toLowerCase()],
+			toxE :ToxE = sj.toxEffect && ToxE[sj.toxEffect.toLowerCase()];
+		return new ExpressionMut(fld, not, op, simPercent, value, ppf, ppmt, toxT, toxS, toxR, toxE);
 	}
 	static physicalProps(sja :PhysicalPropServerJSON[]) :PhysicalProp[] {
 		if(sja && sja.length){

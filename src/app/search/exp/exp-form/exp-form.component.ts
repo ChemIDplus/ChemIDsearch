@@ -6,7 +6,8 @@ import { Subscription } from 'rxjs/Subscription';
 import { Expression, ExpressionMut } from './../../../domain/expression';
 import { Fld, Field } from '../../../domain/field';
 import { Op, Operator } from '../../../domain/operator';
-import { Mt, MeasurementType } from '../../../domain/measurement-type';
+import { PPF, PPField } from '../../../domain/pp-field';
+import { PPMT, PPMeasurementType } from '../../../domain/pp-measurement-type';
 import { ToxT, ToxicityTest } from '../../../domain/toxicity-test';
 import { ToxS, ToxicitySpecies } from '../../../domain/toxicity-species';
 import { ToxR, ToxicityRoute } from '../../../domain/toxicity-route';
@@ -40,7 +41,8 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 	ctrlOp :FormControl;
 	ctrlValue :FormControl;
 	ctrlValueBoolean :FormControl;
-	ctrlMt :FormControl;
+	ctrlPPF :FormControl;
+	ctrlPPMT :FormControl;
 	ctrlToxT :FormControl;
 	ctrlToxS :FormControl;
 	ctrlToxR :FormControl;
@@ -88,7 +90,8 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.ctrlValue = new FormControl(this.exp.value);
 		this.ctrlValueBoolean = new FormControl(true);
 		this.currentOps = this.ops;
-		this.ctrlMt = new FormControl(this.exp.mt || Mt.either);
+		this.ctrlPPF = new FormControl(this.exp.ppf);
+		this.ctrlPPMT = new FormControl(this.exp.ppmt || PPMT.either);
 		this.ctrlToxT = new FormControl(this.exp.toxT || ToxT.any);
 		this.ctrlToxS = new FormControl(this.exp.toxS || ToxS.any);
 		this.ctrlToxR = new FormControl(this.exp.toxR || ToxR.any);
@@ -101,7 +104,8 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 				'ctrlPercent':this.ctrlPercent,
 				'ctrlValue':this.ctrlValue,
 				'ctrlValueBoolean':this.ctrlValueBoolean,
-				'ctrlMt':this.ctrlMt,
+				'ctrlPPF':this.ctrlPPF,
+				'ctrlPPMT':this.ctrlPPMT,
 				'ctrlToxT':this.ctrlToxT,
 				'ctrlToxS':this.ctrlToxS,
 				'ctrlToxR':this.ctrlToxR,
@@ -116,7 +120,8 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.subscriptions.push(this.ctrlPercent.valueChanges.subscribe( (v :string) => this.onPercentChanges(v) ));
 		this.subscriptions.push(this.ctrlValue.valueChanges.subscribe( (v :string) => this.onValueChanges(v) ));
 		this.subscriptions.push(this.ctrlValueBoolean.valueChanges.subscribe( (v :string) => this.onValueBooleanChanges(v) ));
-		this.subscriptions.push(this.ctrlMt.valueChanges.subscribe( (v :string) => this.onMeasurementTypeChanges(v) ));
+		this.subscriptions.push(this.ctrlPPF.valueChanges.subscribe( (v :string) => this.onPPFieldChanges(v) ));
+		this.subscriptions.push(this.ctrlPPMT.valueChanges.subscribe( (v :string) => this.onPPMeasurementTypeChanges(v) ));
 		this.subscriptions.push(this.ctrlToxT.valueChanges.subscribe( (v :string) => this.onToxicityTestChanges(v) ));
 		this.subscriptions.push(this.ctrlToxS.valueChanges.subscribe( (v :string) => this.onToxicitySpeciesChanges(v) ));
 		this.subscriptions.push(this.ctrlToxR.valueChanges.subscribe( (v :string) => this.onToxicityRouteChanges(v) ));
@@ -143,7 +148,7 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	/** flds called at least once per change, keep it quick! */
-	get flds() :Fld[] {
+	get flds() :ReadonlyArray<Fld> {
 		Logger.trace('ExpForm.flds');
 		return Field.Flds;
 	}
@@ -152,30 +157,29 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 		Logger.trace('ExpForm.ops');
 		return Operator.getOps(this.exp.fld);
 	}
-	/** mts called at least once per change, keep it quick! */
-	get mts() :Mt[] {
-		Logger.trace('ExpForm.mts');
-		return MeasurementType.getMts();
+	get PPFs() :ReadonlyArray<PPF> {
+		Logger.trace('ExpForm.PPFs');
+		return PPField.PPFs;
 	}
-	/** toxTs called at least once per change, keep it quick! */
-	get toxTs() :ToxT[] {
+	get PPMTs() :ReadonlyArray<PPMT> {
+		Logger.trace('ExpForm.PPMTs');
+		return PPMeasurementType.PPMTs;
+	}
+	get toxTs() :ReadonlyArray<ToxT> {
 		Logger.trace('ExpForm.toxTs');
-		return ToxicityTest.getToxTs();
+		return ToxicityTest.ToxTs;
 	}
-	/** toxSs called at least once per change, keep it quick! */
-	get toxSs() :ToxS[] {
+	get toxSs() :ReadonlyArray<ToxS> {
 		Logger.trace('ExpForm.toxSs');
-		return ToxicitySpecies.getToxSs();
+		return ToxicitySpecies.ToxSs;
 	}
-	/** toxRs called at least once per change, keep it quick! */
-	get toxRs() :ToxR[] {
+	get toxRs() :ReadonlyArray<ToxR> {
 		Logger.trace('ExpForm.toxRs');
-		return ToxicityRoute.getToxRs();
+		return ToxicityRoute.ToxRs;
 	}
-	/** toxEs called at least once per change, keep it quick! */
-	get toxEs() :ToxE[] {
+	get toxEs() :ReadonlyArray<ToxE> {
 		Logger.trace('ExpForm.toxEs');
-		return ToxicityEffect.getToxEs();
+		return ToxicityEffect.ToxEs;
 	}
 	/** fldMultiOnly called at least once per change, keep it quick! */
 	get fldMultiOnly() :boolean {
@@ -190,7 +194,7 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 	/** fldPPsmt called at least once per change, keep it quick! */
 	get fldPP() :boolean {
 		Logger.trace('ExpForm.fldPP');
-		return Field.pp(this.exp.fld);
+		return this.exp.fld === Fld.physicalproperty;
 	}
 	/** fldTox called at least once per change, keep it quick! */
 	get fldTox() :boolean {
@@ -230,10 +234,12 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 		if(this.fldBoolean){
 			this.ctrlValue.setValue('' + this.ctrlValueBoolean.value);
 		}
-		if(!oldPP && newPP){
-			this.ctrlMt.setValue(Mt.either);
-		}else if(oldPP && !newPP){
-			this.ctrlMt.setValue('');
+		if(this.fldPP){
+			this.ctrlPPF.setValue(PPF.meltingpoint);
+			this.ctrlPPMT.setValue(PPMT.either);
+		}else if(oldFld === Fld.physicalproperty){
+			this.ctrlPPF.setValue('');
+			this.ctrlPPMT.setValue('');
 		}
 		if(this.fldTox){
 			this.ctrlToxT.setValue(ToxT.any);
@@ -269,9 +275,13 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 		Logger.trace('ExpForm.onValueBooleanChanges');
 		this.ctrlValue.setValue(v);
 	}
-	onMeasurementTypeChanges(v :string) :void {
-		Logger.trace('ExpForm.onMeasurementTypeChanges');
-		this.exp.mt = +v;
+	onPPFieldChanges(v :string) :void {
+		Logger.trace('ExpForm.onPPFieldChanges');
+		this.exp.ppf = +v;
+	}
+	onPPMeasurementTypeChanges(v :string) :void {
+		Logger.trace('ExpForm.onPPMeasurementTypeChanges');
+		this.exp.ppmt = +v;
 	}
 	onToxicityTestChanges(v :string) :void {
 		Logger.trace('ExpForm.onToxicityTestChanges');
@@ -329,7 +339,7 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 // USED IN HTML:
-	/** getFieldDisplay called 23 times per change (once per every field)! Keep it quick! */
+	/** getFieldDisplay called 16 times per change (once per every field)! Keep it quick! */
 	getFieldDisplay(fld :Fld) :string {
 		Logger.trace('ExpForm.getFieldDisplay');
 		return Field.getDisplay(fld);
@@ -339,10 +349,15 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 		Logger.trace('ExpForm.getOperatorDisplay');
 		return Operator.getDisplay(op);
 	}
-	/** getMeasurementTypeDisplay called 3 times per change (if fld=pp) */
-	getMeasurementTypeDisplay(mt :Mt) :string {
-		Logger.log('ExpForm.getMeasurementTypeDisplay');
-		return MeasurementType.getDisplay(mt);
+	/** getPPFieldDisplay called 8 times per change (if fld=pp) */
+	getPPFieldDisplay(ppf :PPF) :string {
+		Logger.log('ExpForm.getPPFieldDisplay');
+		return PPField.getDisplay(ppf);
+	}
+	/** getPPMeasurementTypeDisplay called 3 times per change (if fld=pp) */
+	getPPMeasurementTypeDisplay(ppmt :PPMT) :string {
+		Logger.log('ExpForm.getPPMeasurementTypeDisplay');
+		return PPMeasurementType.getDisplay(ppmt);
 	}
 	/** getToxicityTestDisplay called 7 times per change (if fld=toxicity) */
 	getToxicityTestDisplay(toxT :ToxT) :string {
@@ -414,7 +429,8 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.ctrlPercent.setValue(Expression.DEFAULT_SIM_PERCENT/*, {emitModelToViewChange:false}*/);
 		ExpressionValidators.skipProcessing = false;
 		this.ctrlValue.setValue(this.exp.value);
-		this.ctrlMt.setValue(this.exp.mt);
+		this.ctrlPPF.setValue(this.exp.ppf);
+		this.ctrlPPMT.setValue(this.exp.ppmt);
 		this.ctrlToxT.setValue(this.exp.toxT);
 		this.ctrlToxS.setValue(this.exp.toxS);
 		this.ctrlToxR.setValue(this.exp.toxR);
@@ -422,8 +438,8 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.autoComplete.clearAutoComplete();
 	}
 
-	private createExpression(fld :Fld = Fld.auto, not :boolean = false, op :Op = Op.auto, simPercent :number = undefined, value :string = '', mt :Mt = undefined, toxtest :ToxT = undefined, toxspecies :ToxS = undefined, toxroute :ToxR = undefined, toxeffect :ToxE = undefined) :ExpressionMut {
+	private createExpression(fld :Fld = Fld.auto, not :boolean = false, op :Op = Op.auto, simPercent :number = undefined, value :string = '', ppf :PPF = undefined, ppmt :PPMT = undefined, toxtest :ToxT = undefined, toxspecies :ToxS = undefined, toxroute :ToxR = undefined, toxeffect :ToxE = undefined) :ExpressionMut {
 		Logger.debug('ExpForm.createExpression');
-		return new ExpressionMut(fld, not, op, simPercent, value, mt, toxtest, toxspecies, toxroute, toxeffect);
+		return new ExpressionMut(fld, not, op, simPercent, value, ppf, ppmt, toxtest, toxspecies, toxroute, toxeffect);
 	}
 }

@@ -7,6 +7,12 @@
 		</select>
 		<span *ngIf="fldMultiOnly">(Multi-Expression Searches only)</span>
 	</div>
+	<div *ngIf="fldPP" class="form-group">
+		<label for="exp_ppf">Physical Property Sub Field</label>
+		<select id="exp_ppf" class="form-control" formControlName="ctrlPPF">
+			<option *ngFor="let ppf of PPFs" [value]="ppf">{{ getPPFieldDisplay(ppf) }}</option>
+		</select>
+	</div>
 	<div class="form-group">
 		<label for="exp_operator">Operator</label>
 		<select id="exp_operator" class="form-control" formControlName="ctrlOp">
@@ -54,9 +60,9 @@
 		</div>
 	</div>
 	<div *ngIf="fldPP" class="form-group">
-		<label for="exp_mt">Measurement Type</label>
-		<select id="exp_mt" class="form-control" formControlName="ctrlMt">
-			<option *ngFor="let mt of mts" [value]="mt">{{ getMeasurementTypeDisplay(mt) }}</option>
+		<label for="exp_ppmt">Measurement Type</label>
+		<select id="exp_ppmt" class="form-control" formControlName="ctrlPPMT">
+			<option *ngFor="let ppmt of PPMTs" [value]="ppmt">{{ getPPMeasurementTypeDisplay(ppmt) }}</option>
 		</select>
 	</div>
 	<ng-container *ngIf="fldTox">

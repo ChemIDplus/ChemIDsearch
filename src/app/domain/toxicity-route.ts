@@ -34,7 +34,8 @@ export class ToxicityRoute{
 
 
 // Static
-	private static toxRs :ToxR[] = EnumEx.getValues(ToxR);
+	/* tslint:disable-next-line:variable-name */
+	static readonly ToxRs :ReadonlyArray<ToxR> = EnumEx.getValues(ToxR);
 
 	private static toxicityRoutes :ToxicityRoute[];
 
@@ -71,9 +72,6 @@ export class ToxicityRoute{
 		a[ToxR.unreported] = new ToxicityRoute('Unreported', 'Unreported');
 	})();
 
-	static getToxRs() :ToxR[] {
-		return ToxicityRoute.toxRs;
-	}
 	static getAbbr(toxR :ToxR) :string {
 		return ToxR[toxR]; // currently no abbreviation, but leaving it in the public api in case we add them
 	}
