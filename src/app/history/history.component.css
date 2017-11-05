@@ -8,7 +8,8 @@
 .mat-column-substances{
 	flex: 5;
 	min-width: 80px;
-	text-align: right;
+	text-align: center;
+	padding-right: 25px;
 }
 .mat-column-actions{
 	flex: 20;
