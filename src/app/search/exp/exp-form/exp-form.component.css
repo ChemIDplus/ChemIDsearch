@@ -2,6 +2,7 @@
 .values-container {
 	display :inline-block;
 	width :auto;
+	padding :2px 12px;
 }
 .values-container[hidden]{
 	display:none;
