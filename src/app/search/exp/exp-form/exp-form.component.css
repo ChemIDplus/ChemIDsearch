@@ -1,5 +1,7 @@
-.form-control,
-.values-container {
+select.form-control{
+	padding :2px 12px;
+}	
+.form-control, .values-container{
 	display :inline-block;
 	width :auto;
 }
