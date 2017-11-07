@@ -17,8 +17,8 @@ export class RegexOperatorComponent {
 const regexExamples :string[][] = [
 	['Name starts with "asp" and ends with "in"', '^asp.*in$', 'https://chem.nlm.nih.gov/api/data/name/regex/%5Easp.*in%24?data=totals', '%5Easp.*in%24'],
 	['Name starts with "N" but not "NSC"', '^n([^s]|s[^c])', 'https://chem.nlm.nih.gov/api/data/name/regex/%5En(%5B%5Es%5D%7Cs%5B%5Ec%5D)?data=totals', '%5En(%5B%5Es%5D%7Cs%5B%5Ec%5D)'],
-	['Name has "+/-" or "+-" anywhere in the term', '\+/?-', 'https://chem.nlm.nih.gov/api/data/name/regex/%255C%2B%252F%3F-?data=totals', '%255C%2B%252F%3F-'],
-	['Name ends with "USAN" and/or "INN" (and perhaps other terms) within square brackets', '\[[^]]*(usan|inn)[^]]*]$', 'https://chem.nlm.nih.gov/api/data/name/regex/%255C%5B%5B%5E%5D%5D*(usan%7Cinn)%5B%5E%5D%5D*%5D%24?data=totals', '%255C%5B%5B%5E%5D%5D*(usan%7Cinn)%5B%5E%5D%5D*%5D%24']
+	['Name has "+/-" or "+-" anywhere in the term', '\\+/?-', 'https://chem.nlm.nih.gov/api/data/name/regex/%255C%2B%252F%3F-?data=totals', '%255C%2B%252F%3F-'],
+	['Name ends with "USAN" and/or "INN" (and perhaps other terms) within square brackets', '\\[[^]]*(usan|inn)[^]]*]$', 'https://chem.nlm.nih.gov/api/data/name/regex/%255C%5B%5B%5E%5D%5D*(usan%7Cinn)%5B%5E%5D%5D*%5D%24?data=totals', '%255C%5B%5B%5E%5D%5D*(usan%7Cinn)%5B%5E%5D%5D*%5D%24']
 ];
 /**
  * Data source to provide what data should be rendered in the table. The observable provided
