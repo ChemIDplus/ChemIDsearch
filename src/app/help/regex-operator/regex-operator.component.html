@@ -10,8 +10,8 @@ We don't want to have to block any users due to undue strain, so please only use
 </p>
 
 <p>
-On the server, the Search Term is wrapped with a ^ and $ (if not already present) so that all values need to match a complete term.
 Searches are case insensitive.
+Terms will try to match characters anywhere in the value; use ^ and/or $ to specify matches must begin and/or end with the search term.
 Symbols used in chemical names that have meanings within regular expressions need to be escaped.
 Note that when put into a URL, most special characters need to be escaped (again), so the URL terms often become incomprehensible!
 </p>
