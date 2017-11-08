@@ -11,9 +11,20 @@ We don't want to have to block any users due to undue strain, so please only use
 
 <p>
 Searches are case insensitive.
+</p>
+
+<p>
 Terms will try to match characters anywhere in the value; use ^ and/or $ to specify matches must begin and/or end with the search term.
-Symbols used in chemical names that have meanings within regular expressions need to be escaped.
-Note that when put into a URL, most special characters need to be escaped (again), so the URL terms often become incomprehensible!
+</p>
+
+<p>
+Literal special characters in chemical names that have meanings within regular expressions need to be escaped.
+In the examples below, when searching for the literal characters &quot;+&quot; and &quot;[&quot;, they needed an &quot;\&quot; before them.
+</p>
+
+<p>
+Note that when put into a URL, many special characters need to be escaped (again), so the URL terms often become incomprehensible!
+In addition, &quot;\&quot; and &quot;/&quot; need to be double escaped as &quot;%255C&quot; and &quot;%252F&quot; respectively.
 </p>
 
 <p>
@@ -26,15 +37,15 @@ Some example searches:
 <mat-table #table [dataSource]="dataSource">
 	<ng-container matColumnDef="description">
 		<mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
-		<mat-cell *matCellDef="let element">{{ element[0] }}</mat-cell>
+		<mat-cell *matCellDef="let re">{{ re.description }}</mat-cell>
 	</ng-container>
 	<ng-container matColumnDef="regex">
-		<mat-header-cell *matHeaderCellDef>Regular Expression</mat-header-cell>
-		<mat-cell *matCellDef="let element">{{ element[1] }}</mat-cell>
+		<mat-header-cell *matHeaderCellDef>Search Term</mat-header-cell>
+		<mat-cell *matCellDef="let re">{{ re.regex }}</mat-cell>
 	</ng-container>
 	<ng-container matColumnDef="url">
-		<mat-header-cell *matHeaderCellDef>API Totals URL (showing escaped URL term)</mat-header-cell>
-		<mat-cell *matCellDef="let element"><a target="_blank" [href]="element[2]">{{ element[3] }}</a></mat-cell>
+		<mat-header-cell *matHeaderCellDef>API Totals (escaped-for-URL search term)</mat-header-cell>
+		<mat-cell *matCellDef="let re"><a target="_blank" [href]="re.url">{{ re.urlEscapedRegex }}</a></mat-cell>
 	</ng-container>
 
 	<mat-header-row fxLayout="row" fxLayoutAlign.gt-sm="start center" fxLayout.lt-md="column" fxLayoutAlign.lt-md="start" *matHeaderRowDef="displayedColumns"></mat-header-row>
