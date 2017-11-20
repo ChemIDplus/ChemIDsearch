@@ -20,7 +20,9 @@
 
 		<ng-container matColumnDef="substances">
 			<mat-header-cell *matHeaderCellDef mat-sort-header>Substances</mat-header-cell>
-			<mat-cell *matCellDef="let searchEvent">{{ searchEvent.substances | number }}</mat-cell>
+			<mat-cell *matCellDef="let searchEvent">				
+				<div>{{ searchEvent.substances | number }}</div>
+			</mat-cell>
 		</ng-container>
 
 		<ng-container matColumnDef="actions">
