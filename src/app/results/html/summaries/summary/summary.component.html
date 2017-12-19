@@ -17,15 +17,8 @@
 				<div *ngIf="!structure && !!weight" fxFlexAlign="center">Loading image...</div>
 				<div *ngIf="similarity" fxFlexAlign="center">{{ similarity }}% similar</div>
 			</div>
-			<div fxFlex="none" fxLayout="column" fxLayoutAlign="space-between" class="link-rows">
-				<ng-container *ngIf="structure">
-					<a fxFlex [routerLink]="['/results', 'structure', 'substructure', rn_id]" title="Substructure search">Sub</a>
-					<a fxFlex [routerLink]="['/results', 'structure', 'similarity'+linkSimPercent, rn_id]" [title]="'Find structures ' + (linkSimPercent < 100 ? 'at least ' : '') + linkSimPercent + '% similar to this one'">Sim {{ linkSimPercent }}%</a>
-					<a fxFlex [routerLink]="['/results', 'structure', 'flex', rn_id]" title="Find parent, salts, and hydrates">Flex</a>
-					<a fxFlex [routerLink]="['/results', 'structure', 'flexplus', rn_id]" title="Find parent, all variations">Flexplus</a>
-					<a fxFlex target="_blank" [href]="'https://chem.nlm.nih.gov/chemidplus/structure/viewer/' + rn_id" title="Open a window with an enlarged image">Zoom</a>
-					<a *ngIf="has3D" fxFlex target="_blank" [href]="'https://chem.nlm.nih.gov/chemidplus/structure3D/viewer/' + rn_id" title="Open a window with a dynamic 3D image">3D</a>
-				</ng-container>
+			<div fxFlex="none">
+				<app-structure-search *ngIf="structure" [summary]="summary" [linkSimPercent]="linkSimPercent"></app-structure-search>
 			</div>
 		</ng-container>
 	</div>

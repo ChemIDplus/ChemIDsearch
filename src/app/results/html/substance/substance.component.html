@@ -28,7 +28,7 @@
 	<mat-expansion-panel *ngIf="weight">
 		<mat-expansion-panel-header>Structure</mat-expansion-panel-header>
 		<div class="mat-elevation-z3">
-			<app-structure *ngIf="structure" [structure]="structure"></app-structure>
+			<app-structure *ngIf="structure" [structure]="structure" [summary]="substance.summary"></app-structure>
 		</div>
 	</mat-expansion-panel>
 	<mat-expansion-panel *ngFor="let typeElementsArray of typeElementsArrays">

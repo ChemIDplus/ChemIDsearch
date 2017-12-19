@@ -21,7 +21,7 @@ export class SummaryComponent implements OnChanges {
 	@Input() structuresView :boolean;
 
 	structure :Structure;
-	private summary :Summary;
+	summary :Summary;
 
 	constructor(readonly app :AppService){
 		Logger.log('SummaryComponent.constructor');

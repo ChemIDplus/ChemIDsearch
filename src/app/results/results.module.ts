@@ -21,6 +21,7 @@ import { StructureImageComponent } from './html/structure-image/structure-image.
 import { JsonComponent } from './json/json.component';
 import { JsonDataComponent } from './json/json-data/json-data.component';
 import { DataModeComponent } from './data-mode/data-mode.component';
+import { StructureSearchComponent } from './html/structure-search/structure-search.component';
 
 @NgModule({
 	declarations: [
@@ -36,6 +37,7 @@ import { DataModeComponent } from './data-mode/data-mode.component';
 		PhysicalPropsComponent,
 		StructureComponent,
 		StructureDetailsComponent,
+		StructureSearchComponent,
 		StructureImageComponent,
 		JsonComponent,
 		JsonDataComponent,
