@@ -12,8 +12,23 @@ import { Logger } from './../../../core/logger';
 })
 export class StructureSearchComponent {
 	@Input() readonly summary :Summary; // Immutable
-	@Input() readonly linkSimPercent :number;
+	@Input() set linkSimPercent(linkSimPercent :number) {
+		if(linkSimPercent !== undefined){
+			this._linkSimPercent = linkSimPercent;
+		}else{
+			this.needsLinkSimPercent = true;
+			this._linkSimPercent = 80;
+		}
+	}
 
+	needsLinkSimPercent :boolean = false;
+
+	/* tslint:disable-next-line:variable-name */
+	private _linkSimPercent :number;
+
+	get linkSimPercent() :number {
+		return this._linkSimPercent;
+	}
 	get has3D() :boolean {
 		Logger.trace2('structureSearch.has3D');
 		return this.summary.has3D;
