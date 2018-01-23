@@ -54,7 +54,7 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 	@ViewChild('textareaExpValues') private textareaExpValuesElementRef :ElementRef;
 	@ViewChild(AutoCompleteComponent) private autoComplete :AutoCompleteComponent;
 
-	private currentOps :Op[];
+	private currentOps :ReadonlyArray<Op>;
 	private isNavigatingToList :boolean = false;
 	private subscriptions :Subscription[] = [];
 
@@ -153,7 +153,7 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 		return Field.Flds;
 	}
 	/** ops called at least once per change, keep it quick! */
-	get ops() :Op[] {
+	get ops() :ReadonlyArray<Op> {
 		Logger.trace('ExpForm.ops');
 		return Operator.getOps(this.exp.fld);
 	}
@@ -216,20 +216,24 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	onFieldChanges(v :string) :void {
 		Logger.trace('ExpForm.onFieldChanges');
-		const oldFld :Fld = this.exp.fld,
-			oldPP :boolean = this.fldPP;
+		const oldFld :Fld = this.exp.fld;
+		const oldOps :ReadonlyArray<Op> = this.ops;
 		this.exp.fld = +v;
-		const newOps :Op[] = this.ops,
-			newPP :boolean = this.fldPP;
+		const newOps :ReadonlyArray<Op> = this.ops;
 		this.isStructure = this.exp.fld === Fld.structure;
 		if(this.currentOps !== newOps){
 			this.currentOps = newOps;
-			setTimeout( () => {
-				// Using timeout to allow the dom's select to be updated with the new ops
-				const op :Op = this.ops[0];
-				Logger.trace('field change updating op to ' + Operator.getDisplay(op));
-				this.ctrlOp.setValue(op);
-			});
+
+			if (oldOps === Operator.autoOps && newOps === Operator.idOps){
+				Logger.trace('field change NOT updating operator');
+			}else{
+				setTimeout( () => {
+					// Using timeout to allow the dom's select to be updated with the new ops
+					const op :Op = this.ops[0];
+					Logger.trace('field change updating op to ' + Operator.getDisplay(op));
+					this.ctrlOp.setValue(op);
+				});
+			}
 		}
 		if(this.fldBoolean){
 			this.ctrlValue.setValue('' + this.ctrlValueBoolean.value);
@@ -402,6 +406,9 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 		if(this.exp.fld === Fld.auto || this.exp.op === Op.auto){
 			exp2 = this.exp.ac.expression;
 			exp2.ac = this.exp.ac;
+		}
+		if(exp2.op === Op.inlist){
+			exp2.value = exp2.value.replace(/\|$/, '');
 		}
 		const exp :Expression = exp2.immutable();
 		let search :Search;

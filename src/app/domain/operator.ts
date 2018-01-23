@@ -23,14 +23,14 @@ export enum Op{
 export class Operator{
 
 // Static
-	private static ops :Op[] = EnumEx.getValues(Op);
+	static readonly ops :ReadonlyArray<Op> = EnumEx.getValues(Op);
 
-	private static autoOps :Op[] = [Op.auto, Op.equals, Op.inlist, Op.startswith, Op.endswith, Op.contains];
-	private static idOps :Op[] = [Op.auto, Op.equals, Op.inlist, Op.startswith, Op.endswith, Op.contains, Op.regex];
-	private static dateOps :Op[] = [Op.gte, Op.lte]; // gte first as the default for last_mod
-	private static rangeOps :Op[] = [Op.between, Op.lte, Op.gte, Op.equals, Op.inlist];
-	private static stOps :Op[] = [Op.substructure, Op.similarity, Op.exact, Op.flex, Op.flexplus];
-	private static eqOp :Op[] = [Op.equals];
+	static readonly autoOps :ReadonlyArray<Op> = [Op.auto, Op.equals, Op.inlist, Op.startswith, Op.endswith, Op.contains];
+	static readonly idOps :ReadonlyArray<Op> = [Op.auto, Op.equals, Op.inlist, Op.startswith, Op.endswith, Op.contains, Op.regex];
+	static readonly dateOps :ReadonlyArray<Op> = [Op.gte, Op.lte]; // gte first as the default for last_mod
+	static readonly rangeOps :ReadonlyArray<Op> = [Op.between, Op.lte, Op.gte, Op.equals, Op.inlist];
+	static readonly stOps :ReadonlyArray<Op> = [Op.substructure, Op.similarity, Op.exact, Op.flex, Op.flexplus];
+	static readonly eqOp :ReadonlyArray<Op> = [Op.equals];
 
 	private static operators :Operator[];
 
@@ -58,7 +58,7 @@ export class Operator{
 		a[Op.flexplus] = new Operator('fp', 'Flexplus (parent, all variations)', 'flexplus');
 	})();
 
-	static getOps(fld :Fld) :Op[] {
+	static getOps(fld :Fld) :ReadonlyArray<Op> {
 		switch(fld){
 			case Fld.auto:
 				return Operator.autoOps;

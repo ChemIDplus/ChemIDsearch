@@ -534,7 +534,7 @@ export class ExpressionMut{
 		}else{
 			let val :string = this._value;
 			if(this._op === Op.inlist){
-				val = val.replace(/^.*\|/, '');
+				val = val.replace(/\|$/, '').replace(/^.*\|/, '');
 			}
 			if(val){
 				val = Expression.trimAndCase(this._fld, val);
