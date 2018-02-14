@@ -46,6 +46,10 @@ export class Sort{
 		return Sort._SORTS[srt];
 	}
 
+	static getDisplay(srt :Srt) :String {
+		return Sort.getSort(srt).display;
+	}
+
 
 // Instance:
 	constructor(

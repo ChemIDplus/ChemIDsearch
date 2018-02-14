@@ -3,7 +3,7 @@ import { Logger } from './logger';
 export class LocalStorageService {
 
 	// Rarely, if ever, increase this, as it will cause removeAllIfOldVersion to blow away users' history and preferences.
-	static readonly VERSION :number = 2;
+	static readonly VERSION :number = 3;
 
 	public static setString(key :string, data :string, expiresSeconds ? :number) :void {
 		if(localStorage && key && data){

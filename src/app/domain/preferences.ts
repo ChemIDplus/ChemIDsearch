@@ -1,47 +1,90 @@
+import { DM } from './data-mode';
 import { RM } from './result-mode';
+import { Srt } from './sort';
 
 export interface PreferencesMinJSON {
-	p ? :number;
+	/** Result Mode - HTML / JSON */
+	m ? :RM;
+	/** autocomplete rows */
+	a ? :number;
+	/** field operator abbr */
+	f ? :number;
+	/** results per page */
 	r ? :number;
-	a ? :boolean;
-	rm ? :RM;
+	s ? :Srt;
+	/** similarity percent */
+	p ? :number;
+	/** view no structures */
+	v ? :number;
+	/** Data Parameter - Totals / Summary / etc */
+	d ? :DM;
 }
 export class Preferences {
 
-	static readonly DEFAULT_MAX_RP_ROWS :number = 5;
-	static readonly DEFAULT_MAX_AC_ROWS :number = 20;
-	static readonly DEFAULT_USE_ABBR :boolean = false;
-	static readonly DEFAULT_RM :RM = RM.html;
+	// Default boolean values should be false for simpler handling where false = undefined = no user preference
+
+	private static readonly DEFAULT_RM :RM = RM.html;
+	private static readonly DEFAULT_MAX_AC_ROWS :number = 20;
+	private static readonly DEFAULT_USE_ABBR :boolean = false;
+	private static readonly DEFAULT_MAX_RP_ROWS :number = 5;
+	private static readonly DEFAULT_SRT :Srt = Srt.citations;
+	private static readonly DEFAULT_SIM_PERCENT :number = 80;
+	private static readonly DEFAULT_VIEW_NO_STRUCTURES :boolean = false;
+	private static readonly DEFAULT_DM :DM = DM.summary;
+
+	private static readonly NON_DEFAULT_BOOLEAN :number = 1;
 
 	/* tslint:disable:variable-name */
-	private _maxResultPageRows :number;
+	private _rm :RM;
 	private _maxAutoCompleteRows :number;
 	private _useFieldOperatorAbbreviations :boolean;
-	private _rm :RM;
+	private _maxResultPageRows :number;
+	private _srt :Srt;
+	private _simPercent :number;
+	private _viewNoStructures :boolean;
+	private _dm :DM;
 
-	constructor(maxResultPageRows ? :number, maxAutoCompleteRows ? :number, useFieldOperatorAbbreviations ? :boolean, rm ? :RM){
-		this.maxResultPageRows = maxResultPageRows;
+	constructor(rm ? :RM, maxAutoCompleteRows ? :number, useFieldOperatorAbbreviations ? :boolean, maxResultPageRows ? :number, srt ? :Srt, simPercent ? :number, viewStructures ? :boolean, dm ? :DM){
+		this.rm = rm;
 		this.maxAutoCompleteRows = maxAutoCompleteRows;
 		this.useFieldOperatorAbbreviations = useFieldOperatorAbbreviations;
-		this.rm = rm;
+		this.maxResultPageRows = maxResultPageRows;
+		this.srt = srt;
+		this.simPercent = simPercent;
+		if(viewStructures !== undefined){
+			this.viewStructures = viewStructures;
+		}
+		this.dm = dm;
 	}
 
-	get maxResultPageRows() :number {
-		return this._maxResultPageRows === undefined ? Preferences.DEFAULT_MAX_RP_ROWS : this._maxResultPageRows;
+	get rm() :RM {
+		return this._rm === undefined ? Preferences.DEFAULT_RM : this._rm;
 	}
-
 	get maxAutoCompleteRows() :number {
 		return this._maxAutoCompleteRows === undefined ? Preferences.DEFAULT_MAX_AC_ROWS : this._maxAutoCompleteRows;
 	}
 	get useFieldOperatorAbbreviations() :boolean {
-		return this._useFieldOperatorAbbreviations === undefined ? Preferences.DEFAULT_USE_ABBR : this._useFieldOperatorAbbreviations;
+		return !!this._useFieldOperatorAbbreviations;
 	}
-	get rm() :RM {
-		return this._rm === undefined ? Preferences.DEFAULT_RM : this._rm;
+	get maxResultPageRows() :number {
+		return this._maxResultPageRows === undefined ? Preferences.DEFAULT_MAX_RP_ROWS : this._maxResultPageRows;
+	}
+	get srt() :Srt{
+		return this._srt === undefined ? Preferences.DEFAULT_SRT : this._srt;
+	}
+	get simPercent() :number{
+		return this._simPercent === undefined ? Preferences.DEFAULT_SIM_PERCENT : this._simPercent;
+	}
+	get viewStructures() :boolean{
+		// Opposite so default _viewNoStructures can be false
+		return !this._viewNoStructures;
+	}
+	get dm() :DM{
+		return this._dm === undefined ? Preferences.DEFAULT_DM : this._dm;
 	}
 
-	set maxResultPageRows(n :number){
-		this._maxResultPageRows = n;
+	set rm(r :RM){
+		this._rm = r;
 	}
 	set maxAutoCompleteRows(n :number){
 		this._maxAutoCompleteRows = n;
@@ -49,27 +92,56 @@ export class Preferences {
 	set useFieldOperatorAbbreviations(b :boolean){
 		this._useFieldOperatorAbbreviations = b;
 	}
-	set rm(r :RM){
-		this._rm = r;
+	set maxResultPageRows(n :number){
+		this._maxResultPageRows = n;
+	}
+	set srt(srt :Srt){
+		this._srt = srt;
+	}
+	set simPercent(n :number){
+		this._simPercent = n;
+	}
+	set viewStructures(viewStructures :boolean){
+		// Opposite so default _viewNoStructures can be false
+		this._viewNoStructures = !viewStructures;
+	}
+	set dm(dm :DM){
+		this._dm = dm;
 	}
 
 	serialize() :PreferencesMinJSON {
 		let mj :PreferencesMinJSON = undefined;
-		if(this.maxResultPageRows && this.maxResultPageRows !== Preferences.DEFAULT_MAX_RP_ROWS){
-			mj = {};
-			mj.p = this.maxResultPageRows;
-		}
-		if(this.maxAutoCompleteRows && this.maxAutoCompleteRows !== Preferences.DEFAULT_MAX_AC_ROWS){
+		if(this.rm !== Preferences.DEFAULT_RM){
 			mj = mj || {};
-			mj.r = this.maxAutoCompleteRows;
+			mj.m = this._rm;
 		}
-		if(this.useFieldOperatorAbbreviations && this.useFieldOperatorAbbreviations !== Preferences.DEFAULT_USE_ABBR){
+		if(this.maxAutoCompleteRows !== Preferences.DEFAULT_MAX_AC_ROWS){
 			mj = mj || {};
-			mj.a = this.useFieldOperatorAbbreviations;
+			mj.a = this._maxAutoCompleteRows;
 		}
-		if(this.rm && this.rm !== Preferences.DEFAULT_RM){
+		if(this._useFieldOperatorAbbreviations){
 			mj = mj || {};
-			mj.rm = this.rm;
+			mj.f = Preferences.NON_DEFAULT_BOOLEAN;
+		}
+		if(this.maxResultPageRows !== Preferences.DEFAULT_MAX_RP_ROWS){
+			mj = mj || {};
+			mj.r = this._maxResultPageRows;
+		}
+		if(this.srt !== Preferences.DEFAULT_SRT){
+			mj = mj || {};
+			mj.s = this._srt;
+		}
+		if(this.simPercent !== Preferences.DEFAULT_SIM_PERCENT){
+			mj = mj || {};
+			mj.p = this._simPercent;
+		}
+		if(this._viewNoStructures){
+			mj = mj || {};
+			mj.v = Preferences.NON_DEFAULT_BOOLEAN;
+		}
+		if(this.dm !== Preferences.DEFAULT_DM){
+			mj = mj || {};
+			mj.d = this._dm;
 		}
 		return mj;
 	}
@@ -77,10 +149,14 @@ export class Preferences {
 	static deserialize(mj :PreferencesMinJSON) :Preferences {
 		if(mj){
 			const p :Preferences = new Preferences();
-			p.maxResultPageRows = mj.p;
-			p.maxAutoCompleteRows = mj.r;
-			p.useFieldOperatorAbbreviations = mj.a;
-			p.rm = mj.rm;
+			p._rm = mj.m;
+			p._maxAutoCompleteRows = mj.a;
+			p._useFieldOperatorAbbreviations = mj.f === Preferences.NON_DEFAULT_BOOLEAN;
+			p._maxResultPageRows = mj.r;
+			p._srt = mj.s;
+			p._simPercent = mj.p;
+			p._viewNoStructures = mj.v === Preferences.NON_DEFAULT_BOOLEAN;
+			p._dm = mj.d;
 			return p;
 		}
 	}
@@ -90,15 +166,23 @@ export class Preferences {
 /** Immutable */
 export class ImmutablePreferences{
 
-	readonly maxResultPageRows :number;
+	readonly rm :RM;
 	readonly maxAutoCompleteRows :number;
 	readonly useFieldOperatorAbbreviations :boolean;
-	readonly rm :RM;
+	readonly maxResultPageRows :number;
+	readonly srt :Srt;
+	readonly simPercent :number;
+	readonly viewStructures :boolean;
+	readonly dm :DM;
 
 	constructor(preferences :Preferences){
-		this.maxResultPageRows = preferences.maxResultPageRows;
+		this.rm = preferences.rm;
 		this.maxAutoCompleteRows = preferences.maxAutoCompleteRows;
 		this.useFieldOperatorAbbreviations = preferences.useFieldOperatorAbbreviations;
-		this.rm = preferences.rm;
+		this.maxResultPageRows = preferences.maxResultPageRows;
+		this.srt = preferences.srt;
+		this.simPercent = preferences.simPercent;
+		this.viewStructures = preferences.viewStructures;
+		this.dm = preferences.dm;
 	}
 }

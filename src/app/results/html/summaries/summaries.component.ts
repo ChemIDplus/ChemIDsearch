@@ -46,8 +46,7 @@ export class SummariesComponent implements OnInit, OnDestroy {
 	filterQuery :string = '';
 	sortOrder :string = 'asc';
 	inited :boolean = false;
-
-	linkSimPercent :number = 80;
+	linkSimPercent :number;
 
 
 	/* tslint:disable-next-line:variable-name */
@@ -65,6 +64,7 @@ export class SummariesComponent implements OnInit, OnDestroy {
 
 	ngOnInit() :void {
 		this.subscriptions.push(this.paginator.page.subscribe( (pe :PageEvent) => this.onPageChange(pe) ));
+		this.linkSimPercent = this.app.simPercent;
 	}
 
 	ngOnDestroy() :void {

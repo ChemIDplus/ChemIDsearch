@@ -8,15 +8,6 @@
 	</div>
 
 	<div class="form-group">
-		<label for="settings_result_page">Default Number of Results per Page</label>
-		<select id="settings_result_page" class="form-control" formControlName="ctrlResultPage">
-			<option value="5">5</option>
-			<option value="10">10</option>
-			<option value="25">25</option>
-		</select>
-	</div>
-	
-	<div class="form-group">
 		<label for="settings_result_page">Number of AutoComplete Result Rows</label>
 		<input id="settings_result_page" type="number" class="form-control" min="10" max="50" step="5" formControlName="ctrlAutoCompleteResult">
 	</div>
@@ -28,4 +19,46 @@
 			<option value="abbr">Abbreviated</option>
 		</select>
 	</div>
+	
+	<fieldset>
+		<legend>HTML View Settings</legend>
+
+		<div class="form-group">
+			<label for="settings_result_page">Default Number of Results per Page</label>
+			<select id="settings_result_page" class="form-control" formControlName="ctrlResultPage">
+				<option value="5">5</option>
+				<option value="10">10</option>
+				<option value="25">25</option>
+			</select>
+		</div>
+
+		<div class="form-group">
+			<label for="settings_sortby">Default Sort By</label>
+			<select  id="settings_sortby" class="form-control" formControlName="ctrlSortBy">
+				<option *ngFor="let srt of srts" [value]="srt">{{ getSortDisplay(srt) }}</option>
+			</select>
+		</div>
+
+		<div class="form-group">
+			<label for="settings_sim_percent">Default Similarity Percent</label>
+			<input id="settings_sim_percent" type="number" class="form-control" min="40" max="100" step="5" formControlName="ctrlSimPercent">
+		</div>
+
+		<div class="form-group">
+			<label for="settings_structure">Default View Structures</label>
+			<input type="checkbox" id="settings_structure" class="form-control" formControlName="ctrlStructures">
+		</div>
+		
+	</fieldset>
+
+	<fieldset>
+		<legend>JSON View Settings</legend>
+		<div class="form-group">
+			<label for="settings_dm">Default Data Parameter Choice</label>
+			<select  id="settings_dm" class="form-control" formControlName="ctrlDmChoice">
+				<option *ngFor="let dm of dms" [value]="dm">{{ getDataModeDisplay(dm) }}</option>
+			</select>
+		</div>
+	</fieldset>
+
 </form>

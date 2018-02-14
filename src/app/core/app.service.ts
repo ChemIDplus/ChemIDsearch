@@ -15,6 +15,7 @@ import { SearchEvent } from './../domain/search-event';
 import { SearchTotals } from './../domain/search-totals';
 import { Totals } from './../domain/totals';
 import { Type } from './../domain/type';
+import { DM } from './../domain/data-mode';
 
 import { LocalStorageService } from './local-storage.service';
 import { SearchService } from './search.service';
@@ -68,7 +69,7 @@ export class AppService {
 	set sessionSearch(search :Search) {
 		Logger.log('AppService.sessionSearch setter', search);
 		this._sessionSearch = search;
-		this._orderBy = new OrderBy(search.hasOneSimilarity ? Srt.similarity : Srt.citations);
+		this._orderBy = new OrderBy(search.hasOneSimilarity ? Srt.similarity : this.srt);
 		this.setDefaultPaging();
 	}
 	get sessionSearch() :Search {
@@ -129,7 +130,7 @@ export class AppService {
 	}
 
 	get oCurrentSearchTotals() :Observable<SearchTotals> {
-		Logger.trace('AppService.oSearchTotals');
+		Logger.trace('AppService.oCurrentSearchTotals');
 		return this.currentSearchTotalsStream.asObservable();
 	}
 
@@ -178,6 +179,43 @@ export class AppService {
 	get rm() :RM {
 		Logger.trace('AppService.rm');
 		return this.preferences.rm;
+	}
+
+	set simPercent(simPercent :number){
+		Logger.log('AppService.simPercent setter');
+		this.preferences.simPercent = simPercent;
+		this.cachePreferences();
+	}
+	get simPercent() :number {
+		Logger.trace('AppService.simPercent');
+		return this.preferences.simPercent;
+	}
+	set viewStructures(viewStructures :boolean){
+		Logger.log('AppService.viewStructures setter');
+		this.preferences.viewStructures = viewStructures;
+		this.cachePreferences();
+	}
+	get viewStructures() :boolean {
+		Logger.trace('AppService.viewStructures');
+		return this.preferences.viewStructures;
+	}
+	set srt(srt :Srt){
+		Logger.log('AppService.srt setter');
+		this.preferences.srt = srt;
+		this.cachePreferences();
+	}
+	get srt() :Srt {
+		Logger.trace('AppService.srt');
+		return this.preferences.srt;
+	}
+	set dm(dm :DM){
+		Logger.log('AppService.dm setter');
+		this.preferences.dm = dm;
+		this.cachePreferences();
+	}
+	get dm() :DM {
+		Logger.trace('AppService.dm');
+		return this.preferences.dm;
 	}
 
 	afterSearchSet(search :Search) :void {

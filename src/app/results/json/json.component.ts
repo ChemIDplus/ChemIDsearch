@@ -22,7 +22,7 @@ export class JsonComponent implements OnInit {
 	@Input() totals :Totals; // Immutable
 
 	tsj :TotalsServerJSON;
-	dm :DM = DM.summary;
+	dm :DM;
 
 	constructor(
 		readonly app :AppService,
@@ -30,6 +30,7 @@ export class JsonComponent implements OnInit {
 
 	ngOnInit() :void {
 		Logger.debug('JsonComponent.onInit');
+		this.dm = this.app.dm;
 
 		this.tsj = {};
 		if(this.totals.substances >= 0){

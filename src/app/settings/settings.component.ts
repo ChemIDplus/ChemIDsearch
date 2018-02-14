@@ -1,16 +1,15 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 
 import { Preferences } from './../domain/preferences';
 import { RM, ResultMode } from './../domain/result-mode';
+import { Srt, Sort } from './../domain/sort';
+import { DM, DataMode } from './../domain/data-mode';
 
-import { Logger } from './../core/logger';
-
-import { LocalStorageService } from './../core/local-storage.service';
 import { AppService } from './../core/app.service';
 
+import { Logger } from './../core/logger';
 
 @Component({
 	selector: 'app-setting',
@@ -26,6 +25,10 @@ export class SettingsComponent implements OnInit {
 	ctrlAutoCompleteResult :FormControl;
 	ctrlResultMode :FormControl;
 	ctrlFldOpAbbr :FormControl;
+	ctrlSortBy :FormControl;
+	ctrlSimPercent :FormControl;
+	ctrlStructures :FormControl;
+	ctrlDmChoice :FormControl;
 	private subscriptions :Subscription[] = [];
 
 	constructor(
@@ -40,14 +43,22 @@ export class SettingsComponent implements OnInit {
 		this.ctrlResultPage = new FormControl(this.app.maxResultPageRows);
 		this.ctrlAutoCompleteResult = new FormControl(this.app.maxAutoCompleteRows);
 		this.ctrlResultMode = new FormControl(this.app.rm);
+		this.ctrlSortBy = new FormControl(this.app.srt);
 		this.ctrlFldOpAbbr = new FormControl(this.app.useFieldOperatorAbbreviations ? 'abbr' : 'full');
+		this.ctrlSimPercent = new FormControl(this.app.simPercent);
+		this.ctrlStructures = new FormControl(this.app.viewStructures);
+		this.ctrlDmChoice = new FormControl(this.app.dm);
 
 		this.form = this.formBuilder.group(
 			{
 				'ctrlResultPage':this.ctrlResultPage,
 				'ctrlAutoCompleteResult':this.ctrlAutoCompleteResult,
 				'ctrlResultMode':this.ctrlResultMode,
-				'ctrlFldOpAbbr':this.ctrlFldOpAbbr
+				'ctrlFldOpAbbr':this.ctrlFldOpAbbr,
+				'ctrlSortBy':this.ctrlSortBy,
+				'ctrlSimPercent':this.ctrlSimPercent,
+				'ctrlStructures':this.ctrlStructures,
+				'ctrlDmChoice' :this.ctrlDmChoice
 			});
 
 		this.subscriptions.push(this.form.valueChanges.subscribe( () => this.onFormChanges() ));
@@ -56,7 +67,7 @@ export class SettingsComponent implements OnInit {
 	/** onFormChanges - called on everything! */
 	onFormChanges() :void {
 		Logger.trace('SettingsForm.onFormChanges');
-		this.app.setPreferences(new Preferences(+this.ctrlResultPage.value, +this.ctrlAutoCompleteResult.value, this.ctrlFldOpAbbr.value === 'abbr', +this.ctrlResultMode.value));
+		this.app.setPreferences(new Preferences(+this.ctrlResultMode.value, +this.ctrlAutoCompleteResult.value, this.ctrlFldOpAbbr.value === 'abbr', +this.ctrlResultPage.value, +this.ctrlSortBy.value, +this.ctrlSimPercent.value, this.ctrlStructures.value, +this.ctrlDmChoice.value));
 		this.cdr.detectChanges();
 	}
 	/** rms called at least once per change, keep it quick! */
@@ -70,5 +81,27 @@ export class SettingsComponent implements OnInit {
 		Logger.trace('SettingsForm.getResultModeDisplay');
 		return ResultMode.getDisplay(rm);
 	}
+
+	get srts() :ReadonlyArray<Srt>{
+		Logger.trace('SettingsForm.srts');
+		return Sort.srts.filter((s :Srt) => s !== Srt.similarity);
+	}
+
+	getSortDisplay(srt :Srt) :String{
+		Logger.trace('SettingsForm.getSortDisplay');
+		return Sort.getDisplay(srt);
+	}
+
+	get dms() :ReadonlyArray<DM>{
+		Logger.trace('SettingsForm.dms');
+		return DataMode.DMs.filter( (dm :DM) => dm !== DM.totals && dm !== DM.valueCounts);
+
+	}
+
+	getDataModeDisplay(dm :DM) :String{
+		Logger.trace('SettingsForm.getDataModeDisplay');
+		return DM[dm];
+	}
+
 
 }

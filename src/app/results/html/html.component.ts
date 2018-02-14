@@ -34,7 +34,7 @@ export class HtmlComponent implements OnChanges, OnInit, OnDestroy {
 	substance :Substance;
 	substances :ReadonlyArray<Substance>;
 	idSimilarities :ReadonlyArray<IDSimilarity>;
-	structuresView :boolean = true;
+	viewStructures :boolean;
 	ltLg :boolean = false;
 
 	private subscriptions :Subscription[] = [];
@@ -61,6 +61,7 @@ export class HtmlComponent implements OnChanges, OnInit, OnDestroy {
 		this.subscriptions.push(this.media.subscribe( (change :MediaChange) => this.onMediaChange(change) ));
 		this.subscriptions.push(this.searchService.oPagedSearchSubstancesResult.subscribe( (pssr :PagedSearchSubstancesResult) => this.onNewPagedSearchSubstancesResult(pssr) ));
 		this.checkTotals();
+		this.viewStructures = this.app.viewStructures;
 	}
 	ngOnDestroy() :void {
 		Logger.debug('HTMLResults.onDestroy');
