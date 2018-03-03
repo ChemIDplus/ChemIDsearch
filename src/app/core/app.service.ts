@@ -16,15 +16,13 @@ import { Source } from './../domain/source';
 import { Totals } from './../domain/totals';
 import { Type } from './../domain/type';
 
-import { LocalStorageService } from './local-storage.service';
+import { LocalStorageService, Expires } from './local-storage.service';
 import { SearchService } from './search.service';
 
 import { Logger } from './logger';
 
 @Injectable()
 export class AppService {
-	private static readonly LONG_TERM_CACHE_SECONDS :number = 315360000; // 10 * 365 * 24 * 60 * 60 = cache for 10 years
-
 	routingSessionSearch :boolean;
 	routingSubstanceInSearch :boolean;
 	substanceInResults :boolean;
@@ -376,7 +374,7 @@ export class AppService {
 		Logger.log('AppService.cachePreferences');
 		const pmj :PreferencesMinJSON = this.preferences.serialize();
 		if(pmj){
-			LocalStorageService.setObject('preferences', pmj, AppService.LONG_TERM_CACHE_SECONDS);
+			LocalStorageService.setObject('preferences', pmj, Expires.YEARS);
 		}else{
 			LocalStorageService.removeItem('preferences');
 		}

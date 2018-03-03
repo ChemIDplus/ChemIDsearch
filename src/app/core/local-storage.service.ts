@@ -1,11 +1,14 @@
 import { Logger } from './logger';
 
 export enum Expires {
-	/** 30 seconds */
-	FAST = 30,
-	/** 20 minutes */
+	/** 20 minutes = 20 * 60 */
 	SHORT = 1200,
-	DAY = 86400
+	/* 24 * 60 * 60 */
+	DAY = 86400,
+	/** 30 days = 30 * 24 * 60 * 60 */
+	MONTH = 2592000,
+	/** 10 years = 10 * 365.25 * 24 * 60 * 60 */
+	YEARS = 315576000
 }
 
 export class LocalStorageService {

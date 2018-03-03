@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { AppService } from './../app.service';
-import { LocalStorageService } from './../local-storage.service';
+import { LocalStorageService, Expires } from './../local-storage.service';
 
 import { Logger } from './../logger';
 
@@ -27,7 +27,7 @@ export class InitComponent implements OnInit {
 				}else{
 					updated = Logger.testResetLevel(loggerLevel);
 					if(updated){
-						LocalStorageService.setString('loggerLevel', loggerLevel);
+						LocalStorageService.setString('loggerLevel', loggerLevel, Expires.MONTH);
 					}
 				}
 			}

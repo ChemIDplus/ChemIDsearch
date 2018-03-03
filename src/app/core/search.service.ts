@@ -391,7 +391,7 @@ export class SearchService {
 	}
 	static cacheSearchEvents(searchEvents :ReadonlyArray<SearchEvent>) :void {
 		Logger.trace('SearchService.cacheSearchEvents');
-		LocalStorageService.setObject('h', SearchEvent.serializeArray(searchEvents));
+		LocalStorageService.setObject('h', SearchEvent.serializeArray(searchEvents), Expires.YEARS);
 	}
 	static getCachedTotals(search :Search) :Totals {
 		Logger.trace('SearchService.getCachedTotals');
@@ -460,7 +460,7 @@ export class SearchService {
 	}
 	private static cacheStructure(idik :IDInchikey, structure :Structure) :void {
 		if(structure){
-			LocalStorageService.setObject(SearchService.structureKey(idik), structure.serialize(), SearchService.structureExpiresSeconds(idik));
+			LocalStorageService.setObject(SearchService.structureKey(idik), structure.serialize(), idik.inchikey ? Expires.MONTH : Expires.DAY);
 		}
 	}
 
@@ -501,13 +501,4 @@ export class SearchService {
 	private static structureKey(idik :IDInchikey) :string {
 		return 'str' + (idik.inchikey || idik.id);
 	}
-	private static structureExpiresSeconds(idik :IDInchikey) :number {
-		let expiresSeconds :number = Expires.DAY;
-		if(idik.inchikey){
-			expiresSeconds *= Expires.FAST;
-		}
-		return expiresSeconds;
-	}
-	/*tslint:enable:member-ordering */
-
 }
