@@ -1,42 +1,16 @@
-import { Component, Input, ViewChild, ChangeDetectionStrategy, OnInit, OnChanges, EventEmitter } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
+import { Component, Input, ViewChild, ChangeDetectionStrategy, OnInit, OnChanges, EventEmitter } from '@angular/core';
 import { MatSort, Sort as MatSortEvent } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
+
+import * as _ from 'lodash';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
-import * as _ from 'lodash';
 
-import { PhysicalProp } from '../../../../domain/physical-prop';
+import { PhysicalProp } from './../../../../domain/physical-prop';
 
 import { Logger } from './../../../../core/logger';
-
-@Component({
-	selector: 'app-physical-props',
-	templateUrl: './physical-props.component.html',
-	styleUrls: ['./physical-props.component.css'],
-	changeDetection: ChangeDetectionStrategy.OnPush
-})
-
-export class PhysicalPropsComponent implements OnInit, OnChanges {
-	@Input() physicalProps :ReadonlyArray<PhysicalProp>; // Immutable
-	@ViewChild(MatSort) sort :MatSort;
-
-	displayedColumns :string[] = ['property', 'value', 'units', 'temperature', 'source'];
-	dataSource :PPsDataSource | undefined;
-
-	/** Stream that emits whenever the data has been modified. */
-	readonly dataChange :BehaviorSubject<PhysicalProp[]> = new BehaviorSubject<PhysicalProp[]>([]);
-
-	ngOnChanges() :void {
-		Logger.debug('PhysicalProps.onChanges', this.physicalProps);
-		this.dataChange.next(_.filter(this.physicalProps, () => true));
-	}
-	ngOnInit() :void {
-		Logger.debug('PhysicalProps.onInit');
-		this.dataSource = new PPsDataSource(this.dataChange, this.sort);
-	}
-}
 
 /**
  * Data source to provide what data should be rendered in the table. Note that the data source
@@ -62,6 +36,7 @@ export class PPsDataSource extends DataSource<PhysicalProp> {
 		});
 	}
 
+	/* tslint:disable-next-line:prefer-function-over-method */
 	disconnect() :void {
 		// empty
 	}
@@ -70,13 +45,40 @@ export class PPsDataSource extends DataSource<PhysicalProp> {
 	getSortedData() :PhysicalProp[] {
 		const data :PhysicalProp[] = this.dataChange.value.slice(),
 			sort :MatSort = this.sort,
-			direction :''|'asc'|'desc' = sort.direction;
+			direction :'' | 'asc' | 'desc' = sort.direction;
 		let active :string | Function = sort.active;
 		if(active === 'property'){
-			active = ( (pp :PhysicalProp) => pp.property.toLowerCase() );
+			active = ( (pp :PhysicalProp) :string => pp.property.toLowerCase() );
 		}else if(active === 'value'){
-			active = ( (pp :PhysicalProp) => Number(pp.value) );
+			active = ( (pp :PhysicalProp) :number => Number(pp.value) );
 		}
 		return (!active || direction === '') ? data : _.orderBy(data, [active], [direction]);
+	}
+}
+
+@Component({
+	selector: 'app-physical-props',
+	templateUrl: './physical-props.component.html',
+	styleUrls: ['./physical-props.component.css'],
+	changeDetection: ChangeDetectionStrategy.OnPush
+})
+
+export class PhysicalPropsComponent implements OnInit, OnChanges {
+	@Input() physicalProps :ReadonlyArray<PhysicalProp>; // Immutable
+	@ViewChild(MatSort) sort :MatSort;
+
+	displayedColumns :string[] = ['property', 'value', 'units', 'temperature', 'source'];
+	dataSource :PPsDataSource | undefined;
+
+	/** Stream that emits whenever the data has been modified. */
+	readonly dataChange :BehaviorSubject<PhysicalProp[]> = new BehaviorSubject<PhysicalProp[]>([]);
+
+	ngOnChanges() :void {
+		Logger.debug('PhysicalProps.onChanges', this.physicalProps);
+		this.dataChange.next(_.filter(this.physicalProps, () => true));
+	}
+	ngOnInit() :void {
+		Logger.debug('PhysicalProps.onInit');
+		this.dataSource = new PPsDataSource(this.dataChange, this.sort);
 	}
 }

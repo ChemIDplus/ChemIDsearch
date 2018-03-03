@@ -1,5 +1,6 @@
-import { Totals } from './totals';
 import { Search } from './search';
+import { Totals } from './totals';
+
 /** Immutable */
 export class SearchTotals {
 	readonly valid :boolean;

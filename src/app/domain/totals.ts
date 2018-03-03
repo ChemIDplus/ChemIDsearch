@@ -8,7 +8,6 @@ export interface TotalsMinJSON{
 /** Immutable */
 export class Totals {
 
-	/* tslint:disable-next-line:variable-name */
 	private _matchesValuesInSubstances :string;
 
 	constructor(readonly substances ? :number, readonly values ? :number){}

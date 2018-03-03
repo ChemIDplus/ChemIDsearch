@@ -1,4 +1,4 @@
-import { EnumEx } from '../util/enum-ex';
+import { EnumEx } from './../util/enum-ex';
 
 export enum PPMT{
 	either,
@@ -11,27 +11,23 @@ export class PPMeasurementType{
 
 
 // Static
-	/* tslint:disable-next-line:variable-name */
-	static readonly PPMTs :ReadonlyArray<PPMT> = EnumEx.getValues(PPMT);
+	static readonly ppmts :ReadonlyArray<PPMT> = EnumEx.getValues(PPMT);
 
 	private static ppMeasurementTypes :PPMeasurementType[];
 
-	// Static Constructor IIFE: see https://github.com/Microsoft/TypeScript/issues/265
-	/* tslint:disable-next-line */
-	private static _constructor = (() :void => {
+	static _constructor() :void {
 		let a :PPMeasurementType[];
 		a = PPMeasurementType.ppMeasurementTypes = [];
 		a[PPMT.either] = new PPMeasurementType('either', '', '');
 		a[PPMT.experimental] = new PPMeasurementType('exp', 'Experimental', 'Exp.');
 		a[PPMT.estimated] = new PPMeasurementType('est', 'Estimated', 'Est.');
-	})();
+	}
 
 	static getAbbr(ppmt :PPMT) :string {
 		return PPMeasurementType.getPPMeasurementType(ppmt).abbr;
 	}
-	/* tslint:disable-next-line:variable-name */
 	static getPPMT(name_or_abbr :string) :PPMT {
-		return PPMT[name_or_abbr] || PPMeasurementType.PPMTs.find( (ppmt :PPMT) => PPMeasurementType.ppMeasurementTypes[ppmt].abbr === name_or_abbr);
+		return PPMT[name_or_abbr] || PPMeasurementType.ppmts.find( (ppmt :PPMT) => PPMeasurementType.ppMeasurementTypes[ppmt].abbr === name_or_abbr);
 	}
 	static getDisplay(ppmt :PPMT) :string {
 		return PPMeasurementType.getPPMeasurementType(ppmt).display;
@@ -45,8 +41,6 @@ export class PPMeasurementType{
 	}
 
 
-
-
 // Instance
 	constructor(
 		readonly abbr :string,
@@ -54,3 +48,5 @@ export class PPMeasurementType{
 		readonly displayAbbr :string
 	){}
 }
+
+PPMeasurementType._constructor();

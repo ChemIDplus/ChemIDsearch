@@ -6,7 +6,7 @@ import { Fld } from './field';
 import { Op } from './operator';
 import { Totals } from './totals';
 
-import { environment } from '../../environments/environment';
+import { environment } from './../../environments/environment';
 
 import { Logger } from './../core/logger';
 
@@ -77,7 +77,6 @@ export class Search {
 	readonly hasNonNot :boolean;
 	readonly hasOneSimilarity :boolean;
 
-	/*tslint:disable:variable-name */
 	private _urlNoAbbr :string;
 	private _routerQueryParamsNoAbbr :Params;
 	private _totalsURL :string;
@@ -85,7 +84,6 @@ export class Search {
 	private _summariesURL :string;
 	private _summariesURLNoAbbr :string;
 	private _structuresURL :string;
-	/*tslint:enable:variable-name */
 
 
 	constructor(exps :Expression[]){
@@ -175,7 +173,9 @@ export class Search {
 		return this._totalsURLNoAbbr;
 	}
 
+	/* tslint:disable-next-line:no-use-before-declare */
 	mutable() :SearchMut {
+		/* tslint:disable-next-line:no-use-before-declare */
 		return new SearchMut(this.exps.map( (exp :Expression) => exp.mutable() ));
 	}
 
@@ -194,6 +194,7 @@ export class Search {
 
 	getURL(dm :DM, useAbbr :boolean = false, singleSummaryToDetails ? :boolean) :string {
 		let url :string;
+		/* tslint:disable-next-line:prefer-conditional-expression */
 		if(this.exp){
 			url = Search.DATA_PREFIX + (useAbbr ? this.url : this.urlNoAbbr) + Search.DATA_PARAM + DM[dm];
 		}else{
@@ -237,7 +238,7 @@ export class Search {
 			++i;
 			params['exp' + i] = uriUnencoded.replace(/\//g, '%2F').replace(/\(/g, '%28').replace(/\)/g, '%29');
 		});
-		return {url:url, params:params};
+		return {url, params};
 	}
 
 
@@ -258,13 +259,11 @@ export class Search {
 
 
 export class SearchMut {
-	/*tslint:disable:variable-name */
 	private _acExp :ExpressionMut;
 	private _acURL :string;
 	private _forEdit :ExpressionMut;
-	/*tslint:enable:variable-name */
 
-	constructor(private exps :ExpressionMut[]){
+	constructor(private readonly exps :ExpressionMut[]){
 		this.setGenerated();
 	}
 

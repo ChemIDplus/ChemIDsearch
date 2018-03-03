@@ -2,6 +2,8 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 import { Summary } from './../../../domain/summary';
 
+import { AppService } from './../../../core/app.service';
+
 import { Logger } from './../../../core/logger';
 
 @Component({
@@ -17,18 +19,19 @@ export class StructureSearchComponent {
 			this._linkSimPercent = linkSimPercent;
 		}else{
 			this.needsLinkSimPercent = true;
-			this._linkSimPercent = 80;
+			this._linkSimPercent = this.app.simPercent;
 		}
+	}
+	get linkSimPercent() :number {
+		return this._linkSimPercent;
 	}
 
 	needsLinkSimPercent :boolean = false;
 
-	/* tslint:disable-next-line:variable-name */
 	private _linkSimPercent :number;
 
-	get linkSimPercent() :number {
-		return this._linkSimPercent;
-	}
+	constructor(readonly app :AppService){}
+
 	get has3D() :boolean {
 		Logger.trace2('structureSearch.has3D');
 		return this.summary.has3D;

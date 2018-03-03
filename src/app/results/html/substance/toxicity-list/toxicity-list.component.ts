@@ -1,9 +1,9 @@
-import { ToxEffect } from './../../../../domain/tox-effect';
 import { Component, Input, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, OnInit } from '@angular/core';
 // import { DataSource } from '@angular/cdk/collections';
 import { MatSort, Sort as MatSortEvent } from '@angular/material';
 // import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+
 // import 'rxjs/add/observable/of';
 import * as _ from 'lodash';
 
@@ -23,15 +23,17 @@ export class ToxicityListComponent implements OnInit {
 		this._toxicityReadOnlyArray = toxicityReadOnlyArray;
 // 		this.setDataSource();
 	}
+	get toxicityList() :ReadonlyArray<Toxicity> {
+		return this._toxicityReadOnlyArray;
+	}
 
 	@ViewChild(MatSort) sort :MatSort;
 
 	displayedColumns :string[] = ['organism', 'testType', 'route', 'dose', 'effect', 'source'];
 // 	dataSource :ToxicitiesDataSource | undefined;
 
-	/* tslint:disable:variable-name */
 	private _toxicityReadOnlyArray :ReadonlyArray<Toxicity>;
-	private subscriptions :Subscription[] = [];
+	private readonly subscriptions :Subscription[] = [];
 
 
 	constructor(readonly cdr :ChangeDetectorRef){}
@@ -41,15 +43,11 @@ export class ToxicityListComponent implements OnInit {
 		this.subscriptions.push(this.sort.sortChange.subscribe( (s :MatSortEvent) => this.onSortChange(s) ));
 	}
 
-	get toxicityList() :ReadonlyArray<Toxicity> {
-		return this._toxicityReadOnlyArray;
-	}
-
 	onSortChange(sortEvent :MatSortEvent) :void {
 		Logger.log('ToxicityList.onSortChange', sortEvent);
 		let property :string | Function = sortEvent.active;
 		if(sortEvent.active === 'dose'){
-			property = (tox :Toxicity) => tox.dose.normalized === undefined ? tox.dose.reported : tox.dose.normalized;
+			property = (tox :Toxicity) :string => tox.dose.normalized === undefined ? tox.dose.reported : tox.dose.normalized;
 		}else if (sortEvent.active === 'source'){
 			property = 'journal.display';
 		}

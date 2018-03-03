@@ -1,4 +1,5 @@
-import { EnumEx } from '../util/enum-ex';
+import { EnumEx } from './../util/enum-ex';
+
 import { Fld } from './field';
 
 export enum Op{
@@ -36,9 +37,7 @@ export class Operator{
 
 	// Make sure the help matches: \ChemIDsearch\src\app\api\fields-operators\fields-operators.component.html
 
-	// Static Constructor IIFE: see https://github.com/Microsoft/TypeScript/issues/265
-	/* tslint:disable-next-line */
-	private static _constructor = (() :void => {
+	static _constructor() :void {
 		let a :Operator[];
 		a = Operator.operators = [];
 		a[Op.auto] = new Operator('auto', '(automatic)', 'auto', true);
@@ -56,7 +55,7 @@ export class Operator{
 		a[Op.exact] = new Operator('ex', 'Exact (parent only)', '=');
 		a[Op.flex] = new Operator('fx', 'Flex (parent, salts, mixture)', 'flex');
 		a[Op.flexplus] = new Operator('fp', 'Flexplus (parent, all variations)', 'flexplus');
-	})();
+	}
 
 	static getOps(fld :Fld) :ReadonlyArray<Op> {
 		switch(fld){
@@ -90,7 +89,6 @@ export class Operator{
 	static getAbbr(op :Op) :string {
 		return Operator.getOperator(op).abbr;
 	}
-	/* tslint:disable-next-line:variable-name */
 	static getOp(name_or_abbr :string) :Op {
 		return Op[name_or_abbr] || Operator.ops.find( (op :Op) => Operator.operators[op].abbr === name_or_abbr);
 	}
@@ -124,6 +122,6 @@ export class Operator{
 		readonly autoReplaceAsterisk ? :boolean,
 		readonly usesPercent ? :boolean
 	){}
-
-
 }
+
+Operator._constructor();

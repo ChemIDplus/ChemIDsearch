@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { environment } from '../../environments/environment';
+import { environment } from './../../environments/environment';
 
 enum Level {
 	OFF,
@@ -29,16 +29,15 @@ export class Logger {
 	 * Or append a parameter to a URL such as ?loggerLevel=TRACE which will be saved to localStorage.
 	 * Undo with ?loggerLevel=DEFAULT which will remove the custom level from localStorage.
 	 */
-	private static override :string; // = 'TRACE';
+	private static readonly override :string; // = 'TRACE';
 
 	/* tslint:disable-next-line:member-ordering */
-	static level :Level = Level[Logger.override || <string>environment.loggerLevel];
+	static level :Level = Level[Logger.override || environment.loggerLevel as string];
 
-	// Static Constructor IIFE: see https://github.com/Microsoft/TypeScript/issues/265
-	/* tslint:disable-next-line */
-	private static _constructor = (() :void => {
+	static _constructor() :void {
 		Logger.info('Logger level set to ' + Level[Logger.level]);
-	})();
+	}
+
 	static testResetLevel(level :string) :boolean {
 		if(level){
 			const test :any = Level[level];
@@ -86,3 +85,5 @@ export class Logger {
 	}
 
 }
+
+Logger._constructor();

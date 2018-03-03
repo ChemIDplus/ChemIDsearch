@@ -1,4 +1,4 @@
-import { EnumEx } from '../util/enum-ex';
+import { EnumEx } from './../util/enum-ex';
 
 export enum Fld{
 	auto,
@@ -24,16 +24,13 @@ export enum Fld{
 export class Field{
 
 // Static
-	/* tslint:disable-next-line:variable-name */
-	static readonly Flds :ReadonlyArray<Fld> = EnumEx.getValues(Fld);
+	static readonly flds :ReadonlyArray<Fld> = EnumEx.getValues(Fld);
 
 	private static fields :Field[];
 
 	// Make sure the help matches: \ChemIDsearch\src\app\api\fields-operators\fields-operators.component.html
 
-	// Static Constructor IIFE: see https://github.com/Microsoft/TypeScript/issues/265
-	/* tslint:disable-next-line */
-	private static _constructor = (() :void => {
+	static _constructor() :void {
 		let a :Field[];
 		a = Field.fields = [];
 		a[Fld.auto] = new Field('auto', '(automatic)', 'Auto', true);
@@ -53,14 +50,13 @@ export class Field{
 		a[Fld.physicalproperty] = new Field('pp', 'Physical Property', 'PP'); // Display values are not currently used; PPField displayed instead
 		a[Fld.toxicity] = new Field('tox', 'Toxicity', 'Tox.');
 		a[Fld.lastmod] = new Field('lm', 'Last Modified', 'LastMod');
-	})();
+	}
 
 	static getAbbr(fld :Fld) :string {
 		return Field.getField(fld).abbr;
 	}
-	/* tslint:disable-next-line:variable-name */
 	static getFld(name_or_abbr :string) :Fld {
-		return Fld[name_or_abbr] || Field.Flds.find( (fld :Fld) => Field.fields[fld].abbr === name_or_abbr);
+		return Fld[name_or_abbr] || Field.flds.find( (fld :Fld) => Field.fields[fld].abbr === name_or_abbr);
 	}
 	static getDisplay(fld :Fld) :string {
 		return Field.getField(fld).display;
@@ -74,8 +70,8 @@ export class Field{
 	static multiOnly(fld :Fld) :boolean {
 		return Field.getField(fld).multiOnly;
 	}
-	static boolean(fld :Fld) :boolean {
-		return Field.getField(fld).boolean;
+	static bool(fld :Fld) :boolean {
+		return Field.getField(fld).bool;
 	}
 	static caseSensitive(fld :Fld) :boolean {
 		return Field.getField(fld).caseSensitive;
@@ -94,8 +90,9 @@ export class Field{
 		readonly displayAbbr :string,
 		readonly allowsAutocomplete ? :boolean,
 		readonly multiOnly ? :boolean,
-		readonly boolean ? :boolean,
+		readonly bool ? :boolean,
 		readonly caseSensitive ? :boolean
 	){}
-
 }
+
+Field._constructor();

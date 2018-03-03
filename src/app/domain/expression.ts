@@ -3,10 +3,10 @@ import { Fld, Field } from './field';
 import { Op, Operator } from './operator';
 import { PPF, PPField } from './pp-field';
 import { PPMT, PPMeasurementType } from './pp-measurement-type';
-import { ToxT, ToxicityTest } from './toxicity-test';
+import { ToxE, ToxicityEffect } from './toxicity-effect';
+import { ToxR, ToxicityRoute } from './toxicity-route';
 import { ToxS, ToxicitySpecies } from './toxicity-species';
-import { ToxR, ToxicityRoute} from './toxicity-route';
-import { ToxE, ToxicityEffect} from './toxicity-effect';
+import { ToxT, ToxicityTest } from './toxicity-test';
 
 import { Logger } from './../core/logger';
 
@@ -32,15 +32,17 @@ export class Expression {
 	static readonly DEFAULT_SIM_PERCENT :number = 80;
 
 	static trimAndCase(fld :Fld, value :string, skipTrim :boolean = false) :string {
+		let value2 :string = value;
 		if(!skipTrim){
-			value = value.trim();
+			value2 = value2.trim();
 		}
 		if(!Field.caseSensitive(fld)){
-			value = value.toLowerCase();
+			value2 = value2.toLowerCase();
 		}
-		return value;
+		return value2;
 	}
 
+	/* tslint:disable-next-line:cyclomatic-complexity */
 	static compare(a :Expression, b :Expression) :number {
 		if(a.fld !== b.fld){
 			return a.fld - b.fld;
@@ -52,7 +54,7 @@ export class Expression {
 			return a.value < b.value ? -1 : 1;
 		}
 		if(a.not !== b.not){
-			return a.not === undefined || b.not === true ? -1 : 1;
+			return a.not === undefined || b.not ? -1 : 1;
 		}
 		if(a.simPercent !== b.simPercent){
 			return (a.simPercent !== undefined && b.simPercent !== undefined) ? a.simPercent - b.simPercent : ( a.simPercent === undefined ? -1 : 1 );
@@ -83,13 +85,11 @@ export class Expression {
 	readonly url :string;
 	readonly display :string;
 
-	/*tslint:disable:variable-name */
 	private _routerLinkParams :ReadonlyArray<string>;
 	private _urlNoAbbr :string;
 	private _routerLinkParamsNoAbbr :ReadonlyArray<string>;
 	private _urlUnencoded :string;
 	private _urlNoAbbrUnencoded :string;
-	/*tslint:enable:variable-name */
 
 	constructor(
 		readonly fld :Fld,
@@ -117,9 +117,11 @@ export class Expression {
 		Logger.debug('GENERATED IMMUTABLE Expression', this );
 	}
 
+	/* tslint:disable-next-line:no-use-before-declare */
 	mutable() :ExpressionMut {
 		Logger.trace('Expression.mutable');
-		return new ExpressionMut(this.fld, this.not, this.op, this.simPercent, this.value, this.ppf, this.ppmt, this.toxT, this.toxS, this.toxR, this.toxE);
+		/* tslint:disable-next-line:no-use-before-declare */
+		return new ExpressionMut(this.fld, this.op, this.value, this.not, this.simPercent, this.ppf, this.ppmt, this.toxT, this.toxS, this.toxR, this.toxE);
 	}
 	toggleNot() :Expression {
 		Logger.trace('Expression.toggleNot');
@@ -167,6 +169,7 @@ export class Expression {
 		return useAbbr ? this.routerLinkParams : this.routerLinkParamsNoAbbr;
 	}
 
+	/* tslint:disable-next-line:cyclomatic-complexity */
 	private generateURL(useAbbr :boolean, skipEncodeValue :boolean = false) :string {
 		// Double escape all / in the value
 		const v :string = (this.value ? Expression.trimAndCase(this.fld, this.value).replace(/\\/g, '%5C').replace(/\//g, '%2F') : undefined);
@@ -282,7 +285,6 @@ export class Expression {
 
 }
 
-/* tslint:disable:variable-name */
 
 export class ExpressionMut{
 
@@ -292,10 +294,10 @@ export class ExpressionMut{
 
 	constructor(
 		private _fld :Fld,
-		private _not :boolean,
 		private _op :Op,
-		private _simPercent :number,
 		private _value :string,
+		private _not :boolean,
+		private _simPercent :number,
 		private _ppf :PPF,
 		private _ppmt :PPMT,
 		private _toxT :ToxT,
@@ -320,6 +322,8 @@ export class ExpressionMut{
 			this.onChange();
 		}
 	}
+	get fld() :Fld { return this._fld; }
+
 	set not(not :boolean) {
 		const changed :boolean = (this._not !== not);
 		this._not = not;
@@ -327,6 +331,8 @@ export class ExpressionMut{
 			this.onChange();
 		}
 	}
+	get not() :boolean { return this._not; }
+
 	set op(op :Op) {
 		const changed :boolean = (this._op !== op);
 		this._op = op;
@@ -334,16 +340,21 @@ export class ExpressionMut{
 			this.onChange();
 		}
 	}
-	set simPercent( simPercent :number) {
-		if(simPercent === Expression.DEFAULT_SIM_PERCENT){
-			simPercent = undefined;
+	get op() :Op { return this._op; }
+
+	set simPercent(simPercent :number) {
+		let simPercent2 :number = simPercent;
+		if(simPercent2 === Expression.DEFAULT_SIM_PERCENT){
+			simPercent2 = undefined;
 		}
-		const changed :boolean = (this._simPercent !== simPercent);
-		this._simPercent = simPercent;
+		const changed :boolean = (this._simPercent !== simPercent2);
+		this._simPercent = simPercent2;
 		if(changed){
 			this.onChange();
 		}
 	}
+	get simPercent() :number { return this._simPercent; }
+
 	set value(value :string) {
 		const changed :boolean = (this._value !== value);
 		this._value = value;
@@ -351,6 +362,8 @@ export class ExpressionMut{
 			this.onChange();
 		}
 	}
+	get value() :string { return this._value; }
+
 	set ppf(ppf :PPF) {
 		const changed :boolean = (this._ppf !== ppf);
 		this._ppf = ppf;
@@ -358,67 +371,71 @@ export class ExpressionMut{
 			this.onChange();
 		}
 	}
-	set ppmt(ppmt :PPMT) {
-		if(ppmt === PPMT.either){
-			ppmt = undefined;
-		}
-		const changed :boolean = (this._ppmt !== ppmt);
-		this._ppmt = ppmt;
-		if(changed){
-			this.onChange();
-		}
-	}
-	set toxT(toxT :ToxT) {
-		if(toxT === ToxT.any){
-			toxT = undefined;
-		}
-		const changed :boolean = (this._toxT !== toxT);
-		this._toxT = toxT;
-		if(changed){
-			this.onChange();
-		}
-	}
-	set toxS(toxS :ToxS) {
-		if(toxS === ToxS.any){
-			toxS = undefined;
-		}
-		const changed :boolean = (this._toxS !== toxS);
-		this._toxS = toxS;
-		if(changed){
-			this.onChange();
-		}
-	}
-	set toxR(toxR :ToxR) {
-		if(toxR === ToxR.any){
-			toxR = undefined;
-		}
-		const changed :boolean = (this._toxR !== toxR);
-		this._toxR = toxR;
-		if(changed){
-			this.onChange();
-		}
-	}
-	set toxE(toxE :ToxE) {
-		if(toxE === ToxE.any){
-			toxE = undefined;
-		}
-		const changed :boolean = (this._toxE !== toxE);
-		this._toxE = toxE;
-		if(changed){
-			this.onChange();
-		}
-	}
-
-	get fld() :Fld { return this._fld; }
-	get not() :boolean { return this._not; }
-	get op() :Op { return this._op; }
-	get simPercent() :number { return this._simPercent; }
-	get value() :string { return this._value; }
 	get ppf() :PPF { return this._ppf; }
+
+	set ppmt(ppmt :PPMT) {
+		let ppmt2 :PPMT = ppmt;
+		if(ppmt2 === PPMT.either){
+			ppmt2 = undefined;
+		}
+		const changed :boolean = (this._ppmt !== ppmt2);
+		this._ppmt = ppmt2;
+		if(changed){
+			this.onChange();
+		}
+	}
 	get ppmt() :PPMT { return this._ppmt; }
+
+	set toxT(toxT :ToxT) {
+		let toxT2 :ToxT = toxT;
+		if(toxT2 === ToxT.any){
+			toxT2 = undefined;
+		}
+		const changed :boolean = (this._toxT !== toxT2);
+		this._toxT = toxT2;
+		if(changed){
+			this.onChange();
+		}
+	}
 	get toxT() :ToxT { return this._toxT; }
+
+	set toxS(toxS :ToxS) {
+		let toxS2 :ToxS = toxS;
+		if(toxS2 === ToxS.any){
+			toxS2 = undefined;
+		}
+		const changed :boolean = (this._toxS !== toxS2);
+		this._toxS = toxS2;
+		if(changed){
+			this.onChange();
+		}
+	}
 	get toxS() :ToxS { return this._toxS; }
+
+	set toxR(toxR :ToxR) {
+		let toxR2 :ToxR = toxR;
+		if(toxR2 === ToxR.any){
+			toxR2 = undefined;
+		}
+		const changed :boolean = (this._toxR !== toxR2);
+		this._toxR = toxR2;
+		if(changed){
+			this.onChange();
+		}
+	}
 	get toxR() :ToxR { return this._toxR; }
+
+	set toxE(toxE :ToxE) {
+		let toxE2 :ToxE = toxE;
+		if(toxE2 === ToxE.any){
+			toxE2 = undefined;
+		}
+		const changed :boolean = (this._toxE !== toxE2);
+		this._toxE = toxE2;
+		if(changed){
+			this.onChange();
+		}
+	}
 	get toxE() :ToxE { return this._toxE; }
 
 	get usesAC() :boolean { return this._usesAC; }
@@ -437,10 +454,10 @@ export class ExpressionMut{
 	}
 
 	get clone() :ExpressionMut {
-		return new ExpressionMut(this._fld, this._not, this._op, this._simPercent, this._value, this._ppf, this._ppmt, this._toxT, this._toxS, this._toxR, this._toxE, this.ac, this.testFirst);
+		return new ExpressionMut(this._fld, this._op, this._value, this._not, this._simPercent, this._ppf, this._ppmt, this._toxT, this._toxS, this._toxR, this._toxE, this.ac, this.testFirst);
 	}
 	get autocomplete() :ExpressionMut {
-		return new ExpressionMut(this._fld, this._not, Op.startswith, undefined, this._acValue, undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.testFirst);
+		return new ExpressionMut(this._fld, Op.startswith, this._acValue, this._not, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.testFirst);
 	}
 	get canonical() :boolean {
 		return (this._fld === Fld.rn || this._fld === Fld.id) && this._op === Op.equals;
@@ -502,7 +519,7 @@ export class ExpressionMut{
 	/*tslint:disable-next-line:member-ordering */
 	static deserialize(e :ExpressionMinJSON) :ExpressionMut {
 		if(e){
-			return new ExpressionMut(e.f, e.n, e.o, e.s, e.v, e.p, e.m, e.tt, e.ts, e.tr, e.te);
+			return new ExpressionMut(e.f, e.o, e.v, e.n, e.s, e.p, e.m, e.tt, e.ts, e.tr, e.te);
 		}
 	}
 

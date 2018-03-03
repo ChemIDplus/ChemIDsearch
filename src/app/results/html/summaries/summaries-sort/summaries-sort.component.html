@@ -1,7 +1,7 @@
 <div class="rel">
 	<span class="sort-by">Sort by:</span><ul #ul (mouseenter)="mouseenter(ul)" (mouseleave)="mouseleave(ul)">
 	<li *ngFor="let sort of sortOptions" [class.active]="sort===current">
-		<button class="btn btn-sm" [class.btn-info]="sort===current" (click)="change(sort)">{{sort.display}}
+		<button class="btn btn-sm" [class.btn-info]="sort===current" (click)="changed(sort)">{{sort.display}}
 			<i *ngIf="sort===current && currentIsAsc" class="fa fa-chevron-up"></i>
 			<i *ngIf="sort===current && !currentIsAsc" class="fa fa-chevron-down"></i>
 		</button>

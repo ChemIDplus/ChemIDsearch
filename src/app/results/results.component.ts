@@ -2,13 +2,13 @@ import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRe
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
-import { Search } from '../domain/search';
+import { RM } from './../domain/result-mode';
+import { Search } from './../domain/search';
 import { SearchTotals } from './../domain/search-totals';
 import { Totals } from './../domain/totals';
-import { ViewMode } from '../domain/view-mode';
-import { RM, ResultMode } from '../domain/result-mode';
+import { ViewMode } from './../domain/view-mode';
 
-import { AppService } from '../core/app.service';
+import { AppService } from './../core/app.service';
 import { SearchService } from './../core/search.service';
 
 import { Logger } from './../core/logger';
@@ -21,12 +21,10 @@ import { Logger } from './../core/logger';
 })
 export class ResultsComponent implements OnInit, OnDestroy {
 
-	/* tslint:disable:variable-name */
-	_search :Search;
-	_totals :Totals;
-	/* tslint:enable:variable-name */
+	private _search :Search;
+	private _totals :Totals;
 
-	private subscriptions :Subscription[] = [];
+	private readonly subscriptions :Subscription[] = [];
 	private viewMode :ViewMode;
 
 	constructor(

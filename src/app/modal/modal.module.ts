@@ -2,13 +2,13 @@
 
 import { NgModule } from '@angular/core';
 
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from './../shared/shared.module';
 
-import { ModalTemplateDirective } from './modal-template.directive';
-import { ModalStateService } from './modal-state.service'; // Internal Only
-import { ModalService } from './modal.service';
 import { ModalInnerComponent } from './modal-inner/modal-inner.component';
 import { ModalOuterComponent } from './modal-outer/modal-outer.component';
+import { ModalStateService } from './modal-state.service'; // Internal Only
+import { ModalTemplateDirective } from './modal-template.directive';
+import { ModalService } from './modal.service';
 
 @NgModule({
 	declarations: [ModalTemplateDirective, ModalInnerComponent, ModalOuterComponent],

@@ -21,7 +21,7 @@ export class TypeElements<T extends Element> {
 
 	serialize<TMJ extends ElementMinJSON>() :TypeElementsMinJSON<TMJ> {
 		const mja :TMJ[] = [];
-		this.elements.forEach((e :T, index :number) => mja[index] = <TMJ>e.serialize());
+		this.elements.forEach((e :T, index :number) => mja[index] = e.serialize() as TMJ);
 		return {'t':this.type.id, 'e':mja};
 	}
 	/*tslint:disable:member-ordering */
@@ -30,9 +30,9 @@ export class TypeElements<T extends Element> {
 			const type :Type = Type.get(mj.t),
 				elements :T2[] = [];
 			if(type.table === 'lo'){
-				mj.e.forEach( (rmj :TMJ, index :number) => elements[index] = <T2>Resource.deserialize(rmj) );
+				mj.e.forEach( (rmj :TMJ, index :number) => elements[index] = Resource.deserialize(rmj) as T2 );
 			}else{
-				mj.e.forEach( (dmj :TMJ, index :number) => elements[index] = <T2>Detail.deserialize(dmj) );
+				mj.e.forEach( (dmj :TMJ, index :number) => elements[index] = Detail.deserialize(dmj) as T2 );
 			}
 			return new TypeElements(mj.t, elements);
 		}

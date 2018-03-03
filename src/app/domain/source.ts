@@ -18,7 +18,7 @@ interface SourceMinJSON {
 export class Source {
 
 // Static
-	private static SOURCES :Source[] = [];
+	private static readonly SOURCES :Source[] = [];
 
 	public static get(id :string) :Source {
 		return Source.SOURCES.find( (source :Source) => source.id === id);

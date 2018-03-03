@@ -1,4 +1,4 @@
-import { EnumEx } from '../util/enum-ex';
+import { EnumEx } from './../util/enum-ex';
 
 export enum DM {
 	totals,
@@ -30,21 +30,18 @@ export enum DM {
 /** Immutable */
 export class DataMode{
 // Static:
-	/* tslint:disable-next-line:variable-name */
-	static readonly DMs :ReadonlyArray<DM> = EnumEx.getValues(DM);
+	static readonly dms :ReadonlyArray<DM> = EnumEx.getValues(DM);
 
 	private static DATA_MODES :DataMode[];
 
 	// Make sure the help matches: \ChemIDsearch\src\app\api\data-parameters\data-parameters.component.html
 
-	// Static Constructor IIFE: see https://github.com/Microsoft/TypeScript/issues/265
-	/* tslint:disable-next-line */
-	private static _constructor = ( () => {
+	static _constructor() :void {
 		let a :DataMode[];
 		a = DataMode.DATA_MODES = [];
 		a[DM.totals] = new DataMode(DM.totals, 1, ' = Totals for matching values and matching substances');
+		/* tslint:disable:align no-magic-numbers */
 		a[DM.valueCounts] = new DataMode(DM.valueCounts, 1000, ' = List of matching values with substance counts');
-		/* tslint:disable:align */
 		a[DM.id] = new DataMode(DM.id, 25000, ' = IDs only');
 		a[DM.lastMod] = new DataMode(DM.lastMod, 10000, ' = IDs and Last Modified');
 		a[DM.complete] = new DataMode(DM.complete, 25, ' = Everything');
@@ -68,7 +65,7 @@ export class DataMode{
 					a[DM.mol3d] = new DataMode(DM.mol3d, 125);
 				a[DM.image] = new DataMode(DM.image, 80, ' = png bytes');
 		/* tslint:enable:align */
-	})();
+	}
 
 	static getDataMode(dm :DM) :DataMode {
 		return DataMode.DATA_MODES[dm];
@@ -81,5 +78,6 @@ export class DataMode{
 		readonly maxSubstancesPerBatch :number,
 		readonly displaySuffix ? :string
 	){}
-
 }
+
+DataMode._constructor();

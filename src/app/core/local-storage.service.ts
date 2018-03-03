@@ -1,11 +1,19 @@
 import { Logger } from './logger';
 
+export enum Expires {
+	/** 30 seconds */
+	FAST = 30,
+	/** 20 minutes */
+	SHORT = 1200,
+	DAY = 86400
+}
+
 export class LocalStorageService {
 
 	// Rarely, if ever, increase this, as it will cause removeAllIfOldVersion to blow away users' history and preferences.
-	static readonly VERSION :number = 3;
+	private static readonly VERSION :number = 3;
 
-	public static setString(key :string, data :string, expiresSeconds ? :number) :void {
+	public static setString(key :string, data :string, expiresSeconds ? :Expires) :void {
 		if(localStorage && key && data){
 			this.set(key, data, expiresSeconds);
 		}
@@ -17,7 +25,7 @@ export class LocalStorageService {
 	}
 
 	/* tslint:disable-next-line:no-any */
-	public static setObject(key :string, data :any, expiresSeconds ? :number) :void {
+	public static setObject(key :string, data :any, expiresSeconds ? :Expires) :void {
 		if(localStorage && key && data){
 			this.set(key, JSON.stringify(data), expiresSeconds);
 		}
@@ -60,16 +68,16 @@ export class LocalStorageService {
 		}
 	}
 
-	private static set(key :string, data :string, expiresSeconds ? :number) :void {
+	private static set(key :string, data :string, expiresSeconds ? :Expires) :void {
 		this.log(key, data, 'set');
-		data = 'e' + ( expiresSeconds ? Date.now() + (expiresSeconds * 1000) : '') + ';' + data;
+		const data2 :string = 'e' + ( expiresSeconds ? Date.now() + (expiresSeconds * 1000) : '') + ';' + data;
 		try{
-			localStorage.setItem(key, data);
+			localStorage.setItem(key, data2);
 		}catch(e){
 			try{
 				// Probably out of space. Purge any that are expired and try again.
 				this.removeExpired();
-				localStorage.setItem(key, data);
+				localStorage.setItem(key, data2);
 			}catch(e2){
 				Logger.warn('LocalStorage Exception: ' + e2);
 			}
@@ -82,7 +90,7 @@ export class LocalStorageService {
 			if(!aTerms){
 				Logger.warn('LocalStorage.getOrRemove found incorrectly formatted value: CLEARING LOCAL STORAGE');
 				localStorage.clear();
-				return;
+				return undefined;
 			}
 			const sExpires :string = aTerms[1],
 				expires :number = sExpires && sExpires.length && parseInt(sExpires, 10),

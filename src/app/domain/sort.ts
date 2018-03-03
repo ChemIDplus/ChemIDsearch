@@ -1,4 +1,4 @@
-import { EnumEx } from '../util/enum-ex';
+import { EnumEx } from './../util/enum-ex';
 
 export enum Srt{
 	similarity,
@@ -21,9 +21,7 @@ export class Sort{
 
 	private static _SORTS :ReadonlyArray<Sort>;
 
-	// Static Constructor IIFE: see https://github.com/Microsoft/TypeScript/issues/265
-	/* tslint:disable-next-line */
-	private static _constructor = (() => {
+	static _constructor() :void {
 		const a :Sort[] = [];
 		a[Srt.similarity] = new Sort(Srt.similarity, 'Similarity', false);
 		a[Srt.lastMod] = new Sort(Srt.lastMod, 'Last Modified', false);
@@ -36,7 +34,7 @@ export class Sort{
 		a[Srt.has3d] = new Sort(Srt.has3d, 'Has 3D', false);
 		a[Srt.inchikey] = new Sort(Srt.inchikey, 'InChIKey', true);
 		Sort._SORTS = a;
-	})();
+	}
 
 	static get SORTS() :ReadonlyArray<Sort> {
 		return Sort._SORTS;
@@ -85,3 +83,5 @@ export class OrderBy{
 		return url;
 	}
 }
+
+Sort._constructor();

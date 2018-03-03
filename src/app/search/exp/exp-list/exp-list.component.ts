@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy, ViewChild, Renderer, ElementRef, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { Subscription } from 'rxjs/Subscription';
 
-import { Expression } from '../../../domain/expression';
+import { Expression } from './../../../domain/expression';
 import { Search } from './../../../domain/search';
 import { SearchTotals } from './../../../domain/search-totals';
-import { Totals } from '../../../domain/totals';
-import { AppService } from '../../../core/app.service';
-import { SearchService } from '../../../core/search.service';
+import { Totals } from './../../../domain/totals';
+
+import { AppService } from './../../../core/app.service';
+import { SearchService } from './../../../core/search.service';
 
 import { Logger } from './../../../core/logger';
 
@@ -23,10 +23,10 @@ export class ExpListComponent implements OnInit, OnDestroy {
 	totals :Totals;
 	valid :boolean;
 
-	@ViewChild('getResults') private getResults :ElementRef;
+	@ViewChild('getResults') private readonly getResults :ElementRef;
 
 	private isNavigatingToExp :boolean = false;
-	private subscriptions :Subscription[] = [];
+	private readonly subscriptions :Subscription[] = [];
 
 	constructor(
 		readonly app :AppService,

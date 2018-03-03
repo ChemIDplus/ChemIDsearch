@@ -1,11 +1,11 @@
 import { Detail, DetailMinJSON } from './detail';
 import { IDInchikey } from './id-inchikey';
-import { Resource, ResourceMinJSON } from './resource';
 import { PhysicalProp, PhysicalPropMinJSON } from './physical-prop';
-import { TypeElements, TypeElementsMinJSON } from './type-elements';
-import { Toxicity, ToxicityMinJSON } from './toxicity';
-import { Summary, SummaryMinJSON } from './summary';
+import { Resource, ResourceMinJSON } from './resource';
 import { Structure } from './structure';
+import { Summary, SummaryMinJSON } from './summary';
+import { Toxicity, ToxicityMinJSON } from './toxicity';
+import { TypeElements, TypeElementsMinJSON } from './type-elements';
 
 import { Logger } from './../core/logger';
 
@@ -39,7 +39,6 @@ export interface SubstanceMinJSON {
 /** Immutable */
 export class Substance {
 
-	/* tslint:disable-next-line:variable-name */
 	readonly rn_id :string;
 	readonly idik :IDInchikey;
 
@@ -63,6 +62,7 @@ export class Substance {
 	}
 
 	/** Prefers own values over arguments'. Returns this if argument doesn't have anything to add. */
+	/* tslint:disable-next-line:cyclomatic-complexity */
 	mergeMissing(s :Substance) :Substance {
 		if(!s){
 			return this;

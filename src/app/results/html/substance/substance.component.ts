@@ -1,16 +1,15 @@
 import { Component, Input, OnChanges, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-
 import { Subscription } from 'rxjs/Subscription';
 
-import { Element } from '../../../domain/element';
+import { Element } from './../../../domain/element';
 import { IDStructure } from './../../../domain/id-structure';
-import { Structure } from '../../../domain/structure';
-import { Substance } from '../../../domain/substance';
-import { TypeElements } from '../../../domain/type-elements';
-import { Toxicity } from '../../../domain/toxicity';
-import { PhysicalProp } from '../../../domain/physical-prop';
+import { PhysicalProp } from './../../../domain/physical-prop';
+import { Structure } from './../../../domain/structure';
+import { Substance } from './../../../domain/substance';
+import { Toxicity } from './../../../domain/toxicity';
+import { TypeElements } from './../../../domain/type-elements';
 
-import { SearchService } from '../../../core/search.service';
+import { SearchService } from './../../../core/search.service';
 
 import { Logger } from './../../../core/logger';
 
@@ -27,12 +26,11 @@ export class SubstanceComponent implements OnChanges, OnInit, OnDestroy {
 	oneAtATime :boolean = true;
 
 	private inited :boolean = false;
-	private subscriptions :Subscription[] = [];
+	private readonly subscriptions :Subscription[] = [];
 
 	constructor(readonly searchService :SearchService, readonly cdr :ChangeDetectorRef){}
 
-	/* tslint:disable-next-line:no-any */
-	ngOnChanges(changes :any) :void {
+	ngOnChanges() :void {
 		Logger.debug('Substance.onChanges ' + this.substance.rn_id);
 		if(this.inited && this.substance.summary.weight){
 			this.searchService.nextStructuresFromIDIKs = [this.substance.idik];
@@ -105,6 +103,7 @@ export class SubstanceComponent implements OnChanges, OnInit, OnDestroy {
 		Logger.trace('Substance.weight');
 		return this.substance.summary.weight;
 	}
+	/* tslint:disable-next-line:prefer-function-over-method */
 	sharedTypeLabel(typeElementsArray :ReadonlyArray<TypeElements<Element>>) :string {
 		Logger.trace('Substance.sharedTypeLabel');
 		return typeElementsArray[0].type.sharedLabel;

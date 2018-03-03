@@ -1,22 +1,44 @@
-import { Component, Input, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
+import { Component, Input, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/observable/of';
+
 import * as _ from 'lodash';
+import 'rxjs/add/observable/of';
 
 import { IDSimilarity } from './../../../domain/id-similarity';
 import { IDStructure } from './../../../domain/id-structure';
-import { OrderBy } from './../../../domain/sort';
 import { PagedSearch, Paging } from './../../../domain/paging';
 import { Search } from './../../../domain/search';
+import { OrderBy } from './../../../domain/sort';
 import { Substance } from './../../../domain/substance';
 
 import { AppService } from './../../../core/app.service';
 import { SearchService } from './../../../core/search.service';
 
 import { Logger } from './../../../core/logger';
+
+/**
+ * Data source to provide what data should be rendered in the table. The observable provided
+ * in connect should emit exactly the data that should be rendered by the table. If the data is
+ * altered, the observable should emit that new set of data on the stream. In our case here,
+ * we return a stream that contains only one set of data that doesn't change.
+ */
+export class SubstancesDataSource extends DataSource<Substance> {
+	constructor(private readonly substances :Substance[]){
+		super();
+	}
+	/** Connect function called by the table to retrieve one stream containing the data to render. */
+	connect() :Observable<Substance[]> {
+		return Observable.of(this.substances);
+	}
+
+	/* tslint:disable-next-line:prefer-function-over-method */
+	disconnect() :void {
+		// empty
+	}
+}
 
 @Component({
 	selector: 'app-summaries',
@@ -49,10 +71,9 @@ export class SummariesComponent implements OnInit, OnDestroy {
 	linkSimPercent :number;
 
 
-	/* tslint:disable-next-line:variable-name */
 	private _substances :ReadonlyArray<Substance>;
 
-	private subscriptions :Subscription[] = [];
+	private readonly subscriptions :Subscription[] = [];
 
 	constructor(
 		readonly app :AppService,
@@ -99,7 +120,6 @@ export class SummariesComponent implements OnInit, OnDestroy {
 	}
 
 
-
 	getSimilarity(substance :Substance) :number {
 		Logger.trace('Summaries.getSimilarity');
 		return this.idSimilarities.find( (ids :IDSimilarity) => ids.id === substance.id ).similarity;
@@ -139,24 +159,4 @@ export class SummariesComponent implements OnInit, OnDestroy {
 		}
 	}
 
-}
-
-/**
- * Data source to provide what data should be rendered in the table. The observable provided
- * in connect should emit exactly the data that should be rendered by the table. If the data is
- * altered, the observable should emit that new set of data on the stream. In our case here,
- * we return a stream that contains only one set of data that doesn't change.
- */
-export class SubstancesDataSource extends DataSource<Substance> {
-	constructor(private substances :Substance[]){
-		super();
-	}
-	/** Connect function called by the table to retrieve one stream containing the data to render. */
-	connect() :Observable<Substance[]> {
-		return Observable.of(this.substances);
-	}
-
-	disconnect() :void {
-		// empty
-	}
 }

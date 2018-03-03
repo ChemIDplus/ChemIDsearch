@@ -1,24 +1,24 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, Renderer, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { Expression, ExpressionMut } from './../../../domain/expression';
-import { Fld, Field } from '../../../domain/field';
-import { Op, Operator } from '../../../domain/operator';
-import { PPF, PPField } from '../../../domain/pp-field';
-import { PPMT, PPMeasurementType } from '../../../domain/pp-measurement-type';
-import { ToxT, ToxicityTest } from '../../../domain/toxicity-test';
-import { ToxS, ToxicitySpecies } from '../../../domain/toxicity-species';
-import { ToxR, ToxicityRoute } from '../../../domain/toxicity-route';
-import { ToxE, ToxicityEffect } from '../../../domain/toxicity-effect';
-import { Search } from '../../../domain/search';
+import { Fld, Field } from './../../../domain/field';
+import { Op, Operator } from './../../../domain/operator';
+import { PPF, PPField } from './../../../domain/pp-field';
+import { PPMT, PPMeasurementType } from './../../../domain/pp-measurement-type';
+import { Search } from './../../../domain/search';
+import { ToxE, ToxicityEffect } from './../../../domain/toxicity-effect';
+import { ToxR, ToxicityRoute } from './../../../domain/toxicity-route';
+import { ToxS, ToxicitySpecies } from './../../../domain/toxicity-species';
+import { ToxT, ToxicityTest } from './../../../domain/toxicity-test';
 
-import { ExpressionValidators } from './exp-validators';
 import { AutoCompleteComponent } from './auto-complete/auto-complete.component';
+import { ExpressionValidators } from './exp-validators';
 
-import { AppService } from '../../../core/app.service';
-import { SearchService } from '../../../core/search.service';
+import { AppService } from './../../../core/app.service';
+import { SearchService } from './../../../core/search.service';
 
 import { Logger } from './../../../core/logger';
 
@@ -29,6 +29,8 @@ import { Logger } from './../../../core/logger';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
+
+	private static readonly KEY_13 :number = 13;
 
 	exp :ExpressionMut;
 
@@ -51,12 +53,12 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 	editNotCreate :boolean = false;
 	isStructure :boolean = false;
 
-	@ViewChild('textareaExpValues') private textareaExpValuesElementRef :ElementRef;
-	@ViewChild(AutoCompleteComponent) private autoComplete :AutoCompleteComponent;
+	@ViewChild('textareaExpValues') private readonly textareaExpValuesElementRef :ElementRef;
+	@ViewChild(AutoCompleteComponent) private readonly autoComplete :AutoCompleteComponent;
 
 	private currentOps :ReadonlyArray<Op>;
 	private isNavigatingToList :boolean = false;
-	private subscriptions :Subscription[] = [];
+	private readonly subscriptions :Subscription[] = [];
 
 	constructor(
 		readonly app :AppService,
@@ -150,7 +152,7 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 	/** flds called at least once per change, keep it quick! */
 	get flds() :ReadonlyArray<Fld> {
 		Logger.trace('ExpForm.flds');
-		return Field.Flds;
+		return Field.flds;
 	}
 	/** ops called at least once per change, keep it quick! */
 	get ops() :ReadonlyArray<Op> {
@@ -159,37 +161,37 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 	get PPFs() :ReadonlyArray<PPF> {
 		Logger.trace('ExpForm.PPFs');
-		return PPField.PPFs;
+		return PPField.ppfs;
 	}
 	get PPMTs() :ReadonlyArray<PPMT> {
 		Logger.trace('ExpForm.PPMTs');
-		return PPMeasurementType.PPMTs;
+		return PPMeasurementType.ppmts;
 	}
 	get toxTs() :ReadonlyArray<ToxT> {
 		Logger.trace('ExpForm.toxTs');
-		return ToxicityTest.ToxTs;
+		return ToxicityTest.toxTs;
 	}
 	get toxSs() :ReadonlyArray<ToxS> {
 		Logger.trace('ExpForm.toxSs');
-		return ToxicitySpecies.ToxSs;
+		return ToxicitySpecies.toxSs;
 	}
 	get toxRs() :ReadonlyArray<ToxR> {
 		Logger.trace('ExpForm.toxRs');
-		return ToxicityRoute.ToxRs;
+		return ToxicityRoute.toxRs;
 	}
 	get toxEs() :ReadonlyArray<ToxE> {
 		Logger.trace('ExpForm.toxEs');
-		return ToxicityEffect.ToxEs;
+		return ToxicityEffect.toxEs;
 	}
 	/** fldMultiOnly called at least once per change, keep it quick! */
 	get fldMultiOnly() :boolean {
 		Logger.trace('ExpForm.fldMultiOnly');
 		return Field.multiOnly(this.exp.fld);
 	}
-	/** fldBoolean called at least once per change, keep it quick! */
-	get fldBoolean() :boolean {
-		Logger.trace('ExpForm.fldBoolean');
-		return Field.boolean(this.exp.fld);
+	/** fldBool called at least once per change, keep it quick! */
+	get fldBool() :boolean {
+		Logger.trace('ExpForm.fldBool');
+		return Field.bool(this.exp.fld);
 	}
 	/** fldPPsmt called at least once per change, keep it quick! */
 	get fldPP() :boolean {
@@ -235,7 +237,7 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 				});
 			}
 		}
-		if(this.fldBoolean){
+		if(this.fldBool){
 			this.ctrlValue.setValue('' + this.ctrlValueBoolean.value);
 		}
 		if(this.fldPP){
@@ -342,8 +344,10 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 		}
 	}
 
-// USED IN HTML:
-	/** getFieldDisplay called 16 times per change (once per every field)! Keep it quick! */
+// USED IN HTML (cannot be static):
+/* tslint:disable:prefer-function-over-method */
+
+/** getFieldDisplay called 16 times per change (once per every field)! Keep it quick! */
 	getFieldDisplay(fld :Fld) :string {
 		Logger.trace('ExpForm.getFieldDisplay');
 		return Field.getDisplay(fld);
@@ -386,7 +390,7 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 	/** onKeyPress called once on every input keypress */
 	onKeyPress(event :KeyboardEvent) :void {
 		Logger.trace('ExpForm.onKeyPress');
-		if(event.keyCode === 13 && this.form.valid){
+		if(event.keyCode === ExpFormComponent.KEY_13 && this.form.valid){
 			this.save();
 		}
 	}
@@ -445,8 +449,8 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.autoComplete.clearAutoComplete();
 	}
 
-	private createExpression(fld :Fld = Fld.auto, not :boolean = false, op :Op = Op.auto, simPercent :number = undefined, value :string = '', ppf :PPF = undefined, ppmt :PPMT = undefined, toxtest :ToxT = undefined, toxspecies :ToxS = undefined, toxroute :ToxR = undefined, toxeffect :ToxE = undefined) :ExpressionMut {
+	private createExpression(fld :Fld = Fld.auto, op :Op = Op.auto, value :string = '', not ? :boolean, simPercent ? :number, ppf ? :PPF, ppmt ? :PPMT, toxtest ? :ToxT, toxspecies ? :ToxS, toxroute ? :ToxR, toxeffect ? :ToxE) :ExpressionMut {
 		Logger.debug('ExpForm.createExpression');
-		return new ExpressionMut(fld, not, op, simPercent, value, ppf, ppmt, toxtest, toxspecies, toxroute, toxeffect);
+		return new ExpressionMut(fld, op, value, not, simPercent, ppf, ppmt, toxtest, toxspecies, toxroute, toxeffect);
 	}
 }

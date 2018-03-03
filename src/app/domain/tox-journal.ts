@@ -16,7 +16,6 @@ import { Logger } from './../core/logger';
 /** Immutable */
 export class ToxJournal {
 
-	/* tslint:disable:variable-name */
 	private _display :string;
 	private _href :string;
 

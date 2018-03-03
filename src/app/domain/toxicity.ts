@@ -22,7 +22,6 @@ export interface ToxicityMinJSON {
 /** Immutable */
 export class Toxicity {
 
-	/* tslint:disable:variable-name */
 	private _doseReported :string;
 	private _doseNormalized :string;
 

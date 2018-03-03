@@ -2,10 +2,10 @@ import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 
+import { DM, DataMode } from './../domain/data-mode';
 import { Preferences } from './../domain/preferences';
 import { RM, ResultMode } from './../domain/result-mode';
 import { Srt, Sort } from './../domain/sort';
-import { DM, DataMode } from './../domain/data-mode';
 
 import { AppService } from './../core/app.service';
 
@@ -29,7 +29,12 @@ export class SettingsComponent implements OnInit {
 	ctrlSimPercent :FormControl;
 	ctrlStructures :FormControl;
 	ctrlDmChoice :FormControl;
-	private subscriptions :Subscription[] = [];
+
+	readonly rms :ReadonlyArray<RM> = ResultMode.getRMs();
+	readonly srts :ReadonlyArray<Srt> = Sort.srts.filter( (s :Srt) => s !== Srt.similarity);
+	readonly dms :ReadonlyArray<DM> = DataMode.dms.filter( (dm :DM) => dm !== DM.totals && dm !== DM.valueCounts);
+
+	private readonly subscriptions :Subscription[] = [];
 
 	constructor(
 		readonly app :AppService,
@@ -49,17 +54,16 @@ export class SettingsComponent implements OnInit {
 		this.ctrlStructures = new FormControl(this.app.viewStructures);
 		this.ctrlDmChoice = new FormControl(this.app.dm);
 
-		this.form = this.formBuilder.group(
-			{
-				'ctrlResultPage':this.ctrlResultPage,
-				'ctrlAutoCompleteResult':this.ctrlAutoCompleteResult,
-				'ctrlResultMode':this.ctrlResultMode,
-				'ctrlFldOpAbbr':this.ctrlFldOpAbbr,
-				'ctrlSortBy':this.ctrlSortBy,
-				'ctrlSimPercent':this.ctrlSimPercent,
-				'ctrlStructures':this.ctrlStructures,
-				'ctrlDmChoice' :this.ctrlDmChoice
-			});
+		this.form = this.formBuilder.group({
+			'ctrlResultPage':this.ctrlResultPage,
+			'ctrlAutoCompleteResult':this.ctrlAutoCompleteResult,
+			'ctrlResultMode':this.ctrlResultMode,
+			'ctrlFldOpAbbr':this.ctrlFldOpAbbr,
+			'ctrlSortBy':this.ctrlSortBy,
+			'ctrlSimPercent':this.ctrlSimPercent,
+			'ctrlStructures':this.ctrlStructures,
+			'ctrlDmChoice' :this.ctrlDmChoice
+		});
 
 		this.subscriptions.push(this.form.valueChanges.subscribe( () => this.onFormChanges() ));
 	}
@@ -70,34 +74,18 @@ export class SettingsComponent implements OnInit {
 		this.app.setPreferences(new Preferences(+this.ctrlResultMode.value, +this.ctrlAutoCompleteResult.value, this.ctrlFldOpAbbr.value === 'abbr', +this.ctrlResultPage.value, +this.ctrlSortBy.value, +this.ctrlSimPercent.value, this.ctrlStructures.value, +this.ctrlDmChoice.value));
 		this.cdr.detectChanges();
 	}
-	/** rms called at least once per change, keep it quick! */
-	get rms() :RM[] {
-		Logger.trace('SettingsForm.rms');
-		return ResultMode.getRMs();
-	}
 
-	/** getResultModeDisplay called 3 times per change */
+// USED IN HTML (cannot be static):
+/* tslint:disable:prefer-function-over-method */
+
 	getResultModeDisplay(rm :RM) :string {
 		Logger.trace('SettingsForm.getResultModeDisplay');
 		return ResultMode.getDisplay(rm);
 	}
-
-	get srts() :ReadonlyArray<Srt>{
-		Logger.trace('SettingsForm.srts');
-		return Sort.srts.filter((s :Srt) => s !== Srt.similarity);
-	}
-
 	getSortDisplay(srt :Srt) :String{
 		Logger.trace('SettingsForm.getSortDisplay');
 		return Sort.getDisplay(srt);
 	}
-
-	get dms() :ReadonlyArray<DM>{
-		Logger.trace('SettingsForm.dms');
-		return DataMode.DMs.filter( (dm :DM) => dm !== DM.totals && dm !== DM.valueCounts);
-
-	}
-
 	getDataModeDisplay(dm :DM) :String{
 		Logger.trace('SettingsForm.getDataModeDisplay');
 		return DM[dm];

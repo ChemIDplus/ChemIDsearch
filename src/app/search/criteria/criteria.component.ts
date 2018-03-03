@@ -3,7 +3,7 @@ import { Component, OnChanges, Input, ChangeDetectionStrategy } from '@angular/c
 import { Search } from './../../domain/search';
 import { Totals } from './../../domain/totals';
 
-import { SearchService } from '../../core/search.service';
+import { SearchService } from './../../core/search.service';
 
 import { Logger } from './../../core/logger';
 
@@ -22,10 +22,9 @@ export class CriteriaComponent implements OnChanges {
 
 	constructor(readonly searchService :SearchService){}
 
-	/* tslint:disable-next-line:no-any */
-	ngOnChanges(changes :any) :void {
+	ngOnChanges() :void {
 		Logger.debug('Criteria.onChanges'/*, this.totals*/);
-		this.matchesTotalValuesInTotalSubstances = this.searchService.getMatchesValuesInSubstances(this.totals, this.expressionCount);
+		this.matchesTotalValuesInTotalSubstances = SearchService.getMatchesValuesInSubstances(this.totals, this.expressionCount);
 	}
 
 	get criteria() :string {

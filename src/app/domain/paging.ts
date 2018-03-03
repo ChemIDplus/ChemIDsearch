@@ -1,6 +1,5 @@
-import { DM } from './data-mode';
-import { OrderBy } from './sort';
 import { Search } from './search';
+import { OrderBy } from './sort';
 import { SubstancesResult } from './substances-result';
 
 /** Immutable */

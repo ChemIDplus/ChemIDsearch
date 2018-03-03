@@ -2,17 +2,17 @@ import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, ChangeDetect
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 
-import { AutoCompleteResult } from '../../../../domain/auto-complete-result';
+import { AutoCompleteResult } from './../../../../domain/auto-complete-result';
+import { DataCount } from './../../../../domain/data-count';
 import { Expression, ExpressionMut } from './../../../../domain/expression';
-import { DataCount } from '../../../../domain/data-count';
-import { Fld, Field } from '../../../../domain/field';
-import { Op, Operator } from '../../../../domain/operator';
-import { SearchTotals } from '../../../../domain/search-totals';
-import { SearchValueCounts } from '../../../../domain/value-counts-result';
+import { Fld, Field } from './../../../../domain/field';
+import { Op, Operator } from './../../../../domain/operator';
+import { SearchTotals } from './../../../../domain/search-totals';
+import { SearchValueCounts } from './../../../../domain/value-counts-result';
 
 import { AppService } from './../../../../core/app.service';
-import { SearchService } from '../../../../core/search.service';
-import { ExpressionValidators } from '../exp-validators';
+import { SearchService } from './../../../../core/search.service';
+import { ExpressionValidators } from './../exp-validators';
 import { AutoCompleteService } from './auto-complete.service';
 
 import { Logger } from './../../../../core/logger';
@@ -25,17 +25,27 @@ import { Logger } from './../../../../core/logger';
 })
 export class AutoCompleteComponent implements OnInit, OnDestroy {
 
+	private static getNewAutocompleteValue(exp :ExpressionMut, suffixValue :string) :string {
+		Logger.trace('AutoComplete.getNewAutocompleteValue');
+		let value :string = suffixValue;
+		if(exp.op === Op.inlist){
+			value = exp.value.replace(/[^|]*$/, '') + suffixValue;
+			Logger.log('AutoComplete.getNewAutocompleteValue inlist value=' + value);
+		}
+		return Expression.trimAndCase(exp.fld, value);
+	}
+
 	ac :AutoCompleteResult = undefined;
 
 /* These Inputs are NOT immutable - be careful and call cdr.markForCheck() whenever a DOM change is needed! */
-	@Input() private exp :ExpressionMut;
-	@Input() private ctrlFld :FormControl;
-	@Input() private ctrlOp :FormControl;
-	@Input() private ctrlValue :FormControl;
-	@Output() private onClicked :EventEmitter<boolean> = new EventEmitter<boolean>();
-	@Output() private onACFetched :EventEmitter<boolean> = new EventEmitter<boolean>();
+	@Input() private readonly exp :ExpressionMut;
+	@Input() private readonly ctrlFld :FormControl;
+	@Input() private readonly ctrlOp :FormControl;
+	@Input() private readonly ctrlValue :FormControl;
+	@Output() private readonly click :EventEmitter<boolean> = new EventEmitter<boolean>();
+	@Output() private readonly acFetch :EventEmitter<boolean> = new EventEmitter<boolean>();
 
-	private subscriptions :Subscription[] = [];
+	private readonly subscriptions :Subscription[] = [];
 
 	constructor(
 		readonly app :AppService,
@@ -76,7 +86,7 @@ export class AutoCompleteComponent implements OnInit, OnDestroy {
 		Logger.trace('AutoComplete.valueMatchesTotalValuesInTotalSubstancesAutoField');
 		const exp :ExpressionMut = this.ac.expression,
 			totalSubstances :number = this.ac.totals.substances;
-		let s :string = exp.acValue.toUpperCase() + (!this.onlyEquals ? '*' : '') + this.searchService.getMatchesValuesInSubstances(this.ac.totals, 1);
+		let s :string = exp.acValue.toUpperCase() + (!this.onlyEquals ? '*' : '') + SearchService.getMatchesValuesInSubstances(this.ac.totals, 1);
 		if(totalSubstances >= 0 && (this.exp.fld === Fld.auto || this.exp.op === Op.auto) && totalSubstances >= 1){
 			s += ' (using ' + Field.getDisplay(exp.fld) + ' ' + Operator.getDisplay(exp.op) + ')';
 		}
@@ -118,7 +128,7 @@ export class AutoCompleteComponent implements OnInit, OnDestroy {
 		if(foundMatch && (expOp === Op.equals || expOp === Op.inlist)){
 			foundMatch = !!ac.results.find( (dc :DataCount) => Expression.trimAndCase(expFld, dc.data, true) === acExp.acValue );
 		}
-		this.onACFetched.emit(foundMatch);
+		this.acFetch.emit(foundMatch);
 		if(acExp){
 			if(!this.ac.totalsComplete){
 				this.acService.fetchTotals(acExp);
@@ -153,7 +163,7 @@ export class AutoCompleteComponent implements OnInit, OnDestroy {
 // USED IN HTML:
 	clicked(event :Event) :void {
 		Logger.debug('AutoComplete.clicked event.target =', event.target);
-		let target :HTMLElement = (<HTMLElement>event.target);
+		let target :HTMLElement = (event.target as HTMLElement);
 		if(target.tagName === 'SPAN'){
 			target = target.parentElement;
 		}
@@ -173,19 +183,8 @@ export class AutoCompleteComponent implements OnInit, OnDestroy {
 				this.switchAutoToTestFirst(false);
 				ExpressionValidators.skipProcessing = false;
 			}
-			this.ctrlValue.setValue(this.getNewAutocompleteValue(this.exp, value) + (singleInlist ? '|' : ''));
-			this.onClicked.emit(saveSingle);
+			this.ctrlValue.setValue(AutoCompleteComponent.getNewAutocompleteValue(this.exp, value) + (singleInlist ? '|' : ''));
+			this.click.emit(saveSingle);
 		}
 	}
-
-	private getNewAutocompleteValue(exp :ExpressionMut, suffixValue :string) :string {
-		Logger.trace('AutoComplete.getNewAutocompleteValue');
-		let value :string = suffixValue;
-		if(exp.op === Op.inlist){
-			value = exp.value.replace(/[^|]*$/, '') + suffixValue;
-			Logger.log('AutoComplete.getNewAutocompleteValue inlist value=' + value);
-		}
-		return Expression.trimAndCase(exp.fld, value);
-	}
-
 }

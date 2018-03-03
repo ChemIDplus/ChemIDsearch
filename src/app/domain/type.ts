@@ -21,7 +21,7 @@ export class Type {
 		'lo':'Resources / Locators',
 		'cp':'Physical Properties'
 	};
-	private static TYPES :Type[] = [];
+	private static readonly TYPES :Type[] = [];
 	public static get(id :number) :Type {
 		return Type.TYPES.find( (type :Type) => type.id === id);
 	}

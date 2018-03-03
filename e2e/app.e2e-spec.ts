@@ -1,6 +1,6 @@
+/* tslint:disable */
 import { AppPage } from './app.po';
 
-/* tslint:disable-next-line:typedef */
 describe('ChemIDsearch App', function() {
 	let page :AppPage;
 

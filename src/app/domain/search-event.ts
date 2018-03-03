@@ -16,6 +16,8 @@ export interface SearchEventMinJSON {
 /** Immutable */
 export class SearchEvent {
 
+	private static readonly MILLIS_IN_DAY :number = 86410000; /* 24*60*60*1000 */
+
 	constructor(
 		readonly search :Search,
 		readonly totals :Totals,
@@ -43,7 +45,7 @@ export class SearchEvent {
 	}
 	get inLastDay() :boolean {
 		Logger.trace2('SearchEvent.inLastDay');
-		return this.millis >= (Date.now() - 86410000 /* 24*60*60*1000 */);
+		return this.millis >= (Date.now() - SearchEvent.MILLIS_IN_DAY );
 	}
 
 	serialize() :SearchEventMinJSON {

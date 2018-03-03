@@ -1,20 +1,19 @@
 import { Injectable } from '@angular/core';
-
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
-import { AutoCompleteResult } from '../../../../domain/auto-complete-result';
-import { DataCount, DataCountGroup } from '../../../../domain/data-count';
-import { ExpressionMut } from '../../../../domain/expression';
-import { Fld, Field } from '../../../../domain/field';
-import { Search, SearchMut } from '../../../../domain/search';
+import { AutoCompleteResult } from './../../../../domain/auto-complete-result';
+import { DataCount, DataCountGroup } from './../../../../domain/data-count';
+import { ExpressionMut } from './../../../../domain/expression';
+import { Fld } from './../../../../domain/field';
+import { Search, SearchMut } from './../../../../domain/search';
 import { SearchTotals } from './../../../../domain/search-totals';
-import { Totals } from '../../../../domain/totals';
-import { ValueCountsResult, SearchValueCounts } from '../../../../domain/value-counts-result';
+import { Totals } from './../../../../domain/totals';
+import { SearchValueCounts, ValueCountsResult } from './../../../../domain/value-counts-result';
 
-import { AppService } from '../../../../core/app.service';
-import { LocalStorageService } from '../../../../core/local-storage.service';
-import { SearchService } from '../../../../core/search.service';
+import { AppService } from './../../../../core/app.service';
+import { LocalStorageService, Expires } from './../../../../core/local-storage.service';
+import { SearchService } from './../../../../core/search.service';
 
 import { Logger } from './../../../../core/logger';
 
@@ -27,11 +26,39 @@ interface CountKeyValues{
 @Injectable()
 export class AutoCompleteService {
 
+	private static filterVC(vcr :ValueCountsResult, value :string) :ValueCountsResult {
+		const valueUpper :string = value.toUpperCase();
+		let resultsSize :number = vcr.results ? vcr.results.length : 0,
+			results :DataCount[];
+		Logger.trace('AutoCompleteService.filterVC valueUpper=' + valueUpper + ' vcr.expression.value.toUpperCase()=' + vcr.expression.value.toUpperCase());
+		if(valueUpper !== vcr.expression.value.toUpperCase()){
+			Logger.trace('AutoCompleteService.filterVC: ' + resultsSize + ' for ' + vcr.expression.value);
+			if(resultsSize > 0){
+				results = [];
+				vcr.results.forEach( (dc :DataCount) => {
+					if(dc.data.toUpperCase().startsWith(valueUpper)){
+						results.push(dc);
+					}
+				});
+				resultsSize = results.length;
+				Logger.trace('AutoCompleteService.filterVC: ' + resultsSize + ' for ' + value);
+				if(resultsSize === 0){
+					return undefined;
+				}
+				vcr.totals = new Totals(-1, results.length);
+				vcr.results = results;
+				vcr.expression.value = value;
+			}
+		}
+		return vcr;
+	}
+
+
 	private currentExp :ExpressionMut;
 	private acExp :ExpressionMut;
 
 
-	private acStream :Subject<AutoCompleteResult> = new Subject<AutoCompleteResult>();
+	private readonly acStream :Subject<AutoCompleteResult> = new Subject<AutoCompleteResult>();
 
 	constructor(readonly app :AppService, readonly searchService :SearchService){}
 
@@ -65,7 +92,7 @@ export class AutoCompleteService {
 		let vcr :ValueCountsResult,
 			length :number = acExpValue.length;
 		while(length >= 3){
-			vcr = this.searchService.getCachedVCR(search, length);
+			vcr = SearchService.getCachedVCR(search, length);
 			if(vcr){
 				Logger.log('AutoCompleteService.newAutoComplete found vcr in storage' + ( vcr.expression ? ' vcr.expression=' + vcr.expression.url : ''));
 				if(this.testVCtoAC({'search':search, 'vcr':vcr}, acExpValue.substr(0, length))){
@@ -129,7 +156,7 @@ export class AutoCompleteService {
 	private testSearchedCurrentAcValue(search :SearchMut) :boolean {
 		if(this.currentExp.ac && this.acExp.value.length !== search.acExp.value.length){
 			Logger.trace('AutoCompleteService.testSearchedCurrentAcValue incomplete ac already exists, ignoring new search results');
-			return;
+			return undefined;
 		}
 		Logger.log('AutoCompleteService.testSearchedCurrentAcValue search.acExp.value=' + search.acExp.value + ' this.acExp.value=' + this.acExp.value);
 		return true;
@@ -148,7 +175,7 @@ export class AutoCompleteService {
 		}
 		if(testValue.length < this.acExp.value.length && vcr.results){
 			Logger.log('AutoCompleteService.testVCtoAC filtering value from ' + testValue + ' to ' + this.acExp.value);
-			vcr = this.filterVC(vcr, this.acExp.value);
+			vcr = AutoCompleteService.filterVC(vcr, this.acExp.value);
 		}
 		if(vcr){
 			acr = this.mergeVCtoAC(vcr);
@@ -165,33 +192,6 @@ export class AutoCompleteService {
 		Logger.debug('AutoCompleteService.testVCtoAC -> acStream.next: acr.totals =', acr.totals);
 		this.acrNext = acr;
 		return true;
-	}
-
-	private filterVC(vcr :ValueCountsResult, value :string) :ValueCountsResult {
-		const valueUpper :string = value.toUpperCase();
-		let resultsSize :number = vcr.results ? vcr.results.length : 0,
-			results :DataCount[];
-		Logger.trace('AutoCompleteService.filterVC valueUpper=' + valueUpper + ' vcr.expression.value.toUpperCase()=' + vcr.expression.value.toUpperCase());
-		if(valueUpper !== vcr.expression.value.toUpperCase()){
-			Logger.trace('AutoCompleteService.filterVC: ' + resultsSize + ' for ' + vcr.expression.value);
-			if(resultsSize > 0){
-				results = [];
-				vcr.results.forEach( (dc :DataCount) => {
-					if(dc.data.toUpperCase().startsWith(valueUpper)){
-						results.push(dc);
-					}
-				});
-				resultsSize = results.length;
-				Logger.trace('AutoCompleteService.filterVC: ' + resultsSize + ' for ' + value);
-				if(resultsSize === 0){
-					return;
-				}
-				vcr.totals = new Totals(-1, results.length);
-				vcr.results = results;
-				vcr.expression.value = value;
-			}
-		}
-		return vcr;
 	}
 
 	private mergeVCtoAC(vcr :ValueCountsResult) :AutoCompleteResult {
@@ -260,6 +260,7 @@ export class AutoCompleteService {
 								resultsToProcess.splice(i, 1);
 								singleResults.push(dc);
 								Logger.trace('AutoCompleteService.mergeVCtoAC no longer processing ' + dc.data);
+								/* tslint:disable-next-line:no-dynamic-delete */
 								delete map[key2];
 								map[dc.data] = [dc];
 							}
@@ -275,7 +276,7 @@ export class AutoCompleteService {
 			for(let k in map){
 				if(map.hasOwnProperty(k)){
 					dcArray = map[k];
-					countKeyValuesArray.push({'count':dcArray.length, 'dcArray':dcArray, key:k});
+					countKeyValuesArray.push({'count':dcArray.length, 'dcArray':dcArray, 'key':k});
 				}
 			}
 			countKeyValuesArray.sort((a :CountKeyValues, b :CountKeyValues) => a.count - b.count);
@@ -308,7 +309,7 @@ export class AutoCompleteService {
 		}
 		if(!acr.totalsComplete){
 			Logger.trace('AutoCompleteService.mergeVCtoAC !acr.totalsComplete calling immutable()');
-			const totals :Totals = this.searchService.getCachedTotals(new Search([acr.expression.autocomplete.immutable()]));
+			const totals :Totals = SearchService.getCachedTotals(new Search([acr.expression.autocomplete.immutable()]));
 			if(totals){
 				Logger.trace('AutoCompleteService.mergeVCtoAC found totals in storage');
 				acr.totals = totals;
@@ -322,7 +323,7 @@ export class AutoCompleteService {
 
 	private cacheACR(acr :AutoCompleteResult) :void {
 		Logger.log('AutoCompleteService.cacheACR');
-		LocalStorageService.setObject(this.acKey, acr.serialize(this.acExp.url !== acr.expression.url), 10 * 60); // cache for 10 minutes
+		LocalStorageService.setObject(this.acKey, acr.serialize(this.acExp.url !== acr.expression.url), Expires.SHORT);
 	}
 	private get cachedACR() :AutoCompleteResult {
 		Logger.trace('AutoCompleteService.cachedACR');
@@ -330,7 +331,7 @@ export class AutoCompleteService {
 	}
 	private get acKey() :string {
 		Logger.trace('AutoCompleteService.acKey');
-		return 'ac' + this.app.maxAutoCompleteRows + '/' + this.searchService.getUrlKey(this.acExp.url);
+		return 'ac' + this.app.maxAutoCompleteRows + '/' + SearchService.getUrlKey(this.acExp.url);
 	}
 
 }

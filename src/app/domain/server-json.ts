@@ -4,12 +4,12 @@ import { Element } from './element';
 import { Expression, ExpressionMut } from './expression';
 import { Fld } from './field';
 import { IDSimilarity } from './id-similarity';
-import { PPF } from './pp-field';
-import { PPMT } from './pp-measurement-type';
 import { Op } from './operator';
 import { PhysicalProp } from './physical-prop';
-import { RNIDName } from './rn-id-name';
+import { PPF } from './pp-field';
+import { PPMT } from './pp-measurement-type';
 import { Resource } from './resource';
+import { RNIDName } from './rn-id-name';
 import { Source } from './source';
 import { Structure } from './structure';
 import { StructureDetails } from './structure-details';
@@ -19,12 +19,12 @@ import { Summary } from './summary';
 import { Totals } from './totals';
 import { ToxDose } from './tox-dose';
 import { ToxEffect } from './tox-effect';
-import { Toxicity } from './toxicity';
 import { ToxJournal } from './tox-journal';
-import { ToxT } from './toxicity-test';
-import { ToxS } from './toxicity-species';
-import { ToxR } from './toxicity-route';
+import { Toxicity } from './toxicity';
 import { ToxE } from './toxicity-effect';
+import { ToxR } from './toxicity-route';
+import { ToxS } from './toxicity-species';
+import { ToxT } from './toxicity-test';
 import { Type } from './type';
 import { TypeElements } from './type-elements';
 import { ValueCountsResult } from './value-counts-result';
@@ -227,7 +227,6 @@ interface RNIDNameServerJSON {
 }
 
 
-
 export class ServerJSON {
 
 	static dataCount(sj :DataCountServerJSON) :DataCount {
@@ -265,7 +264,7 @@ export class ServerJSON {
 			toxS :ToxS = sj.toxSpecies && ToxS[sj.toxSpecies.toLowerCase()],
 			toxR :ToxR = sj.toxRoute && ToxR[sj.toxRoute.toLowerCase()],
 			toxE :ToxE = sj.toxEffect && ToxE[sj.toxEffect.toLowerCase()];
-		return new ExpressionMut(fld, not, op, simPercent, value, ppf, ppmt, toxT, toxS, toxR, toxE);
+		return new ExpressionMut(fld, op, value, not, simPercent, ppf, ppmt, toxT, toxS, toxR, toxE);
 	}
 	static physicalProps(sja :PhysicalPropServerJSON[]) :PhysicalProp[] {
 		if(sja && sja.length){
@@ -393,9 +392,9 @@ export class ServerJSON {
 			Logger.trace('ServerJSON.typeElements Type.get(sj.t)=', Type.get(sj.t), sj.e.length);
 			const elements :T[] = [];
 			if(Type.get(sj.t).table === 'lo'){
-				sj.e.forEach( (esj :TSJ, index :number) => elements[index] = <T>this.resource(esj) );
+				sj.e.forEach( (esj :TSJ, index :number) => elements[index] = this.resource(esj) as T );
 			}else{
-				sj.e.forEach( (esj :TSJ, index :number) => elements[index] = <T>this.detail(esj) );
+				sj.e.forEach( (esj :TSJ, index :number) => elements[index] = this.detail(esj) as T );
 			}
 			return new TypeElements(sj.t, elements);
 		}
@@ -433,5 +432,3 @@ export class ServerJSON {
 	}
 */
 }
-
-

@@ -6,13 +6,14 @@ import { Injectable } from '@angular/core';
  */
 @Injectable()
 export class DialogService {
+	/* tslint:disable:promise-function-async prefer-function-over-method */
 	/**
 	 * Ask user to confirm an action. `message` explains the action and choices.
 	 * Returns promise resolving to `true`=confirm or `false`=cancel
 	 */
 	confirm(message ? :string) :Promise<boolean> {
-		/* tslint:disable-next-line:no-any */
-		return new Promise<boolean>( (resolve :any) => {
+	/* tslint:disable-next-line:no-any typedef */
+	return new Promise<boolean>( (resolve :any) => {
 			return resolve(window.confirm(message || 'Is it OK?'));
 		});
 	}

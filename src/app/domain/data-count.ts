@@ -19,6 +19,7 @@ export class DataCount {
 	static deserialize(mj :DataCountMinJSON) :DataCount {
 		if(mj){
 			if(mj.v){
+				/* tslint:disable-next-line:no-use-before-declare */
 				return new DataCountGroup(mj.d, mj.v);
 			}else{
 				return new DataCount(mj.s || 1, mj.d);

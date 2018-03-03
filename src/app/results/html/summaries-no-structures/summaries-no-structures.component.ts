@@ -1,14 +1,14 @@
-import { Component, Input, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, OnChanges, OnDestroy } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
+import { Component, Input, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, OnChanges, OnDestroy } from '@angular/core';
 import { MatPaginator, PageEvent, MatSort, Sort as MatSortEvent } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/observable/of';
-import * as _ from 'lodash';
 
-import { OrderBy, Srt, Sort } from './../../../domain/sort';
+import 'rxjs/add/observable/of';
+
 import { PagedSearch, Paging } from './../../../domain/paging';
 import { Search } from './../../../domain/search';
+import { OrderBy, Srt, Sort } from './../../../domain/sort';
 import { Substance } from './../../../domain/substance';
 import { Summary } from './../../../domain/summary';
 
@@ -16,6 +16,27 @@ import { AppService } from './../../../core/app.service';
 import { SearchService } from './../../../core/search.service';
 
 import { Logger } from './../../../core/logger';
+
+/**
+ * Data source to provide what data should be rendered in the table. The observable provided
+ * in connect should emit exactly the data that should be rendered by the table. If the data is
+ * altered, the observable should emit that new set of data on the stream. In our case here,
+ * we return a stream that contains only one set of data that doesn't change.
+ */
+export class SummariesDataSource extends DataSource<Summary> {
+	constructor(private readonly summaries :Summary[]){
+		super();
+	}
+	/** Connect function called by the table to retrieve one stream containing the data to render. */
+	connect() :Observable<Summary[]> {
+		return Observable.of(this.summaries);
+	}
+
+	/* tslint:disable-next-line:prefer-function-over-method */
+	disconnect() :void {
+		// empty
+	}
+}
 
 @Component({
 	selector: 'app-summaries-no-structures',
@@ -36,7 +57,7 @@ export class SummariesNoStructuresComponent implements OnInit, OnChanges, OnDest
 	displayedColumns :string[] = ['name', 'id', 'formula', 'weight', 'has3d', 'mesh', 'inchikey', 'citations'];
 	dataSource :SummariesDataSource | undefined;
 
-	private subscriptions :Subscription[] = [];
+	private readonly subscriptions :Subscription[] = [];
 
 	constructor(
 		readonly app :AppService,
@@ -112,24 +133,4 @@ export class SummariesNoStructuresComponent implements OnInit, OnChanges, OnDest
 		this.cdr.markForCheck();
 	}
 
-}
-
-/**
- * Data source to provide what data should be rendered in the table. The observable provided
- * in connect should emit exactly the data that should be rendered by the table. If the data is
- * altered, the observable should emit that new set of data on the stream. In our case here,
- * we return a stream that contains only one set of data that doesn't change.
- */
-export class SummariesDataSource extends DataSource<Summary> {
-	constructor(private summaries :Summary[]){
-		super();
-	}
-	/** Connect function called by the table to retrieve one stream containing the data to render. */
-	connect() :Observable<Summary[]> {
-		return Observable.of(this.summaries);
-	}
-
-	disconnect() :void {
-		// empty
-	}
 }

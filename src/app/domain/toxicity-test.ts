@@ -1,4 +1,4 @@
-import { EnumEx } from '../util/enum-ex';
+import { EnumEx } from './../util/enum-ex';
 
 export enum ToxT{
 	any,
@@ -15,14 +15,11 @@ export class ToxicityTest{
 
 
 // Static
-	/* tslint:disable-next-line:variable-name */
-	static readonly ToxTs :ReadonlyArray<ToxT> = EnumEx.getValues(ToxT);
+	static readonly toxTs :ReadonlyArray<ToxT> = EnumEx.getValues(ToxT);
 
 	private static toxicityTests :ToxicityTest[];
 
-	// Static Constructor IIFE: see https://github.com/Microsoft/TypeScript/issues/265
-	/* tslint:disable-next-line */
-	private static _constructor = (() :void => {
+	static _constructor() :void {
 		let a :ToxicityTest[];
 		a = ToxicityTest.toxicityTests = [];
 		a[ToxT.any] = new ToxicityTest('Any', 'Any');
@@ -32,12 +29,11 @@ export class ToxicityTest{
 		a[ToxT.ld50] = new ToxicityTest('LD50', 'LD50');
 		a[ToxT.tclo] = new ToxicityTest('TCLo', 'TCLo');
 		a[ToxT.tdlo] = new ToxicityTest('TDLo', 'TDLo');
-	})();
+	}
 
 	static getAbbr(toxT :ToxT) :string {
 		return ToxT[toxT]; // currently no abbreviation, but leaving it in the public api in case we add them
 	}
-	/* tslint:disable-next-line:variable-name */
 	static getToxT(name :string) :ToxT {
 		return ToxT[name];
 	}
@@ -53,11 +49,11 @@ export class ToxicityTest{
 	}
 
 
-
-
 // Instance
 	constructor(
 		readonly display :string,
 		readonly displayAbbr :string
 	){}
 }
+
+ToxicityTest._constructor();

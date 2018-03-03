@@ -2,7 +2,6 @@ import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from 
 
 import { OrderBy, Srt, Sort } from './../../../../domain/sort';
 
-import { AppService } from './../../../../core/app.service';
 import { Logger } from './../../../../core/logger';
 
 @Component({
@@ -20,20 +19,19 @@ export class SummariesSortComponent {
 		Logger.log('SummariesSort.orderBy setter', orderBy, this.currentIsAsc);
 	}
 	@Input() hasOneSimilarity :boolean;
-	@Output() public onSortChange :EventEmitter<OrderBy> = new EventEmitter<OrderBy>();
-
-	/* tslint:disable-next-line:variable-name */
-	_orderBy :OrderBy;
+	@Output() public change :EventEmitter<OrderBy> = new EventEmitter<OrderBy>();
 
 	current :Sort;
 	currentIsAsc :boolean;
+
+	private _orderBy :OrderBy;
 
 
 	get sortOptions() :ReadonlyArray<Sort> {
 		return Sort.SORTS.filter( (sort :Sort) => this.hasOneSimilarity || sort.srt !== Srt.similarity );
 	}
 
-	change(sort :Sort) :void {
+	changed(sort :Sort) :void {
 		Logger.log('SummariesSort.change', sort, this.current, this.currentIsAsc);
 		let sortBy2 :Srt,
 			sortBy2Reverse :boolean;
@@ -48,14 +46,16 @@ export class SummariesSortComponent {
 			this.current = sort;
 			this.currentIsAsc = sort.normalIsAsc;
 		}
-		this.onSortChange.emit(new OrderBy(this.current.srt, this.currentIsAsc !== this.current.normalIsAsc, sortBy2, sortBy2Reverse));
+		this.change.emit(new OrderBy(this.current.srt, this.currentIsAsc !== this.current.normalIsAsc, sortBy2, sortBy2Reverse));
 	}
 
 	mouseenter(div :HTMLDivElement) :void {
 		Logger.log('mouseenter', div);
 		div.className = 'show-all';
-		div.style.top = (-2.15 * Math.min(this.sortOptions.indexOf(this.current), 5) - 0.45) + 'em'; /* (-1.95 * Math.min(this.sortOptions.indexOf(this.current), 5) - 0.6) goes up*/
+		/* tslint:disable-next-line:no-magic-numbers */
+		div.style.top = (Math.min(this.sortOptions.indexOf(this.current), 5) * -2.15 - 0.45) + 'em'; /* (-1.95 * Math.min(this.sortOptions.indexOf(this.current), 5) - 0.6) goes up*/
 	}
+	/* tslint:disable-next-line:prefer-function-over-method */
 	mouseleave(div :HTMLDivElement) :void {
 		Logger.log('mouseleave', div);
 		div.className = '';

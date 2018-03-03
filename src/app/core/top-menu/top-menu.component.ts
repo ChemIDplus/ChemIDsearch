@@ -1,7 +1,8 @@
-import { SearchTotals } from './../../domain/search-totals';
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
-import { AppService } from '../app.service';
+import { SearchTotals } from './../../domain/search-totals';
+
+import { AppService } from './../app.service';
 
 import { Logger } from './../logger';
 

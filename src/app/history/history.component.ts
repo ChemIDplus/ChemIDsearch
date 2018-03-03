@@ -1,17 +1,39 @@
-import { Component, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
 import { DataSource } from '@angular/cdk/collections';
+import { Component, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core';
 import { MatSort, Sort as MatSortEvent } from '@angular/material';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/observable/of';
+
 import * as _ from 'lodash';
+import 'rxjs/add/observable/of';
 
 import { SearchEvent } from './../domain/search-event';
 
 import { AppService } from './../core/app.service';
 
 import { Logger } from './../core/logger';
+
+/**
+ * Data source to provide what data should be rendered in the table. The observable provided
+ * in connect should emit exactly the data that should be rendered by the table. If the data is
+ * altered, the observable should emit that new set of data on the stream. In our case here,
+ * we return a stream that contains only one set of data that doesn't change.
+ */
+export class SearchEventsDataSource extends DataSource<SearchEvent> {
+	constructor(private readonly searchEvents :SearchEvent[]){
+		super();
+	}
+	/** Connect function called by the table to retrieve one stream containing the data to render. */
+	connect() :Observable<SearchEvent[]> {
+		return Observable.of(this.searchEvents);
+	}
+
+	/* tslint:disable-next-line:prefer-function-over-method */
+	disconnect() :void {
+		// empty
+	}
+}
 
 @Component({
 	selector: 'app-history',
@@ -27,7 +49,7 @@ export class HistoryComponent implements OnInit, OnDestroy {
 	dataSource :SearchEventsDataSource | undefined;
 
 	private searchEvents :SearchEvent [];
-	private subscriptions :Subscription[] = [];
+	private readonly subscriptions :Subscription[] = [];
 
 	constructor(
 		readonly app :AppService,
@@ -81,24 +103,4 @@ export class HistoryComponent implements OnInit, OnDestroy {
 		this.cdr.markForCheck();
 	}
 
-}
-
-/**
- * Data source to provide what data should be rendered in the table. The observable provided
- * in connect should emit exactly the data that should be rendered by the table. If the data is
- * altered, the observable should emit that new set of data on the stream. In our case here,
- * we return a stream that contains only one set of data that doesn't change.
- */
-export class SearchEventsDataSource extends DataSource<SearchEvent> {
-	constructor(private searchEvents :SearchEvent[]){
-		super();
-	}
-	/** Connect function called by the table to retrieve one stream containing the data to render. */
-	connect() :Observable<SearchEvent[]> {
-		return Observable.of(this.searchEvents);
-	}
-
-	disconnect() :void {
-		// empty
-	}
 }

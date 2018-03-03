@@ -8,15 +8,15 @@ import { ModalStateService } from './modal-state.service';
 @Injectable()
 export class ModalService {
 
-	constructor(private modalService :NgbModal, private state :ModalStateService) {}
+	constructor(private readonly modalService :NgbModal, private readonly state :ModalStateService) {}
 
 	/**
 	 * Opens a modal
 	 * @param data the title and body for the modal
-	 * @returns {Promise<any>} a promise that is fulfilled when the user chooses to confirm, and rejected when
+	 * @returns a promise that is fulfilled when the user chooses to confirm, and rejected when
 	 * the user chooses not to confirm, or closes the modal
 	 */
-	/* tslint:disable-next-line:no-any */
+	/* tslint:disable-next-line:no-any promise-function-async */
 	open(data :ModalData) :Promise<any> {
 		this.state.data = data;
 		this.state.modal = this.modalService.open(this.state.template);

@@ -1,3 +1,4 @@
+/* tslint:disable-next-line:interface-name */
 export interface IDSimilarityMinJSON {
 	/** id */
 	i :string;
@@ -16,7 +17,7 @@ export class IDSimilarity {
 		}
 		return mj;
 	}
-	/*tslint:disable:member-ordering */
+	/* tslint:disable:member-ordering */
 	static deserialize(mj :IDSimilarityMinJSON) :IDSimilarity {
 		if(mj){
 			return new IDSimilarity(mj.i, mj.s);

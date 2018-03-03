@@ -1,21 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Params, Router } from '@angular/router';
-
-import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
 
+import { DM } from './../domain/data-mode';
 import { Expression } from './../domain/expression';
-import { OrderBy, Srt } from './../domain/sort';
 import { Paging } from './../domain/paging';
 import { Preferences, PreferencesMinJSON } from './../domain/preferences';
 import { RM } from './../domain/result-mode';
-import { Source } from './../domain/source';
 import { Search } from './../domain/search';
 import { SearchEvent } from './../domain/search-event';
 import { SearchTotals } from './../domain/search-totals';
+import { Srt, OrderBy } from './../domain/sort';
+import { Source } from './../domain/source';
 import { Totals } from './../domain/totals';
 import { Type } from './../domain/type';
-import { DM } from './../domain/data-mode';
 
 import { LocalStorageService } from './local-storage.service';
 import { SearchService } from './search.service';
@@ -24,17 +23,18 @@ import { Logger } from './logger';
 
 @Injectable()
 export class AppService {
+	private static readonly LONG_TERM_CACHE_SECONDS :number = 315360000; // 10 * 365 * 24 * 60 * 60 = cache for 10 years
+
 	routingSessionSearch :boolean;
 	routingSubstanceInSearch :boolean;
 	substanceInResults :boolean;
 
 	readonly currentSearchTotalsStream :BehaviorSubject<SearchTotals> = new BehaviorSubject( new SearchTotals(Search.EMPTY_SEARCH) );
 
-	private searchTotalsMap :Map<string, SearchTotals> = new Map();
+	private readonly searchTotalsMap :Map<string, SearchTotals> = new Map();
 
 	private preferences :Preferences = this.cachedPreferences || new Preferences();
 
-	/* tslint:disable:variable-name */
 	private _search :Search;
 	private _searchForEdit :Search;
 	private _expressionForEdit :Expression;
@@ -42,7 +42,6 @@ export class AppService {
 	private _orderBy :OrderBy;
 	private _paging :Paging;
 	private _searchHistory :SearchEvent[];
-	/* tslint:enable:variable-name */
 
 	constructor(readonly router :Router, readonly searchService :SearchService){
 		Logger.debug('AppService.constructor');
@@ -233,6 +232,7 @@ export class AppService {
 			}
 		}
 	}
+	/* tslint:disable-next-line:cyclomatic-complexity */
 	setSearchTotals(searchTotals :SearchTotals) :void {
 		Logger.trace2('AppService.setSearchTotals');
 		const searchURL :string = searchTotals.search.url;
@@ -251,6 +251,7 @@ export class AppService {
 					newValues :number = newTotals.values,
 					mergedTotals :Totals = new Totals(newSubstances === undefined || newSubstances === -1 ? oldTotals.substances : newSubstances, newValues === undefined || newValues === -1 ? oldTotals.values : newValues);
 				Logger.log('AppService.setSearchTotals MERGING', oldTotals, 'WITH', newTotals, 'INTO', mergedTotals);
+				/* tslint:disable-next-line:no-parameter-reassignment */
 				searchTotals = new SearchTotals(oldSearchTotals.search, mergedTotals);
 			}
 			Logger.log('AppService.setSearchTotals setting', searchURL, searchTotals);
@@ -307,7 +308,7 @@ export class AppService {
 		}
 		searchHistory.unshift(newSE);
 		// ToDo - auto remove older than X days (local storage setting) searches.
-		this.searchService.cacheSearchEvents(searchHistory);
+		SearchService.cacheSearchEvents(searchHistory);
 	}
 	deleteFromHistory(deleteSE :SearchEvent) :ReadonlyArray<SearchEvent> {
 		Logger.debug('AppService.deleteFromHistory', deleteSE);
@@ -316,10 +317,9 @@ export class AppService {
 		if(iOldSE >= 0){
 			searchHistory.splice(iOldSE, 1);
 		}
-		this.searchService.cacheSearchEvents(searchHistory);
+		SearchService.cacheSearchEvents(searchHistory);
 		return searchHistory;
 	}
-
 
 
 	initTypes() :void {
@@ -369,14 +369,14 @@ export class AppService {
 
 	private setSearchHistory() :void {
 		Logger.debug('AppService.setSearchHistory');
-		this._searchHistory = this.searchService.getCachedSearchEvents() || [];
+		this._searchHistory = SearchService.getCachedSearchEvents() || [];
 	}
 
 	private cachePreferences() :void {
 		Logger.log('AppService.cachePreferences');
 		const pmj :PreferencesMinJSON = this.preferences.serialize();
 		if(pmj){
-			LocalStorageService.setObject('preferences', pmj, 10 * 365 * 24 * 60 * 60); // cache for 10 years
+			LocalStorageService.setObject('preferences', pmj, AppService.LONG_TERM_CACHE_SECONDS);
 		}else{
 			LocalStorageService.removeItem('preferences');
 		}

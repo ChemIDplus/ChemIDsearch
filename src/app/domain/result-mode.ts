@@ -1,4 +1,4 @@
-import { EnumEx } from '../util/enum-ex';
+import { EnumEx } from './../util/enum-ex';
 
 export enum RM{
 	html,
@@ -10,20 +10,18 @@ export enum RM{
 export class ResultMode{
 
 	// Static
-	private static rms :RM[] = EnumEx.getValues(RM);
+	private static readonly rms :RM[] = EnumEx.getValues(RM);
 
 	private static resultModes :ResultMode[];
 
-	// Static Constructor IIFE: see https://github.com/Microsoft/TypeScript/issues/265
-	/* tslint:disable-next-line */
-	private static _constructor = (() :void => {
+	static _constructor() :void {
 		let a :ResultMode[];
 		a = ResultMode.resultModes = [];
 		a[RM.html] = new ResultMode('HTML', 'HTML');
 		a[RM.json] = new ResultMode('JSON', 'JSON');
 		// tslint:disable-next-line:comment-format
 		//a[RM.xml] = new ResultMode('XML', 'XML');
-	})();
+	}
 
 	static getRMs() :RM[] {
 		return ResultMode.rms;
@@ -36,11 +34,11 @@ export class ResultMode{
 	}
 
 
-
-
 // Instance
 	constructor(
 		readonly display :string,
 		readonly displayAbbr :string
 	){}
 }
+
+ResultMode._constructor();

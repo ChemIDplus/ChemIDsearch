@@ -10,7 +10,7 @@ import { Logger } from './../core/logger';
  *
  * ```
  * <ng-template appModal>
- *	 <app-modal-inner></app-modal-inner>
+ *     <app-modal-inner></app-modal-inner>
  * </ng-template>
  * ```
  *

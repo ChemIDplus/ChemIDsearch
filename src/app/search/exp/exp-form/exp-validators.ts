@@ -6,10 +6,11 @@ import { FormControl, FormGroup } from '@angular/forms';
 
 import { Fld, Field } from '../../../domain/field';
 import { Op, Operator } from '../../../domain/operator';
-import { ToxT, ToxicityTest } from '../../../domain/toxicity-test';
-import { ToxS, ToxicitySpecies } from '../../../domain/toxicity-species';
-import { ToxR, ToxicityRoute } from '../../../domain/toxicity-route';
-import { ToxE, ToxicityEffect } from '../../../domain/toxicity-effect';
+import { ToxE } from '../../../domain/toxicity-effect';
+import { ToxR } from '../../../domain/toxicity-route';
+import { ToxS } from '../../../domain/toxicity-species';
+import { ToxT } from '../../../domain/toxicity-test';
+
 import { ValidationResult } from '../../../util/validation-result';
 
 import { Logger } from './../../../core/logger';
@@ -19,6 +20,7 @@ export class ExpressionValidators {
 
 	public static skipProcessing :boolean = false;
 
+	/* tslint:disable-next-line:cyclomatic-complexity */
 	static validate(formGroup :FormGroup) :ValidationResult {
 
 		if(ExpressionValidators.skipProcessing){
@@ -133,8 +135,8 @@ export class ExpressionValidators {
 
 
 		// fld regex
-		let regex :RegExp = undefined,
-			messageKey :string = undefined;
+		let regex :RegExp,
+			messageKey :string;
 		switch(fld){
 			case Fld.rn:
 				messageKey = 'rn_not_correct';
@@ -247,7 +249,7 @@ export class ExpressionValidators {
 					regex = /^[0-9]+(\.[0-9]{1,4})?$/;
 					messageKey = 'number_single_not_correct';
 				}
-				break;
+				// break;
 		}// end switch(fld)
 		if(regex && !value.match(regex)){
 			return ExpressionValidators.fail(messageKey, ctrlValue);
@@ -295,6 +297,7 @@ export class ExpressionValidators {
 		let n :number;
 		try{
 			n = parseInt(v, 10);
+			/* tslint:disable-next-line:no-magic-numbers */
 			if(n >= 40 && n <= 100){
 				return null;
 			}

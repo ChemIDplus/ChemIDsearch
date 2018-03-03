@@ -1,7 +1,8 @@
+/* tslint:disable:ordered-imports */
 import { NgModule } from '@angular/core';
 
-import { SharedModule } from '../shared/shared.module';
-import { SearchModule } from '../search/search.module';
+import { SharedModule } from './../shared/shared.module';
+import { SearchModule } from './../search/search.module';
 
 import { ResultsRoutingModule } from './results-routing.module';
 
@@ -18,10 +19,10 @@ import { PhysicalPropsComponent } from './html/substance/physical-props/physical
 import { StructureComponent } from './html/structure/structure.component';
 import { StructureDetailsComponent } from './html/structure-details/structure-details.component';
 import { StructureImageComponent } from './html/structure-image/structure-image.component';
+import { StructureSearchComponent } from './html/structure-search/structure-search.component';
 import { JsonComponent } from './json/json.component';
 import { JsonDataComponent } from './json/json-data/json-data.component';
 import { DataModeComponent } from './data-mode/data-mode.component';
-import { StructureSearchComponent } from './html/structure-search/structure-search.component';
 
 @NgModule({
 	declarations: [

@@ -3,7 +3,7 @@
 		<ng-container matColumnDef="summary">
 			<mat-header-cell *matHeaderCellDef>
 				<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between">
-					<app-summaries-sort fxFlex [orderBy]="orderBy" [hasOneSimilarity]="hasOneSimilarity" (onSortChange)="onSortChange($event)"></app-summaries-sort>
+					<app-summaries-sort fxFlex [orderBy]="orderBy" [hasOneSimilarity]="hasOneSimilarity" (change)="onSortChange($event)"></app-summaries-sort>
 					<div *ngIf="structuresView" fxFlex="none">
 						{{ hasOneSimilarity ? 'Next ' : '' }}Similarity Search Percent: <input type="number" min="40" max="100" step="5" [(ngModel)]="linkSimPercent">
 					</div>

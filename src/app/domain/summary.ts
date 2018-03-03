@@ -22,7 +22,6 @@ export interface SummaryMinJSON {
 /** Immutable */
 export class Summary {
 
-	/* tslint:disable-next-line:variable-name */
 	readonly rn_id :string;
 	readonly routerLink :string[];
 
@@ -74,5 +73,3 @@ export class Summary {
 	}
 
 }
-
-

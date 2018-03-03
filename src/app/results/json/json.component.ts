@@ -1,13 +1,12 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 
-import { DM, DataMode } from '../../domain/data-mode';
-import { Search } from '../../domain/search';
-import { TotalsServerJSON } from '../../domain/server-json';
-import { Totals } from '../../domain/totals';
+import { DM, DataMode } from './../../domain/data-mode';
+import { Search } from './../../domain/search';
+import { TotalsServerJSON } from './../../domain/server-json';
+import { Totals } from './../../domain/totals';
 
-import { AppService } from '../../core/app.service';
-
-import { EnvService } from '../../core/env.service';
+import { AppService } from './../../core/app.service';
+import { EnvService } from './../../core/env.service';
 
 import { Logger } from './../../core/logger';
 
@@ -42,7 +41,7 @@ export class JsonComponent implements OnInit {
 	}
 
 	get dataModes() :DataMode[] {
-		return DataMode.DMs
+		return DataMode.dms
 			.filter( (dm :DM) => dm !== DM.totals && dm !== DM.valueCounts)
 			.map( (dm :DM) => DataMode.getDataMode(dm) );
 	}

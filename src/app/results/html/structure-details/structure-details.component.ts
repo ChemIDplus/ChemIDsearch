@@ -1,6 +1,6 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
-import { StructureDetails } from '../../../domain/structure-details';
+import { StructureDetails } from './../../../domain/structure-details';
 
 import { Logger } from './../../../core/logger';
 

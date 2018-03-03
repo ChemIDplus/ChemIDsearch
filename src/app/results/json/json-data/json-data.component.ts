@@ -1,12 +1,12 @@
 import { Component, Input, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Http, Response } from '@angular/http';
 
-import { DM, DataMode } from '../../../domain/data-mode';
+import { DM, DataMode } from './../../../domain/data-mode';
 import { Search } from './../../../domain/search';
-import { SubstancesResultServerJSON } from '../../../domain/server-json';
+import { SubstancesResultServerJSON } from './../../../domain/server-json';
 import { Totals } from './../../../domain/totals';
 
-import { AppService } from '../../../core/app.service';
+import { AppService } from './../../../core/app.service';
 
 import { Logger } from './../../../core/logger';
 
@@ -34,8 +34,7 @@ export class JsonDataComponent implements OnChanges {
 		readonly cdr :ChangeDetectorRef
 	){}
 
-	/* tslint:disable-next-line:no-any */
-	ngOnChanges(changes :any) :void {
+	ngOnChanges() :void {
 		Logger.debug('JsonData.onChanges');
 		if(this.priorDm !== this.dm){
 			this.page = 1;

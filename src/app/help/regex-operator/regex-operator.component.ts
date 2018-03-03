@@ -1,20 +1,11 @@
+import { DataSource } from '@angular/cdk/collections';
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import {DataSource} from '@angular/cdk/collections';
-import {Observable} from 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
+
 import 'rxjs/add/observable/of';
 
 import { environment } from './../../../environments/environment';
 
-@Component({
-	selector: 'app-regex-operator',
-	templateUrl: './regex-operator.component.html',
-	styleUrls: ['./regex-operator.component.css'],
-	changeDetection: ChangeDetectionStrategy.OnPush
-})
-export class RegexOperatorComponent {
-	displayedColumns :string[] = ['description', 'regex', 'url'];
-	dataSource :RegexExamplesDataSource = new RegexExamplesDataSource();
-}
 
 class RegexExample {
 	readonly url :string;
@@ -32,6 +23,7 @@ const regexExamples :RegexExample[] = [
 	new RegexExample('Name includes "and" twice anywhere in the term', 'and.*and', 'and.*and'),
 	new RegexExample('Name includes "and" twice, using backreference', '(and).*\\1', '(and).*%255C1')
 ];
+
 /**
  * Data source to provide what data should be rendered in the table. The observable provided
  * in connect should emit exactly the data that should be rendered by the table. If the data is
@@ -40,11 +32,24 @@ const regexExamples :RegexExample[] = [
  */
 export class RegexExamplesDataSource extends DataSource<RegexExample> {
 	/** Connect function called by the table to retrieve one stream containing the data to render. */
+	/* tslint:disable-next-line:prefer-function-over-method */
 	connect() :Observable<RegexExample[]> {
 		return Observable.of(regexExamples);
 	}
 
+	/* tslint:disable-next-line:prefer-function-over-method */
 	disconnect() :void {
 		// empty
 	}
+}
+
+@Component({
+	selector: 'app-regex-operator',
+	templateUrl: './regex-operator.component.html',
+	styleUrls: ['./regex-operator.component.css'],
+	changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class RegexOperatorComponent {
+	displayedColumns :string[] = ['description', 'regex', 'url'];
+	dataSource :RegexExamplesDataSource = new RegexExamplesDataSource();
 }

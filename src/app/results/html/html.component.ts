@@ -1,20 +1,19 @@
 import { Component, OnChanges, OnInit, OnDestroy, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { Router } from '@angular/router';
 import { ObservableMedia, MediaChange } from '@angular/flex-layout';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { IDSimilarity } from './../../domain/id-similarity';
-import { OrderBy } from './../../domain/sort';
 import { Paging, PagedSearch, PagedSearchSubstancesResult } from './../../domain/paging';
-import { Search } from '../../domain/search';
-import { Substance } from '../../domain/substance';
-import { SearchSubstancesResult } from '../../domain/substances-result';
+import { Search } from './../../domain/search';
+import { OrderBy } from './../../domain/sort';
+import { Substance } from './../../domain/substance';
 import { SubstancesResult } from './../../domain/substances-result';
-import { Summary } from '../../domain/summary';
+import { Summary } from './../../domain/summary';
 import { Totals } from './../../domain/totals';
 
-import { AppService } from '../../core/app.service';
-import { SearchService } from '../../core/search.service';
+import { AppService } from './../../core/app.service';
+import { SearchService } from './../../core/search.service';
 
 import { Logger } from './../../core/logger';
 
@@ -37,7 +36,7 @@ export class HtmlComponent implements OnChanges, OnInit, OnDestroy {
 	viewStructures :boolean;
 	ltLg :boolean = false;
 
-	private subscriptions :Subscription[] = [];
+	private readonly subscriptions :Subscription[] = [];
 
 	constructor(
 		readonly router :Router,
@@ -48,8 +47,7 @@ export class HtmlComponent implements OnChanges, OnInit, OnDestroy {
 			this.setLtLg();
 		}
 
-	/* tslint:disable-next-line:no-any */
-	ngOnChanges(changes :any) :void {
+	ngOnChanges() :void {
 		Logger.debug('HTMLResults.onChanges');
 		// There is probably a better way it kick these off again - or better would be to correctly use Observable and an async pipe...
 		if(this.substances || this.substance){
