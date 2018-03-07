@@ -19,7 +19,8 @@ export class Sort{
 // Static:
 	static readonly srts :ReadonlyArray<Srt> = EnumEx.getValues(Srt);
 
-	private static _SORTS :ReadonlyArray<Sort>;
+	private static _sorts :ReadonlyArray<Sort>;
+	private static _sortsNotSimilarity :ReadonlyArray<Sort>;
 
 	static _constructor() :void {
 		const a :Sort[] = [];
@@ -33,15 +34,20 @@ export class Sort{
 		a[Srt.weight] = new Sort(Srt.weight, 'Weight', true);
 		a[Srt.has3d] = new Sort(Srt.has3d, 'Has 3D', false);
 		a[Srt.inchikey] = new Sort(Srt.inchikey, 'InChIKey', true);
-		Sort._SORTS = a;
+		Sort._sorts = a;
+		Sort._sortsNotSimilarity = a.filter( (sort :Sort) => sort.srt !== Srt.similarity );
 	}
 
-	static get SORTS() :ReadonlyArray<Sort> {
-		return Sort._SORTS;
+	static get sorts() :ReadonlyArray<Sort> {
+		return Sort._sorts;
+	}
+
+	static get sortsNotSimilarity() :ReadonlyArray<Sort>{
+		return Sort._sortsNotSimilarity;
 	}
 
 	static getSort(srt :Srt) :Sort {
-		return Sort._SORTS[srt];
+		return Sort._sorts[srt];
 	}
 
 	static getDisplay(srt :Srt) :String {

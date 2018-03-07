@@ -28,36 +28,29 @@ export class SummariesSortComponent {
 
 
 	get sortOptions() :ReadonlyArray<Sort> {
-		return Sort.SORTS.filter( (sort :Sort) => this.hasOneSimilarity || sort.srt !== Srt.similarity );
+		return this.hasOneSimilarity ? Sort.sorts : Sort.sortsNotSimilarity;
 	}
 
-	changed(sort :Sort) :void {
-		Logger.log('SummariesSort.change', sort, this.current, this.currentIsAsc);
-		let sortBy2 :Srt,
-			sortBy2Reverse :boolean;
+	changeSortBy(sort :Sort) :void {
+		Logger.log('SummariesSort.changeSortBy', sort, this.current, this.currentIsAsc);
 		if(sort === this.current){
-			sortBy2 = this._orderBy.sortBy2;
-			sortBy2Reverse = this._orderBy.sortBy2Reverse;
-			Logger.log('sort === this.current =' + sort + '; switching this.currentIsAsc from ', this.currentIsAsc);
-			this.currentIsAsc = !this.currentIsAsc;
+			this.changeDirection();
 		}else{
-			sortBy2 = this.current.srt;
-			sortBy2Reverse = this.currentIsAsc !== this.current.normalIsAsc;
+			const sortBy2 :Srt = this.current.srt,
+				sortBy2Reverse :boolean = this.currentIsAsc !== this.current.normalIsAsc;
 			this.current = sort;
 			this.currentIsAsc = sort.normalIsAsc;
+			this.changeSort(sortBy2, sortBy2Reverse);
 		}
-		this.change.emit(new OrderBy(this.current.srt, this.currentIsAsc !== this.current.normalIsAsc, sortBy2, sortBy2Reverse));
 	}
 
-	mouseenter(div :HTMLDivElement) :void {
-		Logger.log('mouseenter', div);
-		div.className = 'show-all';
-		/* tslint:disable-next-line:no-magic-numbers */
-		div.style.top = (Math.min(this.sortOptions.indexOf(this.current), 5) * -2.15 - 0.45) + 'em'; /* (-1.95 * Math.min(this.sortOptions.indexOf(this.current), 5) - 0.6) goes up*/
+	changeDirection() :void{
+		Logger.log('SummariesSort.changeDirection', this.current, this.currentIsAsc);
+		this.currentIsAsc = !this.currentIsAsc;
+		this.changeSort(this._orderBy.sortBy2, this._orderBy.sortBy2Reverse);
 	}
-	/* tslint:disable-next-line:prefer-function-over-method */
-	mouseleave(div :HTMLDivElement) :void {
-		Logger.log('mouseleave', div);
-		div.className = '';
+
+	private changeSort(sortBy2 :Srt, sortBy2Reverse :boolean) :void{
+		this.change.emit(new OrderBy(this.current.srt, this.currentIsAsc !== this.current.normalIsAsc, sortBy2, sortBy2Reverse));
 	}
 }

@@ -4,3 +4,6 @@ input {
 .mat-cell{
 	font-size: 1rem;
 }
+.mat-header-cell{
+	overflow: visible;
+}
