@@ -282,7 +282,7 @@ export class ExpressionValidators {
 		}
 
 		// auto
-		if(value.length < 3 && (fld === Fld.auto || op === Op.auto)){
+		if(value.length < Field.autocompleteMinLength(fld) && (fld === Fld.auto || op === Op.auto)){
 			return ExpressionValidators.fail('auto_too_short', ctrlValue);
 		}
 

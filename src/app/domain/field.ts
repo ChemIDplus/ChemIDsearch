@@ -76,6 +76,9 @@ export class Field{
 	static caseSensitive(fld :Fld) :boolean {
 		return Field.getField(fld).caseSensitive;
 	}
+	static autocompleteMinLength(fld :Fld) :number {
+		return Field.getField(fld).autocompleteMinLength;
+	}
 
 
 	private static getField(fld :Fld) :Field {
@@ -84,6 +87,8 @@ export class Field{
 
 
 // Instance
+
+	readonly autocompleteMinLength :number;
 	constructor(
 		readonly abbr :string,
 		readonly display :string,
@@ -92,7 +97,9 @@ export class Field{
 		readonly multiOnly ? :boolean,
 		readonly bool ? :boolean,
 		readonly caseSensitive ? :boolean
-	){}
+	){
+		this.autocompleteMinLength = abbr === 'lo' || abbr === 'ca' ? 1 : 3;
+	}
 }
 
 Field._constructor();

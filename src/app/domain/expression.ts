@@ -555,7 +555,7 @@ export class ExpressionMut{
 			}
 			if(val){
 				val = Expression.trimAndCase(this._fld, val);
-				this._usesAC = val.length >= 3;
+				this._usesAC = val.length >= Field.autocompleteMinLength(this._fld);
 				this._acValue = this._usesAC ? val : undefined;
 			}
 		}

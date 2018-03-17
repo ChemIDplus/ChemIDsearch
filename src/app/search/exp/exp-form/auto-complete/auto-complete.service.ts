@@ -5,7 +5,7 @@ import { Subject } from 'rxjs/Subject';
 import { AutoCompleteResult } from './../../../../domain/auto-complete-result';
 import { DataCount, DataCountGroup } from './../../../../domain/data-count';
 import { ExpressionMut } from './../../../../domain/expression';
-import { Fld } from './../../../../domain/field';
+import { Fld, Field } from './../../../../domain/field';
 import { Search, SearchMut } from './../../../../domain/search';
 import { SearchTotals } from './../../../../domain/search-totals';
 import { Totals } from './../../../../domain/totals';
@@ -88,10 +88,11 @@ export class AutoCompleteService {
 			return;
 		}
 
-		const acExpValue :string = this.acExp.value;
+		const acExpValue :string = this.acExp.value,
+			acMinLength :number = Field.autocompleteMinLength(this.acExp.fld);
 		let vcr :ValueCountsResult,
 			length :number = acExpValue.length;
-		while(length >= 3){
+		while(length >= acMinLength){
 			vcr = SearchService.getCachedVCR(search, length);
 			if(vcr){
 				Logger.log('AutoCompleteService.newAutoComplete found vcr in storage' + ( vcr.expression ? ' vcr.expression=' + vcr.expression.url : ''));
