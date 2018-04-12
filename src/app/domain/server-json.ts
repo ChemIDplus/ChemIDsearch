@@ -142,10 +142,12 @@ interface ToxJournalServerJSON {
 interface PhysicalPropServerJSON {
 	/** property */
 	p :string;
-	/** value */
-	v :string;
+	/** data */
+	d ? :number;
+	/** data value for some ranges */
+	v ? :string;
 	/** units */
-	u :string;
+	u ? :string;
 	/** temperature */
 	t ? :string;
 	/** source */
@@ -270,7 +272,7 @@ export class ServerJSON {
 		if(sja && sja.length){
 			Logger.trace('ServerJSON.physicalProps sja.length=', sja.length);
 			const ret :PhysicalProp[] = [];
-			sja.forEach( (psj :PhysicalPropServerJSON, index :number) => ret[index] = new PhysicalProp(psj.p, psj.v, psj.u, psj.s, psj.t) );
+			sja.forEach( (psj :PhysicalPropServerJSON, index :number) => ret[index] = new PhysicalProp(psj.p, psj.d, psj.v, psj.u, psj.s, psj.t) );
 			return ret;
 		}
 	}

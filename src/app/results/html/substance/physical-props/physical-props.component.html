@@ -10,7 +10,7 @@
 
 	<ng-container matColumnDef="value">
 		<mat-header-cell *matHeaderCellDef mat-sort-header>Value</mat-header-cell>
-		<mat-cell *matCellDef="let physicalProp">{{ physicalProp.value }}</mat-cell>
+		<mat-cell *matCellDef="let physicalProp">{{ physicalProp.value || physicalProp.data }}</mat-cell>
 	</ng-container>
 
 	<ng-container matColumnDef="units">

@@ -1,10 +1,12 @@
 export interface PhysicalPropMinJSON {
 	/** property */
 	p :string;
-	/** value */
-	v :string;
+	/** data */
+	d ? :number;
+	/** data value for some ranges */
+	v ? :string;
 	/** units */
-	u :string;
+	u ? :string;
 	/** source */
 	s :string;
 	/** temperature */
@@ -15,6 +17,7 @@ export interface PhysicalPropMinJSON {
 export class PhysicalProp {
 	constructor(
 		readonly property :string,
+		readonly data :number,
 		readonly value :string,
 		readonly units :string,
 		readonly source :string,
@@ -22,8 +25,17 @@ export class PhysicalProp {
 	){}
 
 	serialize() :PhysicalPropMinJSON {
-		const mj :PhysicalPropMinJSON = {'p':this.property, 'v':this.value, 'u':this.units, 's':this.source};
-		if(this.temperature){
+		const mj :PhysicalPropMinJSON = {'p':this.property, 's':this.source};
+		if(this.data !== undefined){
+			mj.d = this.data;
+		}
+		if(this.value !== undefined){
+			mj.v = this.value;
+		}
+		if(this.units !== undefined){
+			mj.u = this.units;
+		}
+		if(this.temperature !== undefined){
 			mj.t = this.temperature;
 		}
 
@@ -32,7 +44,7 @@ export class PhysicalProp {
 	/*tslint:disable:member-ordering */
 	static deserialize(mj :PhysicalPropMinJSON) :PhysicalProp {
 		if(mj){
-			return new PhysicalProp(mj.p, mj.v, mj.u, mj.s, mj.t);
+			return new PhysicalProp(mj.p, mj.d, mj.v, mj.u, mj.s, mj.t);
 		}
 	}
 
