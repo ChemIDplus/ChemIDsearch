@@ -115,10 +115,12 @@ interface ToxJournal {{ '{' }}
 interface PhysicalProp {{ '{' }}
 	/** property */
 	p :string;
-	/** value */
-	v :string;
+	/** data */
+	d ? :number;
+	/** data value for some ranges */
+	v ? :string;
 	/** units */
-	u :string;
+	u ? :string;
 	/** temperature */
 	t ? :string;
 	/** source */

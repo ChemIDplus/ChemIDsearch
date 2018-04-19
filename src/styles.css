@@ -29,13 +29,19 @@
 .top-menu-button,
 .go-button,
 .modify-search-button,
-.delete-expression-button{
+.delete-expression-button,
+.outline-primary-button{
 	padding: 5px;
 	border-radius: 0.25rem;
 }
 .top-menu-button,
 .go-button{
 	color: #fff;
+}
+.outline-primary-button{
+	color: #007bff;
+	border: 1px solid #007bff;
+	background-color: transparent;
 }
 .modify-search-button,
 .delete-expression-button{
