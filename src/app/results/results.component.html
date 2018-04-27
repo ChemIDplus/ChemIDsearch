@@ -1,14 +1,14 @@
 <span *ngIf="search" class="options">
 	<div ngbDropdown class="d-inline-block">
-		<button class="btn btn-outline-primary" id="view_dropdown" ngbDropdownToggle>View</button>
+		<button class="btn btn-outline-primary" id="view_dropdown" ngbDropdownToggle>View{{ viewAPI ? ': API' : ''}}</button>
 		<div ngbDropdownMenu aria-labelledby="view_dropdown">
 			<button class="dropdown-item" (click)="setViewHTML()">HTML</button>
-			<button class="dropdown-item" (click)="setViewJSON()">JSON</button>
+			<button class="dropdown-item" (click)="setViewAPI()">API</button>
 		</div>
 	</div>
 </span>
 <app-criteria [totals]="totals" [search]="search" [expressionCount]="search.exps.length"></app-criteria>
 <div *ngIf="totals">
 	<app-html *ngIf="viewHTML" [search]="search" [totals]="totals"></app-html>
-	<app-json *ngIf="viewJSON" [search]="search" [totals]="totals"></app-json>
+	<app-json *ngIf="viewAPI" [search]="search" [totals]="totals"></app-json>
 </div>

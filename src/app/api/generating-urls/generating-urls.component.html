@@ -1,5 +1,5 @@
 <p>
-There are 2 user interfaces to help you learn to build valid ChemID<i>plus</i> API Search URLs: this application and the Swagger UI.
+There are two user interfaces to help you learn to build valid ChemID<i>plus</i> API Search URLs: this application and the Swagger UI.
 We expect this ChemID<i>plus</i> API Search application will be more useful for most users, especially for building multi-expression searches.
 </p>
 
@@ -9,17 +9,27 @@ Click the <span class="top-menu-button">Help</span> button above to read how to 
 
 <p>
 After entering expression(s) and clicking the <span class="go-button">Get Results</span> button, the browser navigates to the HTML view of the results.
-To investigate the API Search URLs and JSON results for any search, click the <span class="outline-primary-button">VIEW</span> button on the top right and select "JSON".
+To investigate the API Search URLs and JSON/XML/TSV results for any search, click the <span class="outline-primary-button">View</span> button on the top right and select "API".
 You will then see two API Search URL links and two JSON results.
 The top section is for Totals; the URL includes data=totals and thus only returns the count of matching substances.
+Then the next section is for all the per-substance data types.
 </p>
 
 <p>
-Then the next section is for all the per-substance data types.
-The default data parameter is data=summary.
-You can also use the <span class="outline-primary-button">Data Parameter Choice</span> button to select any of the other data parameters instead.
-The JSON results for the selected parameter are listed below that.
+The default data returned is the summary of each matching substance.
+You can use the <span class="outline-primary-button">Data</span> button to return other information for each matching substance.
 </p>
+
+<p>
+The default result format is JSON.
+Using the <span class="outline-primary-button">Format</span> button, you may instead request XML or TSV.
+TSV is similar to CSV but uses the tab character as the delimiter; which means the output can be read by your favorite spreadsheet program.
+</p>
+
+<p>
+The results based on the selected parameters are listed below those two choices.
+</p>
+
 
 <p>
 An alternative to using this ChemID<i>plus</i> API Search is the Swagger UI.

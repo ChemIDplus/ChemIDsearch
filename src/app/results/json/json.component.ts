@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 
 import { DM, DataMode } from './../../domain/data-mode';
+import { Fmt, Format } from './../../domain/format';
 import { Search } from './../../domain/search';
 import { TotalsServerJSON } from './../../domain/server-json';
 import { Totals } from './../../domain/totals';
@@ -21,6 +22,7 @@ export class JsonComponent implements OnInit {
 	@Input() totals :Totals; // Immutable
 
 	tsj :TotalsServerJSON;
+	format :Format = Format.getFormat(Fmt.json);
 	dm :DM;
 
 	constructor(
@@ -40,14 +42,17 @@ export class JsonComponent implements OnInit {
 		}
 	}
 
-	get dataModes() :DataMode[] {
-		return DataMode.dms
-			.filter( (dm :DM) => dm !== DM.totals && dm !== DM.valueCounts)
-			.map( (dm :DM) => DataMode.getDataMode(dm) );
+	get dataModes() :ReadonlyArray<DataMode> {
+		return DataMode.substanceDataModes;
 	}
 	get totalsURL() :string {
 		return this.env.apiURL + (this.app.useFieldOperatorAbbreviations ? this.search.totalsURL : this.search.totalsURLNoAbbr);
 	}
+	get dmDisplay() :string {
+		return DM[this.dm];
+	}
 
-
+	get formats() :ReadonlyArray<Format> {
+		return Format.formats;
+	}
 }

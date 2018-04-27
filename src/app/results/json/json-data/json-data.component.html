@@ -1,9 +1,8 @@
-<app-data-mode [dataMode]="dataMode"></app-data-mode>
 <div *ngIf="collectionSize > 1">Batch: <ngb-pagination [collectionSize]="collectionSize" [pageSize]="1" [maxSize]="10" [rotate]="true" [ellipses]="true" [directionLinks]="false" [boundaryLinks]="false" [page]="page" (pageChange)="onPageChange($event)"></ngb-pagination></div>
 <div>Direct Link: <a target="_blank" [href]="pageUrl">{{ pageUrl }}</a></div>
 <div class="card-wrapper">
 	<div class="card">
-		<pre *ngIf="srsj">{{ srsj | json }}</pre>
+		<pre *ngIf="srsj"><ng-container *ngIf="isJSON">{{ srsj | json }}</ng-container><ng-container *ngIf="isXML">{{ srsj | xml }}</ng-container><ng-container *ngIf="isTSV">{{ srsj }}</ng-container></pre>
 		<div *ngIf="!srsj" class="pre">{{ fetching }}</div>
 	</div>
 </div>

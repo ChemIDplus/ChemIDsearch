@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef
 import { Http, Response } from '@angular/http';
 
 import { DM, DataMode } from './../../../domain/data-mode';
+import { Fmt, Format } from './../../../domain/format';
 import { Search } from './../../../domain/search';
 import { SubstancesResultServerJSON } from './../../../domain/server-json';
 import { Totals } from './../../../domain/totals';
@@ -20,11 +21,12 @@ export class JsonDataComponent implements OnChanges {
 	@Input() search :Search; // Immutable
 	@Input() totals :Totals; // Immutable
 	@Input() dm :DM; // Immutable
+	@Input() fmt :Fmt;
 
 	dataMode :DataMode;
 	urls :string[] = [];
 	page :number;
-	srsj :SubstancesResultServerJSON;
+	srsj :SubstancesResultServerJSON | string;
 
 	private priorDm :DM;
 
@@ -41,7 +43,7 @@ export class JsonDataComponent implements OnChanges {
 			this.priorDm = this.dm;
 		}
 		this.dataMode = DataMode.getDataMode(this.dm);
-		this.urls = this.search.getBatchApiURLs(this.dm, this.totals.substances, this.app.useFieldOperatorAbbreviations);
+		this.urls = this.search.getBatchApiURLs(this.dm, this.totals.substances, this.app.useFieldOperatorAbbreviations).map( (url :string) => (this.fmt !== undefined && this.fmt !== Fmt.json ? url + '&format=' + Fmt[this.fmt] : url));
 		this.updateSRSJ();
 	}
 	onPageChange(page :number) :void {
@@ -68,14 +70,23 @@ export class JsonDataComponent implements OnChanges {
 		Logger.trace('JsonData.collectionSize');
 		return this.urls.length;
 	}
+	get isJSON() :boolean {
+		return this.fmt === undefined || this.fmt === Fmt.json;
+	}
+	get isXML() :boolean {
+		return this.fmt === Fmt.xml;
+	}
+	get isTSV() :boolean {
+		return this.fmt === Fmt.tsv;
+	}
 
 	private updateSRSJ() :void {
 		Logger.trace('JsonData.updateSRSJ');
 		this.srsj = undefined;
 		const pageUrl :string = this.pageUrl;
 		this.http.get(pageUrl)
-			.map( (res :Response) => res.json() )
-			.subscribe( (srsj :SubstancesResultServerJSON) => {
+			.map( (res :Response) => this.isJSON ? res.json() : res.text() )
+			.subscribe( (srsj :SubstancesResultServerJSON | string) => {
 				if(pageUrl === this.pageUrl){
 					this.srsj = srsj;
 					Logger.trace('TopMenu oCurrentSearchTotals.subscribe -> markForCheck');

@@ -40,8 +40,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
 			case RM.html:
 				this.viewMode = ViewMode.html;
 				break;
-			case RM.json:
-				this.viewMode = ViewMode.json;
+			case RM.api:
+				this.viewMode = ViewMode.api;
 				break;
 			default:
 				this.viewMode = ViewMode.html;
@@ -74,13 +74,9 @@ export class ResultsComponent implements OnInit, OnDestroy {
 		Logger.trace('Results.viewHTML');
 		return this.viewMode === ViewMode.html;
 	}
-	get viewJSON() :boolean {
-		Logger.trace('Results.viewJSON');
-		return this.viewMode === ViewMode.json;
-	}
-	get viewXML() :boolean {
-		Logger.trace('Results.viewXML');
-		return this.viewMode === ViewMode.xml;
+	get viewAPI() :boolean {
+		Logger.trace('Results.viewAPI');
+		return this.viewMode === ViewMode.api;
 	}
 
 	onNewParams(params :Params) :void {
@@ -115,12 +111,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
 		Logger.debug('Results.setViewHTML');
 		this.viewMode = ViewMode.html;
 	}
-	setViewJSON() :void {
-		Logger.debug('Results.setViewJSON');
-		this.viewMode = ViewMode.json;
-	}
-	setViewXML() :void {
-		Logger.debug('Results.setViewXML');
-		this.viewMode = ViewMode.xml;
+	setViewAPI() :void {
+		Logger.debug('Results.setViewAPI');
+		this.viewMode = ViewMode.api;
 	}
 }

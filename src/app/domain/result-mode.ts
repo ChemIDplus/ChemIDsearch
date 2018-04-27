@@ -2,9 +2,7 @@ import { EnumEx } from './../util/enum-ex';
 
 export enum RM{
 	html,
-	json
-	// tslint:disable-next-line:comment-format
-	//xml
+	api
 }
 
 export class ResultMode{
@@ -17,10 +15,8 @@ export class ResultMode{
 	static _constructor() :void {
 		let a :ResultMode[];
 		a = ResultMode.resultModes = [];
-		a[RM.html] = new ResultMode('HTML', 'HTML');
-		a[RM.json] = new ResultMode('JSON', 'JSON');
-		// tslint:disable-next-line:comment-format
-		//a[RM.xml] = new ResultMode('XML', 'XML');
+		a[RM.html] = new ResultMode('HTML');
+		a[RM.api] = new ResultMode('API');
 	}
 
 	static getRMs() :RM[] {
@@ -36,8 +32,7 @@ export class ResultMode{
 
 // Instance
 	constructor(
-		readonly display :string,
-		readonly displayAbbr :string
+		readonly display :string
 	){}
 }
 

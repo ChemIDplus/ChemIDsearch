@@ -3,7 +3,7 @@ import { RM } from './result-mode';
 import { Srt } from './sort';
 
 export interface PreferencesMinJSON {
-	/** Result Mode - HTML / JSON */
+	/** Result Mode - HTML / API */
 	m ? :RM;
 	/** autocomplete rows */
 	a ? :number;

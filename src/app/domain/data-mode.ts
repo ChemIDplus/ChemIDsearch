@@ -32,13 +32,14 @@ export class DataMode{
 // Static:
 	static readonly dms :ReadonlyArray<DM> = EnumEx.getValues(DM);
 
-	private static DATA_MODES :DataMode[];
+	private static _dataModes :ReadonlyArray<DataMode>;
+	private static _substanceDataModes :ReadonlyArray<DataMode>;
 
 	// Make sure the help matches: \ChemIDsearch\src\app\api\data-parameters\data-parameters.component.html
 
 	static _constructor() :void {
 		let a :DataMode[];
-		a = DataMode.DATA_MODES = [];
+		a = [];
 		a[DM.totals] = new DataMode(DM.totals, 1, ' = Totals for matching values and matching substances');
 		/* tslint:disable:align no-magic-numbers */
 		a[DM.valueCounts] = new DataMode(DM.valueCounts, 1000, ' = List of matching values with substance counts');
@@ -65,10 +66,15 @@ export class DataMode{
 					a[DM.mol3d] = new DataMode(DM.mol3d, 125);
 				a[DM.image] = new DataMode(DM.image, 80, ' = png bytes');
 		/* tslint:enable:align */
+		DataMode._dataModes = a;
+		DataMode._substanceDataModes = a.filter( (dataMode :DataMode) => dataMode.dm !== DM.totals && dataMode.dm !== DM.valueCounts);
 	}
 
 	static getDataMode(dm :DM) :DataMode {
-		return DataMode.DATA_MODES[dm];
+		return DataMode._dataModes[dm];
+	}
+	static get substanceDataModes() :ReadonlyArray<DataMode> {
+		return DataMode._substanceDataModes;
 	}
 
 

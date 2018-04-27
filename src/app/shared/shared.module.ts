@@ -8,10 +8,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { XmlPipe } from './xml.pipe';
+
 // ToDo - Replace deprecated HttpModule with HttpClientModule, see http://brianflove.com/2017/07/21/migrating-to-http-client/
 
 @NgModule({
 	declarations: [
+		XmlPipe
 	],
 	imports: [
 		CommonModule,
@@ -30,7 +33,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 		MatSortModule,
 		MatExpansionModule,
 
-		NgbModule
+		NgbModule,
+
+		XmlPipe
 	]
 })
 export class SharedModule { }
