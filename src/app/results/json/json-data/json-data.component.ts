@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef
 import { Http, Response } from '@angular/http';
 
 import { DM, DataMode } from './../../../domain/data-mode';
-import { Fmt, Format } from './../../../domain/format';
+import { Fmt } from './../../../domain/format';
 import { Search } from './../../../domain/search';
 import { SubstancesResultServerJSON } from './../../../domain/server-json';
 import { Totals } from './../../../domain/totals';
