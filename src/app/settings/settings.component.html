@@ -52,11 +52,17 @@
 	</fieldset>
 
 	<fieldset>
-		<legend>JSON View Settings</legend>
+		<legend>API View Settings</legend>
 		<div class="form-group">
-			<label for="settings_dm">Default Data Parameter Choice</label>
+			<label for="settings_dm">Default Data Parameter</label>
 			<select  id="settings_dm" class="form-control" formControlName="ctrlDmChoice">
 				<option *ngFor="let dm of dms" [value]="dm">{{ getDataModeDisplay(dm) }}</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="settings_fmt">Default Format Parameter</label>
+			<select  id="settings_fmt" class="form-control" formControlName="ctrlFmtChoice">
+				<option *ngFor="let fmt of fmts" [value]="fmt">{{ getFormatDisplay(fmt) }}</option>
 			</select>
 		</div>
 	</fieldset>

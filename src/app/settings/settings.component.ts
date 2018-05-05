@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 
 import { DM, DataMode } from './../domain/data-mode';
+import { Fmt, Format } from './../domain/format';
 import { Preferences } from './../domain/preferences';
 import { RM, ResultMode } from './../domain/result-mode';
 import { Srt, Sort } from './../domain/sort';
@@ -29,9 +30,11 @@ export class SettingsComponent implements OnInit {
 	ctrlSimPercent :FormControl;
 	ctrlStructures :FormControl;
 	ctrlDmChoice :FormControl;
+	ctrlFmtChoice :FormControl;
 
 	readonly rms :ReadonlyArray<RM> = ResultMode.getRMs();
 	readonly srts :ReadonlyArray<Srt> = Sort.srts.filter( (s :Srt) => s !== Srt.similarity);
+	readonly fmts :ReadonlyArray<Fmt> = Format.fmts;
 	readonly dms :ReadonlyArray<DM> = DataMode.dms.filter( (dm :DM) => dm !== DM.totals && dm !== DM.valueCounts);
 
 	private readonly subscriptions :Subscription[] = [];
@@ -53,6 +56,7 @@ export class SettingsComponent implements OnInit {
 		this.ctrlSimPercent = new FormControl(this.app.simPercent);
 		this.ctrlStructures = new FormControl(this.app.viewStructures);
 		this.ctrlDmChoice = new FormControl(this.app.dm);
+		this.ctrlFmtChoice = new FormControl(this.app.fmt);
 
 		this.form = this.formBuilder.group({
 			'ctrlResultPage':this.ctrlResultPage,
@@ -62,7 +66,8 @@ export class SettingsComponent implements OnInit {
 			'ctrlSortBy':this.ctrlSortBy,
 			'ctrlSimPercent':this.ctrlSimPercent,
 			'ctrlStructures':this.ctrlStructures,
-			'ctrlDmChoice' :this.ctrlDmChoice
+			'ctrlDmChoice' :this.ctrlDmChoice,
+			'ctrlFmtChoice' :this.ctrlFmtChoice
 		});
 
 		this.subscriptions.push(this.form.valueChanges.subscribe( () => this.onFormChanges() ));
@@ -71,7 +76,7 @@ export class SettingsComponent implements OnInit {
 	/** onFormChanges - called on everything! */
 	onFormChanges() :void {
 		Logger.trace('SettingsForm.onFormChanges');
-		this.app.setPreferences(new Preferences(+this.ctrlResultMode.value, +this.ctrlAutoCompleteResult.value, this.ctrlFldOpAbbr.value === 'abbr', +this.ctrlResultPage.value, +this.ctrlSortBy.value, +this.ctrlSimPercent.value, this.ctrlStructures.value, +this.ctrlDmChoice.value));
+		this.app.setPreferences(new Preferences(+this.ctrlResultMode.value, +this.ctrlAutoCompleteResult.value, this.ctrlFldOpAbbr.value === 'abbr', +this.ctrlResultPage.value, +this.ctrlSortBy.value, +this.ctrlSimPercent.value, this.ctrlStructures.value, +this.ctrlDmChoice.value, +this.ctrlFmtChoice.value));
 		this.cdr.detectChanges();
 	}
 
@@ -89,6 +94,10 @@ export class SettingsComponent implements OnInit {
 	getDataModeDisplay(dm :DM) :String{
 		Logger.trace('SettingsForm.getDataModeDisplay');
 		return DM[dm];
+	}
+	getFormatDisplay(fmt :Fmt) :String{
+		Logger.trace('SettingsForm.getFormatDisplay');
+		return Format.getDisplay(fmt);
 	}
 
 

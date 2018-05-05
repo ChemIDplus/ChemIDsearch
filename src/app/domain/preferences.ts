@@ -1,4 +1,5 @@
 import { DM } from './data-mode';
+import { Fmt } from './format';
 import { RM } from './result-mode';
 import { Srt } from './sort';
 
@@ -18,6 +19,8 @@ export interface PreferencesMinJSON {
 	v ? :number;
 	/** Data Parameter - Totals / Summary / etc */
 	d ? :DM;
+	/** API Format - json / xml / tsv */
+	fm ? :Fmt;
 }
 export class Preferences {
 
@@ -29,6 +32,7 @@ export class Preferences {
 	private static readonly DEFAULT_SRT :Srt = Srt.citations;
 	private static readonly DEFAULT_SIM_PERCENT :number = 80;
 	private static readonly DEFAULT_DM :DM = DM.summary;
+	private static readonly DEFAULT_FMT :Fmt = Fmt.json;
 
 	private static readonly NON_DEFAULT_BOOLEAN :number = 1;
 
@@ -40,8 +44,9 @@ export class Preferences {
 	private _simPercent :number;
 	private _viewNoStructures :boolean;
 	private _dm :DM;
+	private _fmt :Fmt;
 
-	constructor(rm ? :RM, maxAutoCompleteRows ? :number, useFieldOperatorAbbreviations ? :boolean, maxResultPageRows ? :number, srt ? :Srt, simPercent ? :number, viewStructures ? :boolean, dm ? :DM){
+	constructor(rm ? :RM, maxAutoCompleteRows ? :number, useFieldOperatorAbbreviations ? :boolean, maxResultPageRows ? :number, srt ? :Srt, simPercent ? :number, viewStructures ? :boolean, dm ? :DM, fmt ? :Fmt){
 		this.rm = rm;
 		this.maxAutoCompleteRows = maxAutoCompleteRows;
 		this.useFieldOperatorAbbreviations = useFieldOperatorAbbreviations;
@@ -52,6 +57,7 @@ export class Preferences {
 			this.viewStructures = viewStructures;
 		}
 		this.dm = dm;
+		this.fmt = fmt;
 	}
 
 	set rm(r :RM){
@@ -112,6 +118,13 @@ export class Preferences {
 		return this._dm === undefined ? Preferences.DEFAULT_DM : this._dm;
 	}
 
+	set fmt(fmt :Fmt){
+		this._fmt = fmt;
+	}
+	get fmt() :Fmt{
+		return this._fmt === undefined ? Preferences.DEFAULT_FMT : this._fmt;
+	}
+
 	serialize() :PreferencesMinJSON {
 		let mj :PreferencesMinJSON;
 		if(this.rm !== Preferences.DEFAULT_RM){
@@ -146,6 +159,10 @@ export class Preferences {
 			mj = mj || {};
 			mj.d = this._dm;
 		}
+		if(this.fmt !== Preferences.DEFAULT_FMT){
+			mj = mj || {};
+			mj.fm = this._fmt;
+		}
 		return mj;
 	}
 	/*tslint:disable-next-line:member-ordering */
@@ -160,6 +177,7 @@ export class Preferences {
 			p._simPercent = mj.p;
 			p._viewNoStructures = mj.v === Preferences.NON_DEFAULT_BOOLEAN;
 			p._dm = mj.d;
+			p._fmt = mj.fm;
 			return p;
 		}
 	}
@@ -177,6 +195,7 @@ export class ImmutablePreferences{
 	readonly simPercent :number;
 	readonly viewStructures :boolean;
 	readonly dm :DM;
+	readonly fmt :Fmt;
 
 	constructor(preferences :Preferences){
 		this.rm = preferences.rm;
@@ -187,5 +206,6 @@ export class ImmutablePreferences{
 		this.simPercent = preferences.simPercent;
 		this.viewStructures = preferences.viewStructures;
 		this.dm = preferences.dm;
+		this.fmt = preferences.fmt;
 	}
 }

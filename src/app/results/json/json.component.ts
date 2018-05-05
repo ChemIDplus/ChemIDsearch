@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 
 import { DM, DataMode } from './../../domain/data-mode';
-import { Fmt, Format } from './../../domain/format';
+import { Format } from './../../domain/format';
 import { Search } from './../../domain/search';
 import { TotalsServerJSON } from './../../domain/server-json';
 import { Totals } from './../../domain/totals';
@@ -22,7 +22,7 @@ export class JsonComponent implements OnInit {
 	@Input() totals :Totals; // Immutable
 
 	tsj :TotalsServerJSON;
-	format :Format = Format.getFormat(Fmt.json);
+	format :Format;
 	dm :DM;
 
 	constructor(
@@ -32,6 +32,7 @@ export class JsonComponent implements OnInit {
 	ngOnInit() :void {
 		Logger.debug('JsonComponent.onInit');
 		this.dm = this.app.dm;
+		this.format = Format.getFormat(this.app.fmt);
 
 		this.tsj = {};
 		if(this.totals.substances >= 0){

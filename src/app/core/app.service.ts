@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { DM } from './../domain/data-mode';
 import { Expression } from './../domain/expression';
+import { Fmt } from './../domain/format';
 import { Paging } from './../domain/paging';
 import { Preferences, PreferencesMinJSON } from './../domain/preferences';
 import { RM } from './../domain/result-mode';
@@ -213,6 +214,15 @@ export class AppService {
 	get dm() :DM {
 		Logger.trace('AppService.dm');
 		return this.preferences.dm;
+	}
+	set fmt(fmt :Fmt){
+		Logger.log('AppService.fmt setter');
+		this.preferences.fmt = fmt;
+		this.cachePreferences();
+	}
+	get fmt() :Fmt {
+		Logger.trace('AppService.fmt');
+		return this.preferences.fmt;
 	}
 
 	afterSearchSet(search :Search) :void {
