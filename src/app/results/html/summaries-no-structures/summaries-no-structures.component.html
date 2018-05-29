@@ -1,5 +1,5 @@
 <div class="mat-elevation-z8">
-	<mat-table #table [dataSource]="dataSource" matSort matSortDisableClear>
+	<mat-table #table [dataSource]="dataSource" matSort [matSortActive]='initialSortOn' [matSortDirection]='initialSortOrder' matSortDisableClear>
 
 		<!--- Note that these columns can be defined in any order.
 				The actual rendered columns are set as a property on the row definition" -->

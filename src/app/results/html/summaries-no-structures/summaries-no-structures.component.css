@@ -3,31 +3,113 @@
 	flex:none;
 }
 .mat-column-name{
-	width: 30%;
+	width: 25%;
 }
 .mat-column-id{
 	min-width: 60px;
-	width: 8%;
+	width: 9%;
 }
 .mat-column-formula{
-	width: 16%;
+	width: 13%;
 }
 .mat-column-weight{
-	width: 6%;
 	text-align: right;
+	width: 7%;
 }
 .mat-column-has3d{
-	min-width: 35px;
-	width: 3%;
 	text-align: center;
+	min-width: 35px;
+	width: 4%;
 }
 .mat-column-mesh{
 	width: 10%;
 }
 .mat-column-inchikey{
-	width: 22%;
+	width: 26%;
 }
 .mat-column-citations{
-	width: 5%;
 	text-align: right;
+	width: 6%;
 }
+
+@media (min-width: 1366px) {
+	.mat-column-name{
+		width: 30.5%;
+	}
+	.mat-column-id{
+		width: 8%;
+	}
+	.mat-column-formula{
+		width: 12.5%;
+	}
+	.mat-column-weight{
+		width: 6.5%;
+	}
+/*	.mat-column-has3d{
+		width: 4%;
+	} */
+	.mat-column-mesh{
+		width: 9%;
+	}
+	.mat-column-inchikey{
+		width: 24%;
+	}
+	.mat-column-citations{
+		width: 5.5%;
+	}
+}
+
+@media (min-width: 1440px) {
+	.mat-column-name{
+		width: 32%;
+	}
+	.mat-column-id{
+		width: 7.5%;
+	}
+	.mat-column-formula{
+		width: 13.5%;
+	}
+	.mat-column-weight{
+		width: 6.25%;
+	}
+/*	.mat-column-has3d{
+		width: 4%;
+	} */
+	.mat-column-mesh{
+		width: 8.5%;
+	}
+	.mat-column-inchikey{
+		width: 23%;
+	}
+	.mat-column-citations{
+		width: 5.25%;
+	}
+}
+
+@media (min-width: 1920px) {
+	.mat-column-name{
+		width: 38%;
+	}
+	.mat-column-id{
+		width: 6%;
+	}
+	.mat-column-formula{
+		width: 19%;
+	}
+	.mat-column-weight{
+		width: 4.5%;
+	}
+	.mat-column-has3d{
+		width: 3%;
+	}
+/*	.mat-column-mesh{
+		width: 8.5%;
+	} */
+	.mat-column-inchikey{
+		width: 17%;
+	}
+	.mat-column-citations{
+		width: 4%;
+	}
+}
+

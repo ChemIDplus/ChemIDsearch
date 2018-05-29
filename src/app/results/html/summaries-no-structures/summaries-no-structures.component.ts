@@ -57,6 +57,8 @@ export class SummariesNoStructuresComponent implements OnInit, OnChanges, OnDest
 	displayedColumns :string[] = ['name', 'id', 'formula', 'weight', 'has3d', 'mesh', 'inchikey', 'citations'];
 	dataSource :SummariesDataSource | undefined;
 
+	initialSortOn :string;
+	initialSortOrder :string;
 	private readonly subscriptions :Subscription[] = [];
 
 	constructor(
@@ -77,6 +79,9 @@ export class SummariesNoStructuresComponent implements OnInit, OnChanges, OnDest
 		this.subscriptions.push(this.paginator.page.subscribe( (pe :PageEvent) => this.onPageChange(pe) ));
 		this.subscriptions.push(this.sort.sortChange.subscribe( (s :MatSortEvent) => this.onSortChange(s) ));
 		this.setDataSource();
+		const currentSrt :Srt = this.orderBy.sortBy1;
+		this.initialSortOn = Srt[currentSrt];
+		this.initialSortOrder = !this.orderBy.sortBy1Reverse === Sort.getSort(currentSrt).normalIsAsc ? 'asc' :'desc';
 	}
 
 	ngOnDestroy() :void {
