@@ -112,28 +112,6 @@ export class ExpressionValidators {
 		}
 
 
-		// pipe 1
-		if(!inlist && hasPipe){
-			if(Operator.fldHasOp(fld, Op.inlist)){
-				if(value === '|'){
-					ExpressionValidators.skipProcessing = true;
-					ctrlValue.setValue('');
-					ExpressionValidators.skipProcessing = false;
-				}
-				Logger.trace('ExpValidator pipe: auto-converting to inlist');
-				ctrlOp.setValue(Op.inlist);
-				return null;
-			}else{
-				return ExpressionValidators.fail('pipe_not_supported', ctrlValue);
-			}
-		}
-		// pipe 2
-		if(inlist && !hasPipe){
-			Logger.trace('ExpValidator pipe: hasPipe=' + hasPipe + ' hasMulti=' + hasMulti + ' inlist=' + inlist);
-			return ExpressionValidators.fail('inlist_not_correct', ctrlValue);
-		}
-
-
 		// fld regex
 		let regex :RegExp,
 			messageKey :string;
@@ -239,20 +217,74 @@ export class ExpressionValidators {
 				messageKey = 'date_not_correct';
 				break;
 			case Fld.weight:
-				if(op === Op.inlist){
-					regex = /^([0-9]+(\.[0-9]{1,4})?\|)+[0-9]+(\.[0-9]{1,4})?\|?$/;
-					messageKey = 'number_inlist_not_correct';
-				}else if(op === Op.between){
-					regex = /^[0-9]+(\.[0-9]{1,4})?[ -][0-9]+(\.[0-9]{1,4})?$/;
-					messageKey = 'number_between_not_correct';
-				}else{
-					regex = /^[0-9]+(\.[0-9]{1,4})?$/;
-					messageKey = 'number_single_not_correct';
+				switch(op){
+					case Op.inlist:
+						regex = /^([1-9][0-9]*(\.[0-9]{1,4})?\|)+[1-9][0-9]*(\.[0-9]{1,4})?\|?$/;
+						messageKey = 'weight_inlist_not_correct';
+						break;
+					case Op.between:
+						regex = /^[0-9]+(\.[0-9]{1,4})?[ -][1-9][0-9]*(\.[0-9]{1,4})?$/;
+						messageKey = 'weight_between_not_correct';
+						break;
+					case Op.equals:
+					case Op.gte:
+						regex = /^[0-9]+(\.[0-9]{1,4})?$/;
+						messageKey = 'weight_single_not_correct';
+						break;
+					case Op.lte:
+						regex = /^[1-9][0-9]*(\.[0-9]{1,4})?$/;
+						messageKey = 'weight_single_not_correct';
 				}
-				// break;
+				break;
+			case Fld.toxicity:
+				if(op === Op.inlist){
+					regex = /^([0-9]+(\.[0-9]+)?([Ee]-?[0-9]+)?\|)+[0-9]+(\.[0-9]+)?([Ee]-?[0-9]+)?\|?$/;
+					messageKey = 'toxicity_inlist_not_correct';
+				}else if(op === Op.between){
+					regex = /^[0-9]+(\.[0-9]+)?([Ee]-?[0-9]+)?[ -][0-9]+(\.[0-9]+)?([Ee]-?[0-9]+)?$/;
+					messageKey = 'toxicity_between_not_correct';
+				}else{
+					regex = /^[0-9]+(\.[0-9]+)?([Ee]-?[0-9]+)?$/;
+					messageKey = 'toxicity_single_not_correct';
+				}
+				break;
+			case Fld.physicalproperty:
+				if(op === Op.inlist){
+					regex = /^(-?[0-9]+(\.[0-9]+)?([Ee]-?[0-9]+)?\|)+-?[0-9]+(\.[0-9]+)?([Ee]-?[0-9]+)?\|?$/;
+					messageKey = 'pp_inlist_not_correct';
+				}else if(op === Op.between){
+					regex = /^-?[0-9]+(\.[0-9]+)?([Ee]-?[0-9]+)?[ -]-?[0-9]+(\.[0-9]+)?([Ee]-?[0-9]+)?$/;
+					messageKey = 'pp_between_not_correct';
+				}else{
+					regex = /^-?[0-9]+(\.[0-9]+)?([Ee]-?[0-9]+)?$/;
+					messageKey = 'pp_single_not_correct';
+				}
+
 		}// end switch(fld)
 		if(regex && !value.match(regex)){
 			return ExpressionValidators.fail(messageKey, ctrlValue);
+		}
+
+
+		// pipe 1
+		if(!inlist && hasPipe){
+			if(Operator.fldHasOp(fld, Op.inlist)){
+				if(value === '|'){
+					ExpressionValidators.skipProcessing = true;
+					ctrlValue.setValue('');
+					ExpressionValidators.skipProcessing = false;
+				}
+				Logger.trace('ExpValidator pipe: auto-converting to inlist');
+				ctrlOp.setValue(Op.inlist);
+				return null;
+			}else{
+				return ExpressionValidators.fail('pipe_not_supported', ctrlValue);
+			}
+		}
+		// pipe 2
+		if(inlist && !hasPipe){
+			Logger.trace('ExpValidator pipe: hasPipe=' + hasPipe + ' hasMulti=' + hasMulti + ' inlist=' + inlist);
+			return ExpressionValidators.fail('inlist_not_correct', ctrlValue);
 		}
 
 
