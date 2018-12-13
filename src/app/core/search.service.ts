@@ -1,5 +1,5 @@
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
@@ -21,7 +21,7 @@ import { PagedSearch, PagedSearchSubstancesResult } from './../domain/paging';
 import { Search, SearchMut } from './../domain/search';
 import { SearchEvent } from './../domain/search-event';
 import { SearchTotals } from './../domain/search-totals';
-import { ServerJSON } from './../domain/server-json';
+import { ServerJSON, TypeServerJSON, SourceServerJSON, TotalsServerJSON, SubstancesResultServerJSON, ValueCountsResultServerJSON } from './../domain/server-json';
 import { Source } from './../domain/source';
 import { Structure } from './../domain/structure';
 import { Substance } from './../domain/substance';
@@ -42,7 +42,6 @@ export class SearchService {
 
 	private static readonly DEBOUNCE_TIME :number = 400;
 	private static readonly STATUS_404 :number = 404;
-	private static readonly STATUS_200 :number = 200;
 
 	private readonly httpSearchForTotalsStream :Subject<Search> = new Subject<Search>();
 	private readonly httpPagedSearchForSummariesStream :Subject<PagedSearch> = new Subject<PagedSearch>();
@@ -54,7 +53,7 @@ export class SearchService {
 	private readonly idikStructuresStream :Subject<ReadonlyArray<IDStructure>> = new Subject<ReadonlyArray<IDStructure>>();
 	private readonly searchValueCountsStream :Subject<SearchValueCounts> = new Subject<SearchValueCounts>();
 
-	constructor(readonly http :Http, readonly env :EnvService) {
+	constructor(readonly httpClient :HttpClient, readonly env :EnvService) {
 
 		Logger.debug('SearchService.constructor');
 
@@ -193,8 +192,8 @@ export class SearchService {
 		if(types){
 			return Observable.of(types);
 		}else{
-			return this.httpGetData('data/meta/types')
-					.map( (res :Response) => SearchService.extractTypes(res) );
+			return this.httpClientGet<TypeServerJSON[]>('data/meta/types')
+					.map( (sja :TypeServerJSON[]) => SearchService.extractTypes(sja) );
 		}
 	}
 	get oSources() :Observable<Source[]> {
@@ -203,71 +202,63 @@ export class SearchService {
 		if(sources){
 			return Observable.of(sources);
 		}else{
-			return this.httpGetData('data/meta/sources')
-					.map( (res :Response) => SearchService.extractSources(res) );
+			return this.httpClientGet<SourceServerJSON[]>('data/meta/sources')
+					.map( (sja :SourceServerJSON[]) => SearchService.extractSources(sja) );
 		}
 	}
 
 	private httpSearchGetTotals(search :Search) :Observable<SearchTotals> {
 		Logger.trace('SearchService.httpSearchGetTotals');
-		return this.httpGetData(search.totalsURL)
-				.map( (res :Response) => SearchService.extractTotals(search, res) )
-				.catch( (err :Response, caught :Observable<SearchTotals>) => SearchService.extractTotalsOrError(search, err, caught) );
+		return this.httpClientGet<TotalsServerJSON>(search.totalsURL)
+				.map( (sj :TotalsServerJSON) => SearchService.extractTotals(search, sj) )
+				.catch( (errRes :HttpErrorResponse, caught :Observable<SearchTotals>) => SearchService.extractTotalsOrError(search, errRes, caught) );
 	}
-	// @ts-ignore noUnusedParameter caught
-	private static extractTotalsOrError(search :Search, res :Response, caught :Observable<SearchTotals> ) :Observable<SearchTotals> {
-		if ( res.status === SearchService.STATUS_404 ){
+	private static extractTotalsOrError(search :Search, errRes :HttpErrorResponse, _caught :Observable<SearchTotals> ) :Observable<SearchTotals> {
+		if ( errRes.status === SearchService.STATUS_404 ){
 			Logger.warn('Search NOT FOUND for ' + search.totalsURL);
-			return Observable.of(SearchService.extractTotals(search, res));
+			return Observable.of(SearchService.extractTotals(search, errRes.error));
 		}
 		Logger.error('ERROR - extractTotalsOrError ' + search.totalsURL);
-		SearchService.throwError(res);
+		SearchService.throwError(errRes);
 	}
-	private static extractTotals(search :Search, res :Response) :SearchTotals {
-		if (res.status !== SearchService.STATUS_200 && res.status !== SearchService.STATUS_404) {
-			throw new Error('Bad response status: ' + res.status);
-		}
+	private static extractTotals(search :Search, sj :TotalsServerJSON) :SearchTotals {
 		Logger.trace('SearchService.extractTotals ' + search.totalsURL);
 		try{
-			const totals :Totals = ServerJSON.totals(res.json());
+			const totals :Totals = ServerJSON.totals(sj);
 			SearchService.cacheTotals(search, totals);
 			Logger.info('SearchService.extractTotals ' + search.totalsURL, totals);
 			return new SearchTotals(search, totals);
-		}catch (err){
-			Logger.error('SearchService.extractTotals ', err, res.text());
-			SearchService.throwError(res);
+		}catch (e){
+			Logger.error('SearchService.extractTotals ', e, sj);
+			SearchService.throwError(e);
 		}
 	}
 
 	private httpSearchGetSummaries(pagedSearch :PagedSearch) :Observable<PagedSearchSubstancesResult> {
 		const url :string = pagedSearch.summariesURL;
 		Logger.trace('SearchService.httpSearchGetSummaries ' + url);
-		return this.httpGetData(url)
-				.map( (res :Response) => SearchService.extractSubstancesResult(pagedSearch, res) )
-				.catch( (err :Response, caught :Observable<PagedSearchSubstancesResult>) => SearchService.extractSubstancesResultOrError(pagedSearch, err, caught) );
+		return this.httpClientGet<SubstancesResultServerJSON>(url)
+				.map( (sj :SubstancesResultServerJSON) => SearchService.extractSubstancesResult(pagedSearch, sj) )
+				.catch( (errRes :HttpErrorResponse, caught :Observable<PagedSearchSubstancesResult>) => SearchService.extractSubstancesResultOrError(pagedSearch, errRes, caught) );
 	}
-	// @ts-ignore noUnusedParameter caught
-	private static extractSubstancesResultOrError(pagedSearch :PagedSearch, res :Response, caught :Observable<PagedSearchSubstancesResult> ) :Observable<PagedSearchSubstancesResult> {
-		if ( res.status === SearchService.STATUS_404 ){
+	private static extractSubstancesResultOrError(pagedSearch :PagedSearch, errRes :HttpErrorResponse, _caught :Observable<PagedSearchSubstancesResult> ) :Observable<PagedSearchSubstancesResult> {
+		if ( errRes.status === SearchService.STATUS_404 ){
 			Logger.warn('Search NOT FOUND for ' + pagedSearch.summariesURL);
-			return Observable.of(SearchService.extractSubstancesResult(pagedSearch, res));
+			return Observable.of(SearchService.extractSubstancesResult(pagedSearch, errRes.error));
 		}
 		Logger.error('ERROR - extractSubstancesResultOrError ' + pagedSearch.summariesURL);
-		SearchService.throwError(res);
+		SearchService.throwError(errRes);
 	}
-	private static extractSubstancesResult(pagedSearch :PagedSearch, res :Response) :PagedSearchSubstancesResult {
-		if (res.status !== SearchService.STATUS_200 && res.status !== SearchService.STATUS_404) {
-			throw new Error('Bad response status: ' + res.status);
-		}
+	private static extractSubstancesResult(pagedSearch :PagedSearch, sj :SubstancesResultServerJSON) :PagedSearchSubstancesResult {
 		Logger.trace('SearchService.extractSubstancesResult ' + pagedSearch.summariesURL);
 		try{
-			const pssr :PagedSearchSubstancesResult = new PagedSearchSubstancesResult(pagedSearch, ServerJSON.substancesResult(res.json())),
+			const pssr :PagedSearchSubstancesResult = new PagedSearchSubstancesResult(pagedSearch, ServerJSON.substancesResult(sj)),
 				sr :SubstancesResult = pssr.substancesResult;
 			Logger.info('SearchService.extractSubstancesResult ' + pagedSearch.summariesURL + (sr.end ? ' ' + sr.start + '-' + sr.end : ''), pssr.substancesResult.total);
 			return SearchService.mergeAndCacheSubstancesResult(pssr);
-		}catch (err){
-			Logger.error('SearchService.extractSubstancesResult ', err, res.text());
-			SearchService.throwError(res);
+		}catch (e){
+			Logger.error('SearchService.extractSubstancesResult ', e, sj);
+			SearchService.throwError(e);
 		}
 	}
 	private finishSummariesResults(pssr :PagedSearchSubstancesResult) :void {
@@ -282,26 +273,22 @@ export class SearchService {
 			numbers :string[] = nonCached.map( (idik :IDInchikey) => idik.id),
 			url :string = 'data/nu/in/' + numbers.join('%7C') + '?data=' + DM[DM.structure];
 
-		return this.httpGetData(url)
-				.map( (res :Response) => SearchService.extractStructuresFromIDIKs(nonCached, res) )
-				.catch( (err :Response, caught :Observable<ReadonlyArray<IDStructure>>) => SearchService.extractStructuresFromIDIKsOrError(nonCached, err, caught) );
+		return this.httpClientGet<SubstancesResultServerJSON>(url)
+				.map( (sj :SubstancesResultServerJSON) => SearchService.extractStructuresFromIDIKs(nonCached, sj) )
+				.catch( (errRes :HttpErrorResponse, caught :Observable<ReadonlyArray<IDStructure>>) => SearchService.extractStructuresFromIDIKsOrError(nonCached, errRes, caught) );
 	}
-	// @ts-ignore noUnusedParameter caught
-	private static extractStructuresFromIDIKsOrError(idiks :IDInchikey[], res :Response, caught :Observable<ReadonlyArray<IDStructure>> ) :Observable<ReadonlyArray<IDStructure>> {
-		if ( res.status === SearchService.STATUS_404 ){
+	private static extractStructuresFromIDIKsOrError(idiks :IDInchikey[], errRes :HttpErrorResponse, _caught :Observable<ReadonlyArray<IDStructure>> ) :Observable<ReadonlyArray<IDStructure>> {
+		if ( errRes.status === SearchService.STATUS_404 ){
 			Logger.warn('Search NOT FOUND for idiks=' + idiks.map( (idik :IDInchikey) => idik.id));
-			return Observable.of(SearchService.extractStructuresFromIDIKs(idiks, res));
+			return Observable.of(SearchService.extractStructuresFromIDIKs(idiks, errRes.error));
 		}
 		Logger.error('ERROR - extractStructuresFromIDIKsOrError idiks=' + idiks.map( (idik :IDInchikey) => idik.id));
-		SearchService.throwError(res);
+		SearchService.throwError(errRes);
 	}
-	private static extractStructuresFromIDIKs(idiks :IDInchikey[], res :Response) :ReadonlyArray<IDStructure> {
-		if (res.status !== SearchService.STATUS_200 && res.status !== SearchService.STATUS_404) {
-			throw new Error('Bad response status: ' + res.status);
-		}
+	private static extractStructuresFromIDIKs(idiks :IDInchikey[], sj :SubstancesResultServerJSON) :ReadonlyArray<IDStructure> {
 		Logger.debug('SearchService.extractStructuresFromIDIKs ' + idiks.map( (idik :IDInchikey) => idik.id));
 		try{
-			const sr :SubstancesResult = ServerJSON.substancesResult(res.json()),
+			const sr :SubstancesResult = ServerJSON.substancesResult(sj),
 				idStructures :IDStructure[] = [];
 			sr.substances.forEach( (s :Substance, index :number) => {
 				SearchService.cacheStructure(s.idik, s.structure);
@@ -309,77 +296,67 @@ export class SearchService {
 			});
 			Logger.info('SearchService.extractStructuresFromIDIKs', idStructures.length);
 			return idStructures;
-		}catch (err){
-			Logger.error('SearchService.extractStructuresFromIDIKs ', err, res.text());
-			SearchService.throwError(res);
+		}catch (e){
+			Logger.error('SearchService.extractStructuresFromIDIKs ', e, sj);
+			SearchService.throwError(e);
 		}
 	}
 
 
 	private httpSearchGetValueCounts(searchMut :SearchMut) :Observable<SearchValueCounts> {
 		Logger.trace('SearchService.httpSearchGetValueCounts', searchMut);
-		return this.httpGetData(searchMut.acURL)
-				.map( (res :Response) => SearchService.extractSearchValueCounts(searchMut, res) )
-				.catch( (err :Response, caught :Observable<SearchValueCounts>) => SearchService.extractSearchValueCountsOrError(searchMut, err, caught) );
+		return this.httpClientGet<ValueCountsResultServerJSON>(searchMut.acURL)
+				.map( (sj :ValueCountsResultServerJSON) => SearchService.extractSearchValueCounts(searchMut, sj) )
+				.catch( (errRes :HttpErrorResponse, caught :Observable<SearchValueCounts>) => SearchService.extractSearchValueCountsOrError(searchMut, errRes, caught) );
 	}
-	// @ts-ignore noUnusedParameter caught
-	private static extractSearchValueCountsOrError(searchMut :SearchMut, res :Response, caught :Observable<SearchValueCounts> ) :Observable<SearchValueCounts> {
-		if ( res.status === SearchService.STATUS_404 ){
+	private static extractSearchValueCountsOrError(searchMut :SearchMut, errRes :HttpErrorResponse, _caught :Observable<SearchValueCounts> ) :Observable<SearchValueCounts> {
+		if ( errRes.status === SearchService.STATUS_404 ){
 			Logger.warn('Search NOT FOUND for ' + searchMut.acURL);
-			return Observable.of(SearchService.extractSearchValueCounts(searchMut, res));
+			return Observable.of(SearchService.extractSearchValueCounts(searchMut, errRes.error));
 		}
 		Logger.error('ERROR - extractSearchValueCountsOrError ' + searchMut.acURL);
-		SearchService.throwError(res);
+		SearchService.throwError(errRes);
 	}
-	private static extractSearchValueCounts(searchMut :SearchMut, res :Response) :SearchValueCounts {
-		if (res.status !== SearchService.STATUS_200 && res.status !== SearchService.STATUS_404) {
-			throw new Error('Bad response status: ' + res.status);
-		}
+	private static extractSearchValueCounts(searchMut :SearchMut, sj :ValueCountsResultServerJSON) :SearchValueCounts {
 		Logger.trace('SearchService.extractSearchValueCounts ' + searchMut.acURL);
 		try{
-			const vcr :ValueCountsResult = ServerJSON.valueCountsResult(res.json()),
+			const vcr :ValueCountsResult = ServerJSON.valueCountsResult(sj),
 				svc :SearchValueCounts = {'search':searchMut, 'vcr':vcr};
 			if(vcr.totals.foundMatch){
 				SearchService.cacheVCR(svc);
 			}
 			Logger.info('SearchService.extractSearchValueCounts ' + searchMut.acURL, vcr.totals);
 			return svc;
-		}catch (err){
-			Logger.error('SearchService.extractSearchValueCounts ', err, res.text());
-			SearchService.throwError(res);
+		}catch (e){
+			Logger.error('SearchService.extractSearchValueCounts ', e, sj);
+			SearchService.throwError(e);
 		}
 	}
 
-	private static extractTypes(res :Response) :Type[] {
-		if (res.status !== SearchService.STATUS_200) {
-			throw new Error('Bad response status: ' + res.status);
-		}
+	private static extractTypes(sja :TypeServerJSON[]) :Type[] {
 		Logger.trace('SearchService.extractTypes');
-		const types :Type[] = ServerJSON.types(res.json());
+		const types :Type[] = ServerJSON.types(sja);
 		SearchService.cacheTypes(types);
 		Logger.info('SearchService.extractTypes', types.length);
 		return types;
 	}
-	private static extractSources(res :Response) :Source[] {
-		if (res.status !== SearchService.STATUS_200) {
-			throw new Error('Bad response status: ' + res.status);
-		}
+	private static extractSources(sja :SourceServerJSON[]) :Source[] {
 		Logger.trace('SearchService.extractSources');
-		const sources :Source[] = ServerJSON.sources(res.json());
+		const sources :Source[] = ServerJSON.sources(sja);
 		SearchService.cacheSources(sources);
 		Logger.info('SearchService.extractSources', sources.length);
 		return sources;
 	}
 
-	private httpGetData(url :string) :Observable<Response> {
+	private httpClientGet<T>(url :string) :Observable<T> {
 		Logger.trace('HTTP getting ' + url);
-		return this.http.get(this.env.apiURL + url);
+		return this.httpClient.get<T>(this.env.apiURL + url);
 	}
-	private static throwError(res :Response) :void {
+	private static throwError(errRes :HttpErrorResponse | Error) :void {
 		try{
-			throw new Error ('ERROR: ' + res.text());
+			throw new Error ('ERROR: ' + errRes.message);
 		}catch(e){
-			throw new Error ('ERROR: ' + res);
+			throw new Error ('ERROR: ' + errRes);
 		}
 	}
 

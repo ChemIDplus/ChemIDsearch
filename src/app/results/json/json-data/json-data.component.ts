@@ -1,5 +1,5 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { Http, Response } from '@angular/http';
 
 import { DM, DataMode } from './../../../domain/data-mode';
 import { Fmt } from './../../../domain/format';
@@ -31,7 +31,7 @@ export class JsonDataComponent implements OnChanges {
 	private priorDm :DM;
 
 	constructor(
-		readonly http :Http,
+		readonly httpClient :HttpClient,
 		readonly app :AppService,
 		readonly cdr :ChangeDetectorRef
 	){}
@@ -84,15 +84,19 @@ export class JsonDataComponent implements OnChanges {
 		Logger.trace('JsonData.updateSRSJ');
 		this.srsj = undefined;
 		const pageUrl :string = this.pageUrl;
-		this.http.get(pageUrl)
-			.map( (res :Response) => this.isJSON ? res.json() : res.text() )
-			.subscribe( (srsj :SubstancesResultServerJSON | string) => {
-				if(pageUrl === this.pageUrl){
-					this.srsj = srsj;
-					Logger.trace('TopMenu oCurrentSearchTotals.subscribe -> markForCheck');
-					this.cdr.markForCheck();
-				}
-			});
-
+		if(this.fmt === undefined || this.fmt === Fmt.json){
+			this.httpClient.get<SubstancesResultServerJSON>(pageUrl)
+				.subscribe( (srsj :SubstancesResultServerJSON) => this.finishUpdateSRSJ(pageUrl, srsj) );
+		}else{
+			this.httpClient.get(pageUrl, {responseType:'text'})
+				.subscribe( (s :string) => this.finishUpdateSRSJ(pageUrl, s) );
+		}
+	}
+	private finishUpdateSRSJ(pageUrl :string, srsj :SubstancesResultServerJSON | string) :void {
+		if(pageUrl === this.pageUrl){
+			this.srsj = srsj;
+			Logger.trace('TopMenu oCurrentSearchTotals.subscribe -> markForCheck');
+			this.cdr.markForCheck();
+		}
 	}
 }

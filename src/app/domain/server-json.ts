@@ -172,7 +172,7 @@ interface StructureDetailsServerJSON {
 
 // Make sure the help matches: \ChemIDsearch\src\app\api\reference-data\reference-data.component.html
 
-interface SourceServerJSON {
+export interface SourceServerJSON {
 	id :string;
 	/** name */
 	n :string;
@@ -183,7 +183,7 @@ interface SourceServerJSON {
 	/** preUrl */
 	u :string;
 }
-interface TypeServerJSON {
+export interface TypeServerJSON {
 	id :number;
 	name :string;
 	table :string;
@@ -192,7 +192,7 @@ interface TypeServerJSON {
 
 // Make sure the help matches: \ChemIDsearch\src\app\api\value-counts\value-counts.component.html
 
-interface ValueCountsResultServerJSON {
+export interface ValueCountsResultServerJSON {
 	totals :TotalsServerJSON;
 	expression ? :ExpressionServerJSON;
 	results ? :DataCountServerJSON[];
