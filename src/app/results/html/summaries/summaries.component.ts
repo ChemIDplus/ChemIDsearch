@@ -1,11 +1,10 @@
 import { DataSource } from '@angular/cdk/collections';
 import { Component, Input, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable, Subscription } from 'rxjs';
+import { of } from 'rxjs/observable/of';
 
 import * as _ from 'lodash';
-import 'rxjs/add/observable/of';
 
 import { IDSimilarity } from './../../../domain/id-similarity';
 import { IDStructure } from './../../../domain/id-structure';
@@ -31,7 +30,7 @@ export class SubstancesDataSource extends DataSource<Substance> {
 	}
 	/** Connect function called by the table to retrieve one stream containing the data to render. */
 	connect() :Observable<Substance[]> {
-		return Observable.of(this.substances);
+		return of(this.substances);
 	}
 
 	/* tslint:disable-next-line:prefer-function-over-method */

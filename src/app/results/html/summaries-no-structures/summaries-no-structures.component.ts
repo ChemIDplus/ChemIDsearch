@@ -1,10 +1,8 @@
 import { DataSource } from '@angular/cdk/collections';
 import { Component, Input, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, OnChanges, OnDestroy } from '@angular/core';
 import { MatPaginator, PageEvent, MatSort, Sort as MatSortEvent } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-
-import 'rxjs/add/observable/of';
+import { Observable, Subscription } from 'rxjs';
+import { of } from 'rxjs/observable/of';
 
 import { PagedSearch, Paging } from './../../../domain/paging';
 import { Search } from './../../../domain/search';
@@ -29,7 +27,7 @@ export class SummariesDataSource extends DataSource<Summary> {
 	}
 	/** Connect function called by the table to retrieve one stream containing the data to render. */
 	connect() :Observable<Summary[]> {
-		return Observable.of(this.summaries);
+		return of(this.summaries);
 	}
 
 	/* tslint:disable-next-line:prefer-function-over-method */

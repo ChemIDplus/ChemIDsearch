@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { Element } from './../../../domain/element';
 import { IDStructure } from './../../../domain/id-structure';

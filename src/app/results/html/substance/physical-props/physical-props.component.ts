@@ -1,12 +1,11 @@
 import { DataSource } from '@angular/cdk/collections';
 import { Component, Input, ViewChild, ChangeDetectionStrategy, OnInit, OnChanges, EventEmitter } from '@angular/core';
 import { MatSort, Sort as MatSortEvent } from '@angular/material';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { merge } from 'rxjs/observable/merge';
+import { map } from 'rxjs/operators';
 
 import * as _ from 'lodash';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/operator/map';
 
 import { PhysicalProp } from './../../../../domain/physical-prop';
 
@@ -31,9 +30,9 @@ export class PPsDataSource extends DataSource<PhysicalProp> {
 			this.sort.sortChange
 		];
 
-		return Observable.merge(...displayDataChanges).map(() => {
-			return this.getSortedData();
-		});
+		return merge(...displayDataChanges).pipe(
+			map( () => this.getSortedData() )
+		);
 	}
 
 	/* tslint:disable-next-line:prefer-function-over-method */

@@ -2,11 +2,10 @@ import { DataSource } from '@angular/cdk/collections';
 import { Component, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core';
 import { MatSort, Sort as MatSortEvent } from '@angular/material';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable, Subscription } from 'rxjs';
+import { of } from 'rxjs/observable/of';
 
 import * as _ from 'lodash';
-import 'rxjs/add/observable/of';
 
 import { SearchEvent } from './../domain/search-event';
 
@@ -26,7 +25,7 @@ export class SearchEventsDataSource extends DataSource<SearchEvent> {
 	}
 	/** Connect function called by the table to retrieve one stream containing the data to render. */
 	connect() :Observable<SearchEvent[]> {
-		return Observable.of(this.searchEvents);
+		return of(this.searchEvents);
 	}
 
 	/* tslint:disable-next-line:prefer-function-over-method */

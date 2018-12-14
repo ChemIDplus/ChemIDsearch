@@ -1,10 +1,8 @@
 import { Component, Input, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, OnInit } from '@angular/core';
 // import { DataSource } from '@angular/cdk/collections';
 import { MatSort, Sort as MatSortEvent } from '@angular/material';
-// import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
-// import 'rxjs/add/observable/of';
 import * as _ from 'lodash';
 
 import { Toxicity } from './../../../../domain/toxicity';

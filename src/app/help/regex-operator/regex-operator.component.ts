@@ -1,8 +1,7 @@
 import { DataSource } from '@angular/cdk/collections';
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-
-import 'rxjs/add/observable/of';
+import { Observable } from 'rxjs';
+import { of } from 'rxjs/observable/of';
 
 import { environment } from './../../../environments/environment';
 
@@ -34,7 +33,7 @@ export class RegexExamplesDataSource extends DataSource<RegexExample> {
 	/** Connect function called by the table to retrieve one stream containing the data to render. */
 	/* tslint:disable-next-line:prefer-function-over-method */
 	connect() :Observable<RegexExample[]> {
-		return Observable.of(regexExamples);
+		return of(regexExamples);
 	}
 
 	/* tslint:disable-next-line:prefer-function-over-method */

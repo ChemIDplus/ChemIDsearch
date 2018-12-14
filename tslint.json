@@ -26,7 +26,7 @@
 		"eofline": true,
 		"file-header": false,
 		"forin": true,
-		"import-blacklist": [true, "rxjs", "rxjs/Rx"],
+		"import-blacklist": [true, "rxjs/Rx"],
 		"import-spacing": true,
 		"indent": [true, "tabs"],
 		"interface-name": [true, "never-prefix"],

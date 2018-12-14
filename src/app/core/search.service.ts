@@ -1,15 +1,8 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/operator/share';
+import { Observable, Subject } from 'rxjs';
+import { of } from 'rxjs/observable/of';
+import { map, catchError, debounceTime, distinctUntilChanged, mergeMap, share } from 'rxjs/operators';
 
 // import * as _ from 'lodash';
 
@@ -57,55 +50,55 @@ export class SearchService {
 
 		Logger.debug('SearchService.constructor');
 
-		this.httpSearchForTotalsStream
-			.debounceTime( SearchService.DEBOUNCE_TIME )
-			.distinctUntilChanged( (search1 :Search, search2 :Search) => search1.url === search2.url)
+		this.httpSearchForTotalsStream.pipe(
+			debounceTime( SearchService.DEBOUNCE_TIME ),
+			distinctUntilChanged( (search1 :Search, search2 :Search) => search1.url === search2.url),
 			// Using mergeMap (i.e. flatMap) not switchMap as we want to save all the HTTP fetched results into local storage and not cancel earlier requests
-			.mergeMap( (search :Search) => {
+			mergeMap( (search :Search) => {
 				Logger.trace('SearchService.httpSearchForTotalsStream.mergeMap', search);
 				return this.httpSearchGetTotals(search);
-			})
-			.share()
-			.subscribe( (searchTotals :SearchTotals) => {
-				Logger.trace('SearchService.httpSearchForTotalsStream.subscribe -> searchTotalsStream.next', searchTotals);
-				this.searchTotalsStream.next(searchTotals);
-			});
-		this.httpPagedSearchForSummariesStream
-			.debounceTime ( SearchService.DEBOUNCE_TIME )
-			.distinctUntilChanged( (pagedSearch1 :PagedSearch, pagedSearch2 :PagedSearch) => pagedSearch1.summariesURL === pagedSearch2.summariesURL)
+			}),
+			share()
+		).subscribe( (searchTotals :SearchTotals) => {
+			Logger.trace('SearchService.httpSearchForTotalsStream.subscribe -> searchTotalsStream.next', searchTotals);
+			this.searchTotalsStream.next(searchTotals);
+		});
+		this.httpPagedSearchForSummariesStream.pipe(
+			debounceTime ( SearchService.DEBOUNCE_TIME ),
+			distinctUntilChanged( (pagedSearch1 :PagedSearch, pagedSearch2 :PagedSearch) => pagedSearch1.summariesURL === pagedSearch2.summariesURL),
 			// Using mergeMap (i.e. flatMap) not switchMap as we want to save all the HTTP fetched results into local storage and not cancel earlier requests
-			.mergeMap( (pagedSearch :PagedSearch) => {
+			mergeMap( (pagedSearch :PagedSearch) => {
 				Logger.trace('SearchService.httpPagedSearchForSummariesStream.mergeMap', pagedSearch);
 				return this.httpSearchGetSummaries(pagedSearch);
-			})
-			.share()
-			.subscribe( (pssr :PagedSearchSubstancesResult) => {
-				Logger.trace('SearchService.httpPagedSearchForSummariesStream.subscribe', pssr);
-				this.finishSummariesResults(pssr);
-			});
-		this.httpIDIKForStructuresStream
-			.mergeMap( (idiks :IDInchikey[]) => {
+			}),
+			share()
+		).subscribe( (pssr :PagedSearchSubstancesResult) => {
+			Logger.trace('SearchService.httpPagedSearchForSummariesStream.subscribe', pssr);
+			this.finishSummariesResults(pssr);
+		});
+		this.httpIDIKForStructuresStream.pipe(
+			mergeMap( (idiks :IDInchikey[]) => {
 				Logger.trace('SearchService.httpIDIKForStructuresStream.mergeMap', idiks);
 				return this.httpIDIKsGetStructures(idiks);
-			})
-			.share()
-			.subscribe( (sa :ReadonlyArray<IDStructure>) => {
-				Logger.trace('SearchService.httpIDIKForStructuresStream.subscribe -> idikStructuresStream.next', sa);
-				this.idikStructuresStream.next(sa);
-			});
-		this.httpSearchForValueCountsStream
-			.debounceTime( SearchService.DEBOUNCE_TIME )
+			}),
+			share()
+		).subscribe( (sa :ReadonlyArray<IDStructure>) => {
+			Logger.trace('SearchService.httpIDIKForStructuresStream.subscribe -> idikStructuresStream.next', sa);
+			this.idikStructuresStream.next(sa);
+		});
+		this.httpSearchForValueCountsStream.pipe(
+			debounceTime( SearchService.DEBOUNCE_TIME ),
 					// SearchMut is mutable and the new search is likely the same object as last time but with new Expressions. distinctUntilChanged won't see a difference.
 					// .distinctUntilChanged( (search1 :Search, search2 :Search) => search1.url === search2.url)
-			.mergeMap( (searchMut :SearchMut) => {
+			mergeMap( (searchMut :SearchMut) => {
 				Logger.trace('SearchService.httpSearchForValueCountsStream.mergeMap', searchMut);
 				return this.httpSearchGetValueCounts(searchMut);
-			})
-			.share()
-			.subscribe( (svc :SearchValueCounts) => {
-				Logger.trace('SearchService.httpSearchForValueCountsStream.subscribe -> searchValueCountsStream.next', svc);
-				this.searchValueCountsStream.next(svc);
-			});
+			}),
+			share()
+		).subscribe( (svc :SearchValueCounts) => {
+			Logger.trace('SearchService.httpSearchForValueCountsStream.subscribe -> searchValueCountsStream.next', svc);
+			this.searchValueCountsStream.next(svc);
+		});
 	}
 
 	get oSearchTotals() :Observable<SearchTotals> {
@@ -190,33 +183,36 @@ export class SearchService {
 		Logger.trace('SearchService.oTypes');
 		const types :Type[] = SearchService.getCachedTypes();
 		if(types){
-			return Observable.of(types);
+			return of(types);
 		}else{
-			return this.httpClientGet<TypeServerJSON[]>('data/meta/types')
-					.map( (sja :TypeServerJSON[]) => SearchService.extractTypes(sja) );
+			return this.httpClientGet<TypeServerJSON[]>('data/meta/types').pipe(
+				map( (sja :TypeServerJSON[]) => SearchService.extractTypes(sja) )
+			);
 		}
 	}
 	get oSources() :Observable<Source[]> {
 		Logger.trace('SearchService.oSources');
 		const sources :Source[] = SearchService.getCachedSources();
 		if(sources){
-			return Observable.of(sources);
+			return of(sources);
 		}else{
-			return this.httpClientGet<SourceServerJSON[]>('data/meta/sources')
-					.map( (sja :SourceServerJSON[]) => SearchService.extractSources(sja) );
+			return this.httpClientGet<SourceServerJSON[]>('data/meta/sources').pipe(
+				map( (sja :SourceServerJSON[]) => SearchService.extractSources(sja) )
+			);
 		}
 	}
 
 	private httpSearchGetTotals(search :Search) :Observable<SearchTotals> {
 		Logger.trace('SearchService.httpSearchGetTotals');
-		return this.httpClientGet<TotalsServerJSON>(search.totalsURL)
-				.map( (sj :TotalsServerJSON) => SearchService.extractTotals(search, sj) )
-				.catch( (errRes :HttpErrorResponse, caught :Observable<SearchTotals>) => SearchService.extractTotalsOrError(search, errRes, caught) );
+		return this.httpClientGet<TotalsServerJSON>(search.totalsURL).pipe(
+			map( (sj :TotalsServerJSON) => SearchService.extractTotals(search, sj) ),
+			catchError( (errRes :HttpErrorResponse, caught :Observable<SearchTotals>) => SearchService.extractTotalsOrError(search, errRes, caught) )
+		);
 	}
 	private static extractTotalsOrError(search :Search, errRes :HttpErrorResponse, _caught :Observable<SearchTotals> ) :Observable<SearchTotals> {
 		if ( errRes.status === SearchService.STATUS_404 ){
 			Logger.warn('Search NOT FOUND for ' + search.totalsURL);
-			return Observable.of(SearchService.extractTotals(search, errRes.error));
+			return of(SearchService.extractTotals(search, errRes.error));
 		}
 		Logger.error('ERROR - extractTotalsOrError ' + search.totalsURL);
 		SearchService.throwError(errRes);
@@ -237,14 +233,15 @@ export class SearchService {
 	private httpSearchGetSummaries(pagedSearch :PagedSearch) :Observable<PagedSearchSubstancesResult> {
 		const url :string = pagedSearch.summariesURL;
 		Logger.trace('SearchService.httpSearchGetSummaries ' + url);
-		return this.httpClientGet<SubstancesResultServerJSON>(url)
-				.map( (sj :SubstancesResultServerJSON) => SearchService.extractSubstancesResult(pagedSearch, sj) )
-				.catch( (errRes :HttpErrorResponse, caught :Observable<PagedSearchSubstancesResult>) => SearchService.extractSubstancesResultOrError(pagedSearch, errRes, caught) );
+		return this.httpClientGet<SubstancesResultServerJSON>(url).pipe(
+			map( (sj :SubstancesResultServerJSON) => SearchService.extractSubstancesResult(pagedSearch, sj) ),
+			catchError( (errRes :HttpErrorResponse, caught :Observable<PagedSearchSubstancesResult>) => SearchService.extractSubstancesResultOrError(pagedSearch, errRes, caught) )
+		);
 	}
 	private static extractSubstancesResultOrError(pagedSearch :PagedSearch, errRes :HttpErrorResponse, _caught :Observable<PagedSearchSubstancesResult> ) :Observable<PagedSearchSubstancesResult> {
 		if ( errRes.status === SearchService.STATUS_404 ){
 			Logger.warn('Search NOT FOUND for ' + pagedSearch.summariesURL);
-			return Observable.of(SearchService.extractSubstancesResult(pagedSearch, errRes.error));
+			return of(SearchService.extractSubstancesResult(pagedSearch, errRes.error));
 		}
 		Logger.error('ERROR - extractSubstancesResultOrError ' + pagedSearch.summariesURL);
 		SearchService.throwError(errRes);
@@ -273,14 +270,15 @@ export class SearchService {
 			numbers :string[] = nonCached.map( (idik :IDInchikey) => idik.id),
 			url :string = 'data/nu/in/' + numbers.join('%7C') + '?data=' + DM[DM.structure];
 
-		return this.httpClientGet<SubstancesResultServerJSON>(url)
-				.map( (sj :SubstancesResultServerJSON) => SearchService.extractStructuresFromIDIKs(nonCached, sj) )
-				.catch( (errRes :HttpErrorResponse, caught :Observable<ReadonlyArray<IDStructure>>) => SearchService.extractStructuresFromIDIKsOrError(nonCached, errRes, caught) );
+		return this.httpClientGet<SubstancesResultServerJSON>(url).pipe(
+			map( (sj :SubstancesResultServerJSON) => SearchService.extractStructuresFromIDIKs(nonCached, sj) ),
+			catchError( (errRes :HttpErrorResponse, caught :Observable<ReadonlyArray<IDStructure>>) => SearchService.extractStructuresFromIDIKsOrError(nonCached, errRes, caught) )
+		);
 	}
 	private static extractStructuresFromIDIKsOrError(idiks :IDInchikey[], errRes :HttpErrorResponse, _caught :Observable<ReadonlyArray<IDStructure>> ) :Observable<ReadonlyArray<IDStructure>> {
 		if ( errRes.status === SearchService.STATUS_404 ){
 			Logger.warn('Search NOT FOUND for idiks=' + idiks.map( (idik :IDInchikey) => idik.id));
-			return Observable.of(SearchService.extractStructuresFromIDIKs(idiks, errRes.error));
+			return of(SearchService.extractStructuresFromIDIKs(idiks, errRes.error));
 		}
 		Logger.error('ERROR - extractStructuresFromIDIKsOrError idiks=' + idiks.map( (idik :IDInchikey) => idik.id));
 		SearchService.throwError(errRes);
@@ -305,14 +303,15 @@ export class SearchService {
 
 	private httpSearchGetValueCounts(searchMut :SearchMut) :Observable<SearchValueCounts> {
 		Logger.trace('SearchService.httpSearchGetValueCounts', searchMut);
-		return this.httpClientGet<ValueCountsResultServerJSON>(searchMut.acURL)
-				.map( (sj :ValueCountsResultServerJSON) => SearchService.extractSearchValueCounts(searchMut, sj) )
-				.catch( (errRes :HttpErrorResponse, caught :Observable<SearchValueCounts>) => SearchService.extractSearchValueCountsOrError(searchMut, errRes, caught) );
+		return this.httpClientGet<ValueCountsResultServerJSON>(searchMut.acURL).pipe(
+			map( (sj :ValueCountsResultServerJSON) => SearchService.extractSearchValueCounts(searchMut, sj) ),
+			catchError( (errRes :HttpErrorResponse, caught :Observable<SearchValueCounts>) => SearchService.extractSearchValueCountsOrError(searchMut, errRes, caught) )
+		);
 	}
 	private static extractSearchValueCountsOrError(searchMut :SearchMut, errRes :HttpErrorResponse, _caught :Observable<SearchValueCounts> ) :Observable<SearchValueCounts> {
 		if ( errRes.status === SearchService.STATUS_404 ){
 			Logger.warn('Search NOT FOUND for ' + searchMut.acURL);
-			return Observable.of(SearchService.extractSearchValueCounts(searchMut, errRes.error));
+			return of(SearchService.extractSearchValueCounts(searchMut, errRes.error));
 		}
 		Logger.error('ERROR - extractSearchValueCountsOrError ' + searchMut.acURL);
 		SearchService.throwError(errRes);

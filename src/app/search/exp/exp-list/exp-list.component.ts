@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, Renderer, ElementRef, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { Expression } from './../../../domain/expression';
 import { Search } from './../../../domain/search';

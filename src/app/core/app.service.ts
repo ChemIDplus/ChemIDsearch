@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Params, Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { DM } from './../domain/data-mode';
 import { Expression } from './../domain/expression';

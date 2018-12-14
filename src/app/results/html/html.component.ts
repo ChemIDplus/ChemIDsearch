@@ -1,7 +1,7 @@
 import { Component, OnChanges, OnInit, OnDestroy, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ObservableMedia, MediaChange } from '@angular/flex-layout';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { IDSimilarity } from './../../domain/id-similarity';
 import { Paging, PagedSearch, PagedSearchSubstancesResult } from './../../domain/paging';
