@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, Renderer, ElementRef, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -31,7 +31,6 @@ export class ExpListComponent implements OnInit, OnDestroy {
 	constructor(
 		readonly app :AppService,
 		readonly searchService :SearchService,
-		readonly renderer :Renderer,
 		readonly router :Router,
 		readonly cdr :ChangeDetectorRef
 	){}
@@ -109,7 +108,8 @@ export class ExpListComponent implements OnInit, OnDestroy {
 
 	private setFocus() :void {
 		Logger.trace('ExpList.setFocus');
-		this.renderer.invokeElementMethod(this.getResults.nativeElement, 'focus');
+		// Removed Renderer for v7 upgrade. Issue at https://github.com/angular/angular/issues/15674
+		this.getResults.nativeElement.focus();
 	}
 
 }

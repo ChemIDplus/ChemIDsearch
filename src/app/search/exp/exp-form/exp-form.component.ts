@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, Renderer, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -64,7 +64,6 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 		readonly app :AppService,
 		readonly searchService :SearchService,
 		readonly formBuilder :FormBuilder,
-		readonly renderer :Renderer,
 		readonly router :Router,
 		readonly cdr :ChangeDetectorRef
 	){}
@@ -318,7 +317,8 @@ export class ExpFormComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 	setFocus() :void {
 		Logger.trace('ExpForm.setFocus');
-		this.renderer.invokeElementMethod(this.textareaExpValuesElementRef.nativeElement, 'focus');
+		// Removed Renderer for v7 upgrade. Issue at https://github.com/angular/angular/issues/15674
+		this.textareaExpValuesElementRef.nativeElement.focus();
 	}
 	/** resizeTextarea called once on every input keypress */
 	resizeTextarea() :void {
