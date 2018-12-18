@@ -1,6 +1,6 @@
 {
 	"rulesDirectory": [
-		"node_modules/codelyzer"
+		"codelyzer"
 	],
 	"rules": {
 		"adjacent-overload-signatures": true,
@@ -143,8 +143,8 @@
 		"ordered-imports": [
 			true,
 			{
-			  "import-sources-order": "case-insensitive",
-			  "named-imports-order": "any"
+				"import-sources-order": "case-insensitive",
+				"named-imports-order": "any"
 			}
 		  ],
 		"prefer-const": true,
@@ -210,8 +210,6 @@
 		"variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore", "allow-snake-case"],
 		"whitespace": [true, "check-decl", "check-operator", "check-module", "check-separator", "check-rest-spread", "check-typecast", "check-type-operator"],
 
-		"directive-selector": [true, "attribute", "app", "camelCase"],
-		"component-selector": [true, "element", "app", "kebab-case"],
 		"no-output-on-prefix": true,
 		"use-input-property-decorator": true,
 		"use-output-property-decorator": true,
