@@ -2,8 +2,7 @@ import { DataSource } from '@angular/cdk/collections';
 import { Component, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core';
 import { MatSort, Sort as MatSortEvent } from '@angular/material';
 import { Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
-import { of } from 'rxjs/observable/of';
+import { Observable, Subscription, of } from 'rxjs';
 
 import * as _ from 'lodash';
 
@@ -89,8 +88,12 @@ export class HistoryComponent implements OnInit, OnDestroy {
 
 	onSortChange(sortEvent :MatSortEvent) :void {
 		Logger.log('HistoryComponent.onSortChange', sortEvent);
-		this.searchEvents = _.orderBy(this.searchEvents, [sortEvent.active], [sortEvent.direction]);
-		this.setDataSource();
+		if(sortEvent.direction === 'asc' || sortEvent.direction === 'desc'){
+			this.searchEvents = _.orderBy(this.searchEvents, [sortEvent.active], [sortEvent.direction]);
+			this.setDataSource();
+		}else{
+			this.setSearchEvents();
+		}
 	}
 	private setSearchEvents() :void {
 		this.searchEvents = _.filter(this.app.searchHistory, () => true);

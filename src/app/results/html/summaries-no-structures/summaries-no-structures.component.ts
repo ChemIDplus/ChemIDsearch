@@ -1,8 +1,7 @@
 import { DataSource } from '@angular/cdk/collections';
 import { Component, Input, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, OnChanges, OnDestroy } from '@angular/core';
 import { MatPaginator, PageEvent, MatSort, Sort as MatSortEvent } from '@angular/material';
-import { Observable, Subscription } from 'rxjs';
-import { of } from 'rxjs/observable/of';
+import { Observable, Subscription, of } from 'rxjs';
 
 import { PagedSearch, Paging } from './../../../domain/paging';
 import { Search } from './../../../domain/search';

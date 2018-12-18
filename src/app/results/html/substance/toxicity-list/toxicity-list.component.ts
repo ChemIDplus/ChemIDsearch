@@ -49,7 +49,9 @@ export class ToxicityListComponent implements OnInit {
 		}else if (sortEvent.active === 'source'){
 			property = 'journal.display';
 		}
-		this._toxicityReadOnlyArray = _.orderBy(this._toxicityReadOnlyArray, [property], [sortEvent.direction]);
+		if(sortEvent.direction === 'asc' || sortEvent.direction === 'desc'){
+			this._toxicityReadOnlyArray = _.orderBy(this._toxicityReadOnlyArray, [property], [sortEvent.direction]) as ReadonlyArray<Toxicity>;
+		}
 // 		this.setDataSource();
 		this.cdr.markForCheck();
 	}

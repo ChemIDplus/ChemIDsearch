@@ -1,8 +1,7 @@
 import { DataSource } from '@angular/cdk/collections';
 import { Component, Input, ViewChild, ChangeDetectionStrategy, OnInit, OnChanges, EventEmitter } from '@angular/core';
 import { MatSort, Sort as MatSortEvent } from '@angular/material';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { merge } from 'rxjs/observable/merge';
+import { BehaviorSubject, Observable, merge } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import * as _ from 'lodash';
@@ -51,7 +50,7 @@ export class PPsDataSource extends DataSource<PhysicalProp> {
 		}else if(active === 'value'){
 			active = ( (pp :PhysicalProp) :number => Number(pp.value) );
 		}
-		return (!active || direction === '') ? data : _.orderBy(data, [active], [direction]);
+		return (!active || direction === '') ? data : _.orderBy(data, [active], [direction]) as PhysicalProp[];
 	}
 }
 

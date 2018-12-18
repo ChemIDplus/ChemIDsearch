@@ -1,7 +1,6 @@
 import { DataSource } from '@angular/cdk/collections';
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { Observable } from 'rxjs';
-import { of } from 'rxjs/observable/of';
+import { Observable, of } from 'rxjs';
 
 import { environment } from './../../../environments/environment';
 

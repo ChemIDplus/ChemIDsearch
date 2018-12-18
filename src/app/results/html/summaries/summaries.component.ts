@@ -1,8 +1,7 @@
 import { DataSource } from '@angular/cdk/collections';
 import { Component, Input, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material';
-import { Observable, Subscription } from 'rxjs';
-import { of } from 'rxjs/observable/of';
+import { Observable, Subscription, of } from 'rxjs';
 
 import * as _ from 'lodash';
 

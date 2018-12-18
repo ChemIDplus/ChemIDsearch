@@ -1,7 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { of } from 'rxjs/observable/of';
+import { Observable, Subject, of } from 'rxjs';
 import { map, catchError, debounceTime, distinctUntilChanged, mergeMap, share } from 'rxjs/operators';
 
 // import * as _ from 'lodash';
