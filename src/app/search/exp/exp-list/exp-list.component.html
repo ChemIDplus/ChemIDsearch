@@ -12,6 +12,6 @@
 	<span *ngIf="search.hasNonNot">Please adjust the search criteria to match at least one substance.</span>
 </div>
 <div>
-	<button class="btn btn-success" tabindex="1" #getResults [disabled]="!valid" (click)="app.navToResults()">Get Results</button>
+	<button class="btn btn-success mr-1" tabindex="1" #getResults [disabled]="!valid" (click)="app.navToResults()">Get Results</button>
 	<button class="btn btn-default" (click)="clear()">Clear</button>
 </div>

@@ -7,3 +7,10 @@ input {
 .mat-header-cell{
 	overflow: visible;
 }
+.summaries-sort-container{
+	width: 100%;
+	min-height: 56px;
+}
+app-summary{
+	width: 100%;
+}

@@ -2,9 +2,9 @@
 	<mat-table #table [dataSource]="dataSource">
 		<ng-container matColumnDef="summary">
 			<mat-header-cell *matHeaderCellDef>
-				<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between">
-					<app-summaries-sort fxFlex [orderBy]="orderBy" [hasOneSimilarity]="hasOneSimilarity" (change)="onSortChange($event)"></app-summaries-sort>
-					<div *ngIf="structuresView" fxFlex="none">
+				<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center" class="summaries-sort-container">
+					<app-summaries-sort fxFlex class="my-1" [orderBy]="orderBy" [hasOneSimilarity]="hasOneSimilarity" (change)="onSortChange($event)"></app-summaries-sort>
+					<div *ngIf="structuresView" fxFlex="none" class="my-1">
 						{{ hasOneSimilarity ? 'Next ' : '' }}Similarity Search Percent: <input type="number" min="40" max="100" step="5" [(ngModel)]="linkSimPercent">
 					</div>
 				</div>

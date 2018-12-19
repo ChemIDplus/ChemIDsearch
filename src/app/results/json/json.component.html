@@ -4,7 +4,7 @@
 	<div class="card card-body"><pre>{{ tsj | json }}</pre></div>
 </div>
 <div *ngIf="totals.substances || totals.values" class="card card-body bg-light top-level">
-	<div ngbDropdown class="d-inline-block">
+	<div ngbDropdown class="d-inline-block mr-1">
 		<button class="btn btn-outline-primary" id="dm_dropdown" ngbDropdownToggle>Data: {{dmDisplay}}</button>
 		<div ngbDropdownMenu aria-labelledby="dm_dropdown">
 			<button *ngFor="let dataMode of dataModes" class="dropdown-item" [class.active]="dataMode.dm === dm" (click)="dm=dataMode.dm"><app-data-mode [dataMode]="dataMode"></app-data-mode></button>

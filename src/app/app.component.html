@@ -1,7 +1,7 @@
-<header class="mob-tox-header" fxHide fxShow.xs>
+<header class="mob-tox-header" fxShow.xs fxHide.md fxHide>
 	<div>TOXNET</div>
 </header>
-<header class="tox-header" fxHide fxShow.gt-xs fxLayout="row" fxLayout.sm="column" ngClass.sm="sm">
+<header class="tox-header" fxHide.xs fxShow.md fxShow fxLayout="row" fxLayout.sm="column" ngClass.sm="sm">
 	<div fxFlex class="site-titles">
 		<div class="site-title"><a href="https://www.nlm.nih.gov/" title="U.S. National Library of Medicine" rel="NLM home">U.S. National Library of Medicine</a></div>
 		<div class="site-title2"><a href="https://toxnet.nlm.nih.gov/" title="TOXNET - TOXICOLOGY DATA NETWORK" rel="home">TOXNET - TOXICOLOGY DATA NETWORK</a></div>
@@ -18,11 +18,11 @@
 	<app-top-menu></app-top-menu>
 	<router-outlet></router-outlet>
 </div>
-<footer class="mob-tox-footer" fxHide fxShow.xs fxLayout="column" fxLayoutAlign="end center">
+<footer class="mob-tox-footer" fxShow.xs fxHide.md fxHide fxLayout="column" fxLayoutAlign="end center">
 	<div><a href="https://chem.nlm.nih.gov/chemidplus/">ChemIDplus Main Site</a></div>
 	<div><a href="https://www.nlm.nih.gov/copyright.html">Copyright</a> &nbsp;|&nbsp; <a href="https://www.nlm.nih.gov/privacy.html">Privacy</a> &nbsp;|&nbsp; <a href="mailto:tehip@teh.nlm.nih.gov">Contact Us</a></div>
 </footer>
-<footer class="tox-footer" fxHide fxShow.gt-xs>
+<footer class="tox-footer" fxHide.xs fxShow.md fxShow>
 	<nav fxLayout="row" fxLayoutAlign="space-around center" role="article">
 		<a fxFlex="10" href="https://www.nlm.nih.gov/pubs/factsheets/toxnetfs.html">About</a>
 		<a fxFlex="15" href="https://sis.nlm.nih.gov/siscontact.html"              >Contact Us</a>

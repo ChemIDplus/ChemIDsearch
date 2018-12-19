@@ -99,9 +99,9 @@
 		</div>
 	</ng-container>
 	<div>
-		<button type="button" class="btn btn-success" [disabled]="!form.valid" (click)="save()">Done</button>
+		<button type="button" class="btn btn-success mr-1" [disabled]="!form.valid" (click)="save()">Done</button>
 		<button type="button" class="btn btn-default" (click)="clear()">Clear</button>
-		<button *ngIf="hasExpression" type="button" class="btn btn-default" (click)="navToList()">Cancel</button>
+		<button *ngIf="hasExpression" type="button" class="btn btn-default ml-1" (click)="navToList()">Cancel</button>
 	</div>
 	<app-auto-complete [exp]="exp" [ctrlFld]="ctrlFld" [ctrlOp]="ctrlOp" [ctrlValue]="ctrlValue" (click)="acClicked($event)" (acFetch)="acFetched($event)"></app-auto-complete>
 </form>
