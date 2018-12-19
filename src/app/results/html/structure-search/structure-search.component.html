@@ -1,6 +1,6 @@
 <div fxLayout="column" fxLayoutAlign="space-around">
 	<a [routerLink]="['/results', 'structure', 'substructure', rn_id]" title="Substructure search">Sub</a>
-	<span><a [routerLink]="['/results', 'structure', 'similarity'+linkSimPercent, rn_id]" [title]="'Find structures ' + (linkSimPercent < 100 ? 'at least ' : '') + linkSimPercent + '% similar to this one'">Sim{{ !needsLinkSimPercent ? linkSimPercent +'%' : ''}}</a><span *ngIf="needsLinkSimPercent"> <input type="number" min="40" max="100" step="5" [(ngModel)]="linkSimPercent">%</span></span>
+	<span><a [routerLink]="['/results', 'structure', 'similarity'+linkSimPercent, rn_id]" [title]="'Find structures ' + (linkSimPercent < 100 ? 'at least ' : '') + linkSimPercent + '% similar to this one'">Sim{{ !needsLinkSimPercent ? linkSimPercent +'%' : ''}}</a><span *ngIf="needsLinkSimPercent" class="ml-1"><input type="number" min="40" max="100" step="5" [(ngModel)]="linkSimPercent">%</span></span>
 	<a [routerLink]="['/results', 'structure', 'flex', rn_id]" title="Find parent, salts, and hydrates">Flex</a>
 	<a [routerLink]="['/results', 'structure', 'flexplus', rn_id]" title="Find parent, all variations">Flexplus</a>
 	<a target="_blank" [href]="'https://chem.nlm.nih.gov/chemidplus/structure/viewer/' + rn_id" title="Open a window with an enlarged image">Zoom</a>
