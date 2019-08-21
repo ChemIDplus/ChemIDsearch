@@ -6,29 +6,21 @@
 	</label>
 </div>
 <mat-accordion [multi]="!oneAtATime">
-	<mat-expansion-panel>
+	<mat-expansion-panel [expanded]="true">
 		<mat-expansion-panel-header>Generating Search URLs</mat-expansion-panel-header>
 		<app-generating-urls></app-generating-urls>
-	</mat-expansion-panel>
-	<mat-expansion-panel>
-		<mat-expansion-panel-header>Use the&nbsp;<span class="field">Last Modified</span>&nbsp;Field</mat-expansion-panel-header>
-		<app-last-modified></app-last-modified>
-	</mat-expansion-panel>
-	<mat-expansion-panel>
-		<mat-expansion-panel-header>Use our Source Code</mat-expansion-panel-header>
-		<app-source-code></app-source-code>
 	</mat-expansion-panel>
 	<mat-expansion-panel>
 		<mat-expansion-panel-header>Examples</mat-expansion-panel-header>
 		<app-examples></app-examples>
 	</mat-expansion-panel>
 	<mat-expansion-panel>
-		<mat-expansion-panel-header>Data Parameters</mat-expansion-panel-header>
-		<app-data-parameters></app-data-parameters>
+		<mat-expansion-panel-header>Results are in Size-Limited Batches: Get the Rest</mat-expansion-panel-header>
+		<app-batch-results></app-batch-results>
 	</mat-expansion-panel>
 	<mat-expansion-panel>
-		<mat-expansion-panel-header>JSON Results: Interfaces and Key to Abbreviations</mat-expansion-panel-header>
-		<app-json-results></app-json-results>
+		<mat-expansion-panel-header>Data Parameters and Batch Sizes</mat-expansion-panel-header>
+		<app-data-parameters></app-data-parameters>
 	</mat-expansion-panel>
 	<mat-expansion-panel>
 		<mat-expansion-panel-header>Search Fields and Operators</mat-expansion-panel-header>
@@ -39,8 +31,20 @@
 		<app-sorting></app-sorting>
 	</mat-expansion-panel>
 	<mat-expansion-panel>
-		<mat-expansion-panel-header>Paging and Batch Results</mat-expansion-panel-header>
-		<app-batch-results></app-batch-results>
+		<mat-expansion-panel-header>Only Fetch Incremental Changes using the&nbsp;<span class="field">Last Modified</span>&nbsp;Field</mat-expansion-panel-header>
+		<app-last-modified></app-last-modified>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>Use our Source Code</mat-expansion-panel-header>
+		<app-source-code></app-source-code>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>JSON Results: Interfaces and Key to Abbreviations</mat-expansion-panel-header>
+		<app-json-results></app-json-results>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>Paging Results</mat-expansion-panel-header>
+		<app-paging></app-paging>
 	</mat-expansion-panel>
 	<mat-expansion-panel>
 		<mat-expansion-panel-header>Reference Data</mat-expansion-panel-header>

@@ -1,0 +1,25 @@
+<p>
+You may intentionally return limited results to facilitate server-side paging.
+To request small amounts of results at a time, include the rowStart parameter, starting at 1.
+The number of results in the response is then determined by the pageSize parameter.
+If pageSize is not included, then the default of 5 is used.
+For example, with the default pageSize, the first two pages for "RN starts with 50-" using the abbreviated URLs would be:
+</p>
+<ul>
+	<li><a href="https://chem.nlm.nih.gov/api/data/rn/sw/50-?data=summary&rowStart=1" target="_blank">https://chem.nlm.nih.gov/api/data/rn/sw/50-?data=summary&amp;rowStart=1</a></li>
+	<li><a href="https://chem.nlm.nih.gov/api/data/rn/sw/50-?data=summary&rowStart=6" target="_blank">https://chem.nlm.nih.gov/api/data/rn/sw/50-?data=summary&amp;rowStart=6</a></li>
+</ul>
+
+<p>
+Sorting and Paging can also be combined.
+When sorting by descending citations, the first two pages at 10 records each would be:
+</p>
+<ul>
+	<li><a href="https://chem.nlm.nih.gov/api/data/rn/sw/50-?data=summary&sortBy1=citations&rowStart=1&pageSize=10" target="_blank">https://chem.nlm.nih.gov/api/data/rn/sw/50-?data=summary&amp;sortBy1=citations&amp;rowStart=1&amp;pageSize=10</a></li>
+	<li><a href="https://chem.nlm.nih.gov/api/data/rn/sw/50-?data=summary&sortBy1=citations&rowStart=11&pageSize=10" target="_blank">https://chem.nlm.nih.gov/api/data/rn/sw/50-?data=summary&amp;sortBy1=citations&amp;rowStart=11&amp;pageSize=10</a></li>
+</ul>
+
+<p>
+Navigating through results in this ChemID<i>plus</i> API Search application is accomplished using both Sorting and Paging.
+For more examples, you could view your browser's network traffic after paging through search results.
+</p>

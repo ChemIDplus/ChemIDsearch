@@ -11,6 +11,7 @@ import { FieldsOperatorsComponent } from './fields-operators/fields-operators.co
 import { GeneratingUrlsComponent } from './generating-urls/generating-urls.component';
 import { JsonResultsComponent } from './json-results/json-results.component';
 import { LastModifiedComponent } from './last-modified/last-modified.component';
+import { PagingComponent } from './paging/paging.component';
 import { ReferenceDataComponent } from './reference-data/reference-data.component';
 import { SortingComponent } from './sorting/sorting.component';
 import { SourceCodeComponent } from './source-code/source-code.component';
@@ -33,7 +34,8 @@ import { ValueCountsComponent } from './value-counts/value-counts.component';
 		ReferenceDataComponent,
 		ValueCountsComponent,
 		SourceCodeComponent,
-		LastModifiedComponent
+		LastModifiedComponent,
+		PagingComponent
 	]
 })
 export class ApiModule { }

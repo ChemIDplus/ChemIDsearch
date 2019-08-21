@@ -1,29 +1,7 @@
 <p>
-You may intentionally return limited results to facilitate server-side paging.
-To request small amounts of results at a time, include the rowStart parameter, starting at 1.
-The number of results in the response is then determined by the pageSize parameter.
-If pageSize is not included, then the default of 5 is used.
-For example, with the default pageSize, the first two pages for "RN starts with 50-" using the abbreviated URLs would be:
-</p>
-<ul>
-	<li><a href="https://chem.nlm.nih.gov/api/data/rn/sw/50-?data=summary&rowStart=1" target="_blank">https://chem.nlm.nih.gov/api/data/rn/sw/50-?data=summary&amp;rowStart=1</a></li>
-	<li><a href="https://chem.nlm.nih.gov/api/data/rn/sw/50-?data=summary&rowStart=6" target="_blank">https://chem.nlm.nih.gov/api/data/rn/sw/50-?data=summary&amp;rowStart=6</a></li>
-</ul>
-<p>
-Sorting and Paging can also be combined.
-When sorting by descending citations, the first two pages at 10 records each would be:
-</p>
-<ul>
-	<li><a href="https://chem.nlm.nih.gov/api/data/rn/sw/50-?data=summary&sortBy1=citations&rowStart=1&pageSize=10" target="_blank">https://chem.nlm.nih.gov/api/data/rn/sw/50-?data=summary&amp;sortBy1=citations&amp;rowStart=1&amp;pageSize=10</a></li>
-	<li><a href="https://chem.nlm.nih.gov/api/data/rn/sw/50-?data=summary&sortBy1=citations&rowStart=11&pageSize=10" target="_blank">https://chem.nlm.nih.gov/api/data/rn/sw/50-?data=summary&amp;sortBy1=citations&amp;rowStart=11&amp;pageSize=10</a></li>
-</ul>
-
-<hr>
-
-<p>
-If an API search matches many substances, the results may be returned in batches, even without the rowStart parameter.
-If a SubstancesResult includes <i>start</i> and <i>end</i> and the requst did not include rowStart, then the server has only sent a single batch back.
-Additional batches may then be requested by including the batchStart parameter.
+If an API search matches many substances or you request a lot of data for each one (e.g. using data=complete), then the API will only return a subset of the results.
+If your result includes <i>start</i> and <i>end</i>, then the server has only sent a single batch back.
+To get data for all of the matching substances, you need to make multiple requests and include the batchStart parameter.
 </p>
 
 <p>
@@ -42,13 +20,24 @@ The abbreviated URL for that search is: <a href="https://chem.nlm.nih.gov/api/da
 </pre>
 
 <p>
-The search matched 80 substances.
-We did not request paging, but the result includes <i>start</i> and <i>end</i>.
-Therefore, we know the server only returned a batch with the first 25 substances.
-To get the rest, we would need to make multiple requests, each incrementing the batchStart parameter to be one more than the prior <i>end</i> value:
+We see <i>total</i>, which means that the search matched 80 substances.
+But we also see <i>start</i> and <i>end</i>, which means that the result only included data for the first 25 of the 80 matching substances.
+To get the rest, we would need to make additional requests, each one incrementing the batchStart parameter to be one more than the prior <i>end</i> value:
 </p>
 <ul>
 	<li><a href="https://chem.nlm.nih.gov/api/data/rn/sw/50-?data=complete&batchStart=26" target="_blank">https://chem.nlm.nih.gov/api/data/rn/sw/50-?data=complete&amp;batchStart=26</a></li>
 	<li><a href="https://chem.nlm.nih.gov/api/data/rn/sw/50-?data=complete&batchStart=51" target="_blank">https://chem.nlm.nih.gov/api/data/rn/sw/50-?data=complete&amp;batchStart=51</a></li>
 	<li><a href="https://chem.nlm.nih.gov/api/data/rn/sw/50-?data=complete&batchStart=76" target="_blank">https://chem.nlm.nih.gov/api/data/rn/sw/50-?data=complete&amp;batchStart=76</a></li>
 </ul>
+
+<p>
+The data parameter lets you specify what fields you want to receive data for.
+As all batches are about the same file size, more data per substance means fewer substances per batch.
+Depending on the data parameter you choose, batch sizes range from 25 to 25,000 substances per batch.
+Choosing the most focused data parameter for your needs allows you to fetch more substances at once, so you would need fewer batches and have less data to parse.
+</p>
+
+<p>
+<b>Please request batches one at a time, waiting for one to complete before requesting the next batch.</b>
+That way our servers will not be overwhelmed and everyone can receive data in a timely fashion.
+</p>
