@@ -13,9 +13,11 @@ import { JsonResultsComponent } from './json-results/json-results.component';
 import { LastModifiedComponent } from './last-modified/last-modified.component';
 import { PagingComponent } from './paging/paging.component';
 import { ReferenceDataComponent } from './reference-data/reference-data.component';
+import { ResourceUrlsComponent } from './resource-urls/resource-urls.component';
 import { SortingComponent } from './sorting/sorting.component';
 import { SourceCodeComponent } from './source-code/source-code.component';
 import { ValueCountsComponent } from './value-counts/value-counts.component';
+
 
 @NgModule({
 	imports: [
@@ -35,7 +37,8 @@ import { ValueCountsComponent } from './value-counts/value-counts.component';
 		ValueCountsComponent,
 		SourceCodeComponent,
 		LastModifiedComponent,
-		PagingComponent
+		PagingComponent,
+		ResourceUrlsComponent
 	]
 })
 export class ApiModule { }

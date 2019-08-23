@@ -1,0 +1,77 @@
+<p>
+ChemID<i>plus</i> data includes links to up to about 100 online resources per substance.
+Note that historically, ChemID<i>plus</i> also referred to these resources as "Locators."
+Thus you may see either term.
+For example, the <span class="field">locator</span> search field is referring to the same data.
+</p>
+		
+<p>
+The API's JSON and XML results for resources do not include the whole URLs.
+In order to build the complete URL, you first need to get the pre-URL values for the sources by downloading <a href="https://chem.nlm.nih.gov/api/data/meta/sources" target="_blank">https://chem.nlm.nih.gov/api/data/meta/sources</a>.
+</p>
+
+<p>
+To generate the full URL:
+</p>
+<ol>
+	<li>Start with the source's "u" value</li>
+	<li>Replace any ${{ '{' }}RN} with the substance's summary's "rn"</li>
+	<li>Replace any ${{ '{' }}MH} with the substance's summary's "mh" (MeSH)</li>
+	<li>Append the substance's resource's "u" value, if it exists</li>
+</ol>
+
+<p>
+To demonstrate, we will generate two for Aspirin.
+First, we find and copy the pre-URL values for the two sources
+</p>
+<pre>
+{{ '{' }}
+	"id": "TOXLINE Mob",
+	"n": "NLM TOXLINE on TOXNET",
+	"t": 632,
+	"u": "https://toxnet.nlm.nih.gov/cgi-bin/sis/search?@pda=1&database=toxline&queryxxx=${{ '{' }}RN}+%22${{ '{' }}MH}%22+"
+},
+{{ '{' }}
+	"id": "Haz-Map",
+	"n": "Occ. Exposure to Haz.  Agents",
+	"t": 632,
+	"u": "https://hazmap.nlm.nih.gov/category-details?table=copytblagents&id="
+}
+</pre>
+
+<p>
+Second, fetch resources data for Aspirin, from <a href="https://chem.nlm.nih.gov/api/data/rn/equals/50-78-2?data=resources" target="_blank">https://chem.nlm.nih.gov/api/data/rn/equals/50-78-2?data=resources</a>
+</p>
+<pre>
+{{ '{' }}
+	"d": "TOXLINE Mob"
+},
+{{ '{' }}
+	"d": "Haz-Map",
+	"u": "212"
+}
+</pre>
+
+<p>
+To replace the RN and MeSH placeholders, we also need the summary data from <a href="https://chem.nlm.nih.gov/api/data/rn/equals/50-78-2?data=summary" target="_blank">https://chem.nlm.nih.gov/api/data/rn/equals/50-78-2?data=summary</a>
+</p>
+<pre>
+"summary": {{ '{' }}
+	"na": "Aspirin [USP:BAN:JAN]",
+	"rn": "50-78-2",
+	"ik": "BSYNRYMUTXBXSQ-UHFFFAOYSA-N",
+	"f": "C9-H8-O4",
+	"w": 180.1582,
+	"mh": "Aspirin",
+}
+</pre>
+
+<p>
+For TOXLINE Mob, Aspirin has no post-URL, but the pre-URL requires replacements for both ${{ '{' }}RN} and ${{ '{' }}MH} with the values from the summary's "rn" and "mh".
+The final URL is <a href="https://toxnet.nlm.nih.gov/cgi-bin/sis/search?@pda=1&database=toxline&queryxxx=50-78-2+%22Aspirin%22+" target="_blank">https://toxnet.nlm.nih.gov/cgi-bin/sis/search?@pda=1&database=toxline&queryxxx=50-78-2+%22Aspirin%22+</a>
+</p>
+
+<p>
+For Haz-Map, no RN or MH replacements are necessary, but we do append the post-URL of "212".
+The final URL is <a href="https://hazmap.nlm.nih.gov/category-details?table=copytblagents&id=212" target="_blank">https://hazmap.nlm.nih.gov/category-details?table=copytblagents&id=212</a>
+</p>
